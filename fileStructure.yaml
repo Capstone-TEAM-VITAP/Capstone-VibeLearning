@@ -1,0 +1,60 @@
+apps:
+  frontend:
+    src:
+      components: {}
+      pages: {}
+      hooks: {}
+      services: {}
+      store: {}
+      styles: {}
+    public: {}
+    package.json: null 
+
+  backend:
+    src:
+      routes: {}
+      controllers: {}
+      services: {}
+      models: {}
+      middleware: {}
+      config: {}
+      utils: {}
+    tests: {}
+    package.json: null
+
+  ai-service:
+    app:
+      api: {}
+      parser: {}
+      code_graph: {}
+      rag: {}
+      orchestrator: {}
+      modes: {}
+      core: {}
+    tests: {}
+    requirements.txt: null
+
+packages:
+  types: {}
+  shared-utils: {}
+
+infra:
+  docker:
+    Dockerfile.frontend: null
+    Dockerfile.backend: null
+    Dockerfile.ai-service: null
+    docker-compose.yml: null
+  github-actions: {}
+  scripts: {}
+
+docks:
+  architecture.md: null
+
+.env.example: null
+.gitignore: null
+README.MD: null
+
+
+  
+
+
