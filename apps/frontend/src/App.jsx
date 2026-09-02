@@ -1,122 +1,93 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import {
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  Show,
+} from "@clerk/react";
+import Dashboard from "./pages/Dashboard.jsx";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-container">
+      <header className="app-header">
+        <div className="brand-container">
+          <h1 className="brand-title">Code Ai </h1>
+          <span className="brand-badge">Dashboard</span>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+        <div className="auth-nav">
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button className="btn-sign-in">Sign In</button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button className="btn-sign-up">Sign Up</button>
+            </SignUpButton>
+          </Show>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          <Show when="signed-in">
+            <div className="user-button-wrapper">
+              <span className="user-status-pill">
+                <span className="user-status-dot"></span>
+                Active
+              </span>
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: {
+                      width: "38px",
+                      height: "38px",
+                      borderRadius: "50%",
+                      border: "2px solid var(--accent, #c084fc)",
+                      boxShadow: "0 0 10px rgba(192, 132, 252, 0.35)",
+                    },
+                    userButtonPopoverCard: {
+                      backgroundColor: "var(--bg, #16171d)",
+                      border: "1px solid var(--border, #2e303a)",
+                      color: "var(--text-h, #f3f4f6)",
+                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.5)",
+                    },
+                    userButtonPopoverActionButton: {
+                      color: "var(--text-h, #f3f4f6)",
+                    },
+                    userButtonPopoverActionButtonText: {
+                      color: "var(--text-h, #f3f4f6)",
+                    },
+                    userButtonPopoverActionButtonIcon: {
+                      color: "var(--accent, #c084fc)",
+                    },
+                    userButtonPopoverFooter: {
+                      borderTop: "1px solid var(--border, #2e303a)",
+                      backgroundColor: "var(--bg, #16171d)",
+                    },
+                  },
+                }}
+              />
+            </div>
+          </Show>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <main className="app-main">
+        <Show when="signed-out">
+          <div className="hero-card">
+            <h2>Welcome to VibeLearning</h2>
+            <p>Your interactive learning workspace. Sign in to access your projects and personalized dashboard.</p>
+            <div style={{ marginTop: "24px" }}>
+              <SignInButton mode="modal">
+                <button className="btn-sign-up">Get Started</button>
+              </SignInButton>
+            </div>
+          </div>
+        </Show>
+
+        <Show when="signed-in">
+          <Dashboard />
+        </Show>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
