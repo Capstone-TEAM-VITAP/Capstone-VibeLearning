@@ -2,3 +2,8 @@ packages:
   - "apps/frontend"
   - "apps/backend"
   - "packages/*"
+allowBuilds:
+  bcrypt: false
+  esbuild: false
+  msgpackr-extract: false
+  workerd: false

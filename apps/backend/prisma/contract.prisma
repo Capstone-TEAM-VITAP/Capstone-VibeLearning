@@ -1,0 +1,33 @@
+// use prisma-next
+
+types {
+  Uuid = Uuid
+}
+
+model User {
+  id          Uuid     @id @default(uuid())
+  clerkUserId String   @unique
+  email       String?
+  name        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  projects Project[]
+
+  @@map("user")
+}
+
+model Project {
+  id          Uuid     @id @default(uuid())
+  name        String
+  description String?
+  userId      Uuid
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("project")
+}
