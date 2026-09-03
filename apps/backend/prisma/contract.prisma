@@ -12,7 +12,8 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
 
-  projects Project[]
+  projects     Project[]
+  repositories Repository[]
 
   @@map("user")
 }
@@ -25,9 +26,56 @@ model Project {
 
   user User @relation(fields: [userId], references: [id])
 
+  repositories Repository[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
   @@index([userId])
   @@map("project")
+}
+
+model Repository {
+  id            Uuid    @id @default(uuid())
+  userId        Uuid
+  projectId     Uuid?
+  repoUrl       String
+  owner         String
+  name          String
+  defaultBranch String  @default("main")
+  lastSyncSha   String?
+
+  user    User     @relation(fields: [userId], references: [id])
+  project Project? @relation(fields: [projectId], references: [id])
+
+  snapshots RepoSnapshot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@unique([userId, repoUrl])
+  @@index([userId])
+  @@index([projectId])
+  @@map("repository")
+}
+
+model RepoSnapshot {
+  id           Uuid     @id @default(uuid())
+  repositoryId Uuid
+  commitSha    String
+  baseSha      String?
+  message      String?
+  authorName   String?
+  committedAt  DateTime?
+  fileCount    Int      @default(0)
+  additions    Int      @default(0)
+  deletions    Int      @default(0)
+
+  repository Repository @relation(fields: [repositoryId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([repositoryId, commitSha])
+  @@index([repositoryId])
+  @@map("repo_snapshot")
 }

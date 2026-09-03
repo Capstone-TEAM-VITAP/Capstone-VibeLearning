@@ -22,6 +22,19 @@ CodeAI is an interactive coding and learning workspace designed to accelerate de
 
 ## Quickstart
 
+### One-click start (Windows)
+
+```powershell
+.\run.ps1
+```
+
+Checks tools, installs deps, ensures `.env` files, regenerates the Prisma
+contract, runs backend tests, starts backend + frontend in their own windows,
+then prints all server and endpoint links. Use `.\run.ps1 -SkipInstall` to
+skip `pnpm install`. Stop with Ctrl+C in each server window.
+
+### Manual start
+
 ### 1. Install Dependencies
 
 ```bash
