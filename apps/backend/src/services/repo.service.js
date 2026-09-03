@@ -4,6 +4,7 @@ import { snapshotRepository } from "../repositories/snapshot.repository.js";
 import { projectRepository } from "../repositories/project.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 import { ConflictError, NotFoundError } from "../utils/errors.js";
+import { analysisService } from "./analysis.service.js";
 import {
   ensureMirror,
   getChangedFiles,
@@ -83,7 +84,7 @@ export const repoService = {
       });
       const headSha = await resolveSha(repo.id, `origin/${repo.defaultBranch}`).catch(() => resolveSha(repo.id, null));
       const meta = await getCommitMeta(repo.id, headSha);
-      await snapshotRepository.create({
+      const snapshot = await snapshotRepository.create({
         repositoryId: repo.id,
         commitSha: meta.commitSha,
         baseSha: null,
@@ -91,6 +92,7 @@ export const repoService = {
         authorName: meta.authorName,
         committedAt: meta.committedAt,
       });
+      analysisService.enqueueAndDispatch(repo, snapshot);
       return repositoryRepository.update(repo.id, user.id, { lastSyncSha: meta.commitSha });
     } catch (err) {
       await repositoryRepository.delete(repo.id, user.id).catch(() => null);
@@ -161,6 +163,7 @@ export const repoService = {
       deletions: diff.deletions,
     });
     await repositoryRepository.update(repo.id, repo.userId, { lastSyncSha: headSha });
+    analysisService.enqueueAndDispatch(repo, snapshot);
 
     return {
       snapshot,

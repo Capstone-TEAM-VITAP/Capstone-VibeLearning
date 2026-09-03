@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAuth, UserButton } from "@clerk/react";
 import { getCurrentUser } from "../services/api.js";
+import AnalysisDemo from "../components/AnalysisDemo.jsx";
 import ReposSection from "../components/ReposSection.jsx";
 
 function Dashboard() {
   const { getToken, isLoaded, isSignedIn } = useAuth();
 
   const [user, setUser] = useState(null);
+  const [view, setView] = useState("repos");
 
   useEffect(() => {
     if (!isLoaded || !isSignedIn) return;
@@ -77,7 +79,26 @@ function Dashboard() {
         )}
       </div>
 
-      <ReposSection getToken={getToken} />
+      <div className="view-tabs" data-testid="dashboard-tabs">
+        <button
+          type="button"
+          className={view === "repos" ? "btn-sign-up" : "btn-sign-in"}
+          data-testid="tab-repos"
+          onClick={() => setView("repos")}
+        >
+          Repositories
+        </button>
+        <button
+          type="button"
+          className={view === "analysis" ? "btn-sign-up" : "btn-sign-in"}
+          data-testid="tab-analysis"
+          onClick={() => setView("analysis")}
+        >
+          Analysis demo
+        </button>
+      </div>
+
+      {view === "repos" ? <ReposSection getToken={getToken} /> : <AnalysisDemo getToken={getToken} />}
     </div>
   );
 }

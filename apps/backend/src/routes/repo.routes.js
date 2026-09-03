@@ -2,6 +2,7 @@ import express from "express";
 import { z } from "zod";
 import { requireAuth } from "../middleware/auth.middleware.js";
 import { validate } from "../middleware/validate.middleware.js";
+import { analysisController } from "../controllers/analysis.controller.js";
 import { repoController } from "../controllers/repo.controller.js";
 import {
   connectRepoSchema,
@@ -58,6 +59,20 @@ router.get(
   "/:id/snapshots/:sha/diff",
   validate({ params: snapshotParamSchema, query: diffQuerySchema }),
   repoController.getDiff
+);
+
+// POST /api/v1/repos/:id/snapshots/:sha/analyze — run analysis now, wait for it
+router.post(
+  "/:id/snapshots/:sha/analyze",
+  validate({ params: snapshotParamSchema }),
+  analysisController.analyze
+);
+
+// GET /api/v1/repos/:id/snapshots/:sha/analysis — latest job + result
+router.get(
+  "/:id/snapshots/:sha/analysis",
+  validate({ params: snapshotParamSchema }),
+  analysisController.getAnalysis
 );
 
 export default router;

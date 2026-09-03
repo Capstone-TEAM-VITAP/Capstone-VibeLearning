@@ -73,9 +73,28 @@ model RepoSnapshot {
 
   repository Repository @relation(fields: [repositoryId], references: [id])
 
+  job AnalysisJob?
+
   createdAt DateTime @default(now())
 
   @@unique([repositoryId, commitSha])
   @@index([repositoryId])
   @@map("repo_snapshot")
+}
+
+model AnalysisJob {
+  id         Uuid   @id @default(uuid())
+  snapshotId Uuid   @unique
+  status     String @default("pending")
+  attempts   Int    @default(0)
+  error      String?
+  resultJson String?
+
+  snapshot RepoSnapshot @relation(fields: [snapshotId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([status])
+  @@map("analysis_job")
 }
