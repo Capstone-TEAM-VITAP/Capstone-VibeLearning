@@ -4,6 +4,7 @@ import { clerkMiddleware } from "@clerk/express";
 
 import authRoutes from "./routes/auth.routes.js";
 import projectRoutes from "./routes/project.routes.js";
+import repoRoutes from "./routes/repo.routes.js";
 import { notFoundHandler, errorHandler } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -50,6 +51,7 @@ app.get("/api/v1/health", (req, res) => {
 // API Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/projects", projectRoutes);
+app.use("/api/v1/repos", repoRoutes);
 
 // Catch-all 404 handler for undefined routes
 app.use(notFoundHandler);
