@@ -11,7 +11,15 @@ export function validate(schemas) {
         req.params = await schemas.params.parseAsync(req.params);
       }
       if (schemas.query) {
-        req.query = await schemas.query.parseAsync(req.query);
+        const parsed = await schemas.query.parseAsync(req.query);
+        // Express 5 exposes req.query as a prototype getter with no setter,
+        // so plain assignment throws. Shadow it with an own property instead.
+        Object.defineProperty(req, "query", {
+          value: parsed,
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
       }
       if (schemas.body) {
         req.body = await schemas.body.parseAsync(req.body);

@@ -20,6 +20,14 @@ export const repositoryRepository = {
     return db.orm.public.Repository.where({ userId, repoUrl }).first();
   },
 
+  /**
+   * Global lookup by owner/name for webhook deliveries, which carry no
+   * Clerk identity. Several users may connect the same repo — sync each.
+   */
+  async findManyByOwnerAndName(owner, name) {
+    return db.orm.public.Repository.where({ owner, name }).all();
+  },
+
   async create(data) {
     return db.orm.public.Repository.create({
       userId: data.userId,

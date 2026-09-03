@@ -492,3 +492,25 @@ GET /api/v1/repos/:id/snapshots/:sha/diff?base=<sha>&path=<file>
   }
   ```
 - Hunk lines carry `{ type: "add"|"del"|"context", oldLine?, newLine?, text }` — the contract the AST / semantic-search / ranking stages consume.
+
+---
+
+## Webhooks Endpoints
+
+Public endpoints called by GitHub, not by users — no Clerk token. Authentication is the `X-Hub-Signature-256` HMAC header verified against `GITHUB_WEBHOOK_SECRET`.
+
+---
+
+### 1. GitHub Push Webhook
+
+```http
+POST /api/v1/webhooks/github
+```
+
+- **Headers**: `X-GitHub-Event` (`push`/`ping`/…), `X-Hub-Signature-256: sha256=<hmac>`
+- **Purpose**: Auto-sync every connected row matching the pushed repo: fetch, resolve the pushed ref, record a snapshot (skipped if it already exists).
+- **Setup**: repo Settings → Webhooks → payload URL `https://<backend>/api/v1/webhooks/github`, JSON, `push` events only, secret = `GITHUB_WEBHOOK_SECRET`.
+- **Responses**:
+  - `200 { success: true, data: { matched: N } }` — synced N connected rows.
+  - `200 { success: true, data: { ignored: true } }` — ping, non-push, deletion, or unknown repo (not an error; stops GitHub retries).
+  - `401` — bad/missing signature. `500` — webhook secret not configured.

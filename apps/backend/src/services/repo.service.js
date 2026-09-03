@@ -119,7 +119,14 @@ export const repoService = {
    */
   async syncRepo(clerkUserId, repositoryId, data = {}) {
     const { repo } = await this._requireRepo(clerkUserId, repositoryId);
+    return this.syncConnectedRepo(repo, data);
+  },
 
+  /**
+   * Sync core keyed by repo row (no Clerk identity needed), shared by the
+   * manual sync endpoint and GitHub push deliveries.
+   */
+  async syncConnectedRepo(repo, data = {}) {
     await ensureMirror({
       repositoryId: repo.id,
       repoUrl: repo.repoUrl,
@@ -160,6 +167,20 @@ export const repoService = {
       files: diff.files.map(({ path, status, additions, deletions }) => ({ path, status, additions, deletions })),
       cached: false,
     };
+  },
+
+  /**
+   * Handle a verified GitHub push: snapshot the pushed ref on every
+   * connected row matching owner/name. Unknown repos are ignored (not an
+   * error) so GitHub stops retrying the delivery.
+   */
+  async handlePushEvent({ owner, name, ref }) {
+    const repos = await repositoryRepository.findManyByOwnerAndName(owner, name);
+    const results = [];
+    for (const repo of repos) {
+      results.push(await this.syncConnectedRepo(repo, { ref }));
+    }
+    return { matched: repos.length, results };
   },
 
   async listSnapshots(clerkUserId, repositoryId) {

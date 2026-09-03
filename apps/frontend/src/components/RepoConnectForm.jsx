@@ -19,6 +19,11 @@ function RepoConnectForm({ getToken, onConnected }) {
       setRepoUrl("");
       onConnected?.(repo);
     } catch (err) {
+      if (/already connected/i.test(err.message || "")) {
+        // Row exists — refresh the list instead of dead-ending on the error.
+        onConnected?.(null);
+        return;
+      }
       setError(err.message);
     } finally {
       setBusy(false);

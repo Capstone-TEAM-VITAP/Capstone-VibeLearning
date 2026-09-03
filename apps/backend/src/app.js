@@ -5,6 +5,7 @@ import { clerkMiddleware } from "@clerk/express";
 import authRoutes from "./routes/auth.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import repoRoutes from "./routes/repo.routes.js";
+import webhookRoutes from "./routes/webhook.routes.js";
 import { notFoundHandler, errorHandler } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -33,7 +34,15 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(
+  express.json({
+    // Stash exact request bytes for HMAC verification (GitHub webhooks).
+    // JSON parsing must not alter them, so capture before parsing.
+    verify: (req, res, buf) => {
+      req.rawBody = Buffer.from(buf);
+    },
+  })
+);
 
 // Clerk authentication middleware
 app.use(clerkMiddleware());
@@ -52,6 +61,7 @@ app.get("/api/v1/health", (req, res) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/repos", repoRoutes);
+app.use("/api/v1/webhooks", webhookRoutes);
 
 // Catch-all 404 handler for undefined routes
 app.use(notFoundHandler);
