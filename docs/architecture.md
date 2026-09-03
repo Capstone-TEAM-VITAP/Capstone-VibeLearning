@@ -21,24 +21,32 @@ Capstone-VibeLearning/
 │   │   │   ├── config/
 │   │   │   │   └── db.js           # Database client instance & Temporal polyfill
 │   │   │   ├── controllers/
-│   │   │   │   └── project.controller.js
+│   │   │   │   ├── project.controller.js
+│   │   │   │   └── repo.controller.js      # Repository / snapshot / diff endpoints
 │   │   │   ├── middleware/
 │   │   │   │   ├── auth.middleware.js
 │   │   │   │   ├── error.middleware.js
 │   │   │   │   └── validate.middleware.js
 │   │   │   ├── repositories/
 │   │   │   │   ├── project.repository.js
+│   │   │   │   ├── repository.repository.js  # Connected GitHub repos (user-scoped)
+│   │   │   │   ├── snapshot.repository.js    # Repo snapshots per commit SHA
 │   │   │   │   └── user.repository.js
 │   │   │   ├── routes/
 │   │   │   │   ├── auth.routes.js
-│   │   │   │   └── project.routes.js
+│   │   │   │   ├── project.routes.js
+│   │   │   │   └── repo.routes.js            # /api/v1/repos/* (connect/sync/diff)
 │   │   │   ├── services/
-│   │   │   │   └── project.service.js
+│   │   │   │   ├── git.service.js            # Bare-mirror cache, resolve, diff via git CLI
+│   │   │   │   ├── project.service.js
+│   │   │   │   └── repo.service.js           # Connect/sync/snapshot orchestration
 │   │   │   ├── utils/
+│   │   │   │   ├── diff.js           # Pure name-status + unified-diff parsers
 │   │   │   │   ├── errors.js       # Standard operational HTTP errors
 │   │   │   │   └── response.js     # Standardized API response formatters
 │   │   │   ├── validators/
-│   │   │   │   └── project.validator.js
+│   │   │   │   ├── project.validator.js
+│   │   │   │   └── repo.validator.js
 │   │   │   └── app.js              # Express application setup & middleware chain
 │   │   ├── index.js                # Server entry point
 │   │   ├── package.json
@@ -296,6 +304,7 @@ All API endpoints follow the `/api/v1` URL prefix:
 - `/api/v1/health`
 - `/api/v1/auth/*`
 - `/api/v1/projects/*`
+- `/api/v1/repos/*` (connect/sync/snapshots/diff — mirrors repos into `GIT_CACHE_DIR` via `git.service.js`, records `RepoSnapshot` rows)
 
 This isolates versioned API routes from frontend assets and ensures backward compatibility as the application expands.
 

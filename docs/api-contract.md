@@ -356,3 +356,139 @@ DELETE /api/v1/projects/:id
     }
     ```
   - `500 Internal Server Error`: Unexpected server error.
+
+---
+
+## Repositories Endpoints
+
+Backend slice of the analysis pipeline: **GitHub Repo → Snapshot → Changed Files/Lines**.
+All endpoints are scoped strictly to the authenticated user. The optional `accessToken`
+(per-request, for private repos) is used for the git fetch only and is never persisted.
+
+---
+
+### 1. List Connected Repositories
+
+```http
+GET /api/v1/repos?projectId=<uuid>
+```
+
+- **Authentication**: Required (`Bearer <clerk_token>`)
+- **Query**: `projectId` (optional UUID; must belong to the caller)
+- **Success Status**: `200 OK` — list envelope `{ success, data: [], meta: { total } }`
+
+---
+
+### 2. Connect Repository
+
+```http
+POST /api/v1/repos/connect
+```
+
+- **Authentication**: Required (`Bearer <clerk_token>`)
+- **Purpose**: Validate the GitHub URL, mirror the repo server-side, record a HEAD snapshot.
+- **Request Body** (`application/json`):
+  | Field | Type | Required | Rules |
+  | :--- | :--- | :--- | :--- |
+  | `repoUrl` | string | Yes | GitHub https or ssh URL |
+  | `projectId` | string (UUID) | No | Must belong to the caller |
+  | `defaultBranch` | string | No | Defaults to `main` |
+  | `accessToken` | string | No | Private-repo token, never stored |
+
+  ```json
+  { "repoUrl": "https://github.com/octocat/Hello-World", "defaultBranch": "main" }
+  ```
+- **Success Status**: `201 Created` — the repository row (with `lastSyncSha`)
+- **Error Statuses**:
+  - `400 Bad Request`: Invalid URL / unreachable repo / bad token.
+  - `401 Unauthorized`: Missing or invalid authentication.
+  - `404 Not Found`: `projectId` does not belong to the caller.
+  - `409 Conflict`: Repository already connected.
+
+---
+
+### 3. Get / Delete Repository
+
+```http
+GET /api/v1/repos/:id
+DELETE /api/v1/repos/:id
+```
+
+- `DELETE` returns `204 No Content` and removes the server-side mirror cache (best-effort).
+- Unknown / foreign IDs return `404 Not Found`.
+
+---
+
+### 4. Sync Repository (new Snapshot)
+
+```http
+POST /api/v1/repos/:id/sync
+```
+
+- **Request Body** (`application/json`, all optional):
+  ```json
+  { "ref": "origin/main", "baseSha": "6039afc5e7b4ee31ca7c6481c5e7e56acf978bfb", "accessToken": "..." }
+  ```
+  - `ref`: branch/tag/SHA to snapshot (defaults to `origin/<defaultBranch>`).
+  - `baseSha`: full 40-char SHA the diff is measured against (defaults to `lastSyncSha`).
+- **Success Status**: `201 Created`
+- **Response Example**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "snapshot": { "commitSha": "6a7c89be…", "message": "second", "fileCount": 2, "additions": 4, "deletions": 2 },
+      "files": [{ "path": "src/app.js", "status": "M", "additions": 3, "deletions": 2 }],
+      "cached": false
+    }
+  }
+  ```
+
+---
+
+### 5. List Snapshots
+
+```http
+GET /api/v1/repos/:id/snapshots
+```
+
+- **Success Status**: `200 OK` — snapshots newest first, list envelope.
+
+---
+
+### 6. Changed Files (no hunks)
+
+```http
+GET /api/v1/repos/:id/snapshots/:sha/files?base=<sha>
+```
+
+- `:sha` and `?base=` are full 40-char commit SHAs. `base` defaults to the snapshot's recorded `baseSha`.
+- **Response Example**:
+  ```json
+  {
+    "success": true,
+    "data": { "baseSha": "6039afc5…", "headSha": "6a7c89be…", "fileCount": 2, "files": [{ "path": "src/app.js", "status": "M" }] }
+  }
+  ```
+
+---
+
+### 7. Full Diff (hunks + line numbers)
+
+```http
+GET /api/v1/repos/:id/snapshots/:sha/diff?base=<sha>&path=<file>
+```
+
+- `path` (optional) restricts the diff to a single file.
+- **Response Example**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "baseSha": "6039afc5…", "headSha": "6a7c89be…",
+      "fileCount": 2, "additions": 4, "deletions": 2,
+      "files": [{ "path": "src/app.js", "status": "M", "additions": 3, "deletions": 2, "hunks": [] }]
+    }
+  }
+  ```
+- Hunk lines carry `{ type: "add"|"del"|"context", oldLine?, newLine?, text }` — the contract the AST / semantic-search / ranking stages consume.
