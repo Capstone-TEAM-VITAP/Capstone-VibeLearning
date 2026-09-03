@@ -369,3 +369,215 @@
   color: var(--text);
   margin: 6px 0;
 }
+
+/* Connected repositories (GitHub ingest pipeline) */
+.repo-form {
+  margin: 16px 0;
+}
+
+.repo-form h3,
+.snapshot-panel h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--text-h);
+}
+
+.repo-form-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.repo-input {
+  flex: 1 1 220px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-h);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+.repo-input-branch {
+  flex: 0 1 110px;
+}
+
+.repo-error {
+  color: #f87171;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.repo-empty {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.repo-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.repo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.repo-item-selected {
+  border-color: var(--accent-border);
+}
+
+.repo-item-main {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0;
+}
+
+.repo-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.repo-item-meta {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.repo-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-danger {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f87171;
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  border-color: #f87171;
+}
+
+.snapshot-panel {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.file-status {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.file-status-M { color: #fbbf24; border-color: rgba(251, 191, 36, 0.4); }
+.file-status-A { color: #10b981; border-color: rgba(16, 185, 129, 0.4); }
+.file-status-D { color: #f87171; border-color: rgba(248, 113, 113, 0.4); }
+.file-status-R, .file-status-C { color: var(--accent); border-color: var(--accent-border); }
+
+.file-path {
+  font-family: monospace;
+  color: var(--text-h);
+  word-break: break-all;
+}
+
+.diff-view {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diff-file {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.diff-file-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.diff-counts {
+  margin-left: auto;
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.diff-hunk {
+  margin: 0;
+  padding: 8px 0;
+  font-size: 12px;
+  overflow-x: auto;
+}
+
+.diff-hunk-header {
+  padding: 2px 12px;
+  color: var(--accent);
+}
+
+.diff-line {
+  padding: 1px 12px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.diff-gutter {
+  display: inline-block;
+  width: 16px;
+  color: var(--text);
+}
+
+.diff-line-add { background: rgba(16, 185, 129, 0.12); }
+.diff-line-del { background: rgba(248, 113, 113, 0.12); }
