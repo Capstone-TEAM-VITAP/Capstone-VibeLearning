@@ -27,7 +27,7 @@ function Dashboard() {
       <div className="dashboard-header-row">
         <div>
           <h2>Dashboard Overview</h2>
-          <p>Welcome to your Code Ai  workspace.</p>
+          <p>Welcome to your CodeAI workspace.</p>
         </div>
         <UserButton
           appearance={{

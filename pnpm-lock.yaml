@@ -231,6 +231,9 @@ importers:
       pg:
         specifier: ^8.23.0
         version: 8.23.0
+      temporal-polyfill:
+        specifier: ^1.0.4
+        version: 1.0.4
       zod:
         specifier: ^4.5.4
         version: 4.5.4
@@ -257,6 +260,12 @@ importers:
       '@eslint/js':
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.9.1(jiti@2.7.0)(supports-color@5.5.0))
+      '@reticlehq/react':
+        specifier: 2.12.0
+        version: 2.12.0(react@19.2.8)
+      '@reticlehq/vite-plugin':
+        specifier: 2.12.0
+        version: 2.12.0(supports-color@5.5.0)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.0))
       '@types/react':
         specifier: ^19.2.18
         version: 19.2.18
@@ -1344,6 +1353,35 @@ packages:
       proxy-agent:
         optional: true
       yauzl:
+        optional: true
+
+  '@reticlehq/babel-plugin@2.12.0':
+    resolution: {integrity: sha512-KredIqt3y7OjhCjFTncI4fX/O19kdjo86ZLCJJk/qnSKKAJ5F1nzOfQMB4DfrClpTfH0ZGwLBC4l8P57MjaOuQ==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      '@babel/core': ^7
+
+  '@reticlehq/browser@2.12.0':
+    resolution: {integrity: sha512-vEDQb+JoeRMZ2HjI8KP6WDXpqMtPXFt8sS4fPzhB+e1rgv86BZyZ/BqlEPOJKbPujnkhQKQTvCfxUDqrL0Sz2w==}
+    engines: {node: '>=20.0.0'}
+
+  '@reticlehq/core@2.12.0':
+    resolution: {integrity: sha512-IBJLIW7R55TWFsHJnwXARqTFObR9mCLjSKdRYK+vNR/3++20GK0oFBAmbXoaqr2JgqdLyJDkruouSByd+n7eeQ==}
+    engines: {node: '>=20.0.0'}
+
+  '@reticlehq/react@2.12.0':
+    resolution: {integrity: sha512-1hl1+Cg321FhP/XMyWJWKzCfIg+n/p3ugq6mVO2R90J/Yp9ZeKPfPVjZEHMrByUydfcBQ4XWxH2ZWuIHkQY68Q==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      react: '>=18'
+
+  '@reticlehq/vite-plugin@2.12.0':
+    resolution: {integrity: sha512-TQ8m4YIvwvIJFGT1XMuAr7T9rOQXmtxdpUC59/tn+oHdVE4ACBMKQhmKVtVULGIbPmk9XlKo3jtlEjQ3qFmC/w==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      vite: '>=4'
+    peerDependenciesMeta:
+      vite:
         optional: true
 
   '@rolldown/binding-android-arm-eabi@1.2.6':
@@ -3315,6 +3353,15 @@ packages:
   teex@1.0.1:
     resolution: {integrity: sha512-eYE6iEI62Ni1H8oIa7KlDU6uQBtqr4Eajni3wX7rpfXD8ysFx8z0+dri+KWEPWpBsxXfxu58x/0jvTVT1ekOSg==}
 
+  temporal-polyfill@1.0.4:
+    resolution: {integrity: sha512-MLEU0qOD2uXlz24oINNtdLZQl8RgmMxSnRtKEGZGGetTJjlRwQJjk+VsJ4EREaUoiaTb8NJOcUiKtoAiWn9EBg==}
+
+  temporal-spec@1.0.1:
+    resolution: {integrity: sha512-wxVoanmDeavXie1vu2JaQ3WIc3JZnWAOYFBsJyATaVsXsycKYUflGsyBmrRSnoCpZJpwPyr38VpgSUlQ8CbFxg==}
+
+  temporal-utils@1.0.2:
+    resolution: {integrity: sha512-1B8Dl4KzrOvsNUlpoWGno2VLQlxroLjDgc5NBjVC9ax9ymdo+ezfyvhyjEMx+IVfhINr6CIG2gcnlP95iRrybQ==}
+
   terminal-size@4.0.1:
     resolution: {integrity: sha512-avMLDQpUI9I5XFrklECw1ZEUPJhqzcwSWsyyI8blhRLT+8N1jLJWLWWYQpB2q2xthq8xDvjZPISVh53T/+CLYQ==}
     engines: {node: '>=18'}
@@ -3640,6 +3687,9 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
+
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
   zod@4.5.2:
     resolution: {integrity: sha512-XkYXCol10+ba/6F/cueWV+TezUeOqXW0hdeJt5CdXjTYeAgAQg5N03RQdJ80mhfFE72+pblvYMW4wy2Qp4Qbrg==}
@@ -4846,6 +4896,35 @@ snapshots:
       yargs: 18.1.0
     optionalDependencies:
       yauzl: 3.4.0
+
+  '@reticlehq/babel-plugin@2.12.0(@babel/core@7.29.7(supports-color@5.5.0))':
+    dependencies:
+      '@babel/core': 7.29.7(supports-color@5.5.0)
+      '@reticlehq/core': 2.12.0
+
+  '@reticlehq/browser@2.12.0':
+    dependencies:
+      '@reticlehq/core': 2.12.0
+
+  '@reticlehq/core@2.12.0':
+    dependencies:
+      zod: 3.25.76
+
+  '@reticlehq/react@2.12.0(react@19.2.8)':
+    dependencies:
+      '@reticlehq/browser': 2.12.0
+      '@reticlehq/core': 2.12.0
+      react: 19.2.8
+
+  '@reticlehq/vite-plugin@2.12.0(supports-color@5.5.0)(vite@8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.0))':
+    dependencies:
+      '@babel/core': 7.29.7(supports-color@5.5.0)
+      '@reticlehq/babel-plugin': 2.12.0(@babel/core@7.29.7(supports-color@5.5.0))
+      '@reticlehq/core': 2.12.0
+    optionalDependencies:
+      vite: 8.2.2(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.0)
+    transitivePeerDependencies:
+      - supports-color
 
   '@rolldown/binding-android-arm-eabi@1.2.6':
     optional: true
@@ -6812,6 +6891,15 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
 
+  temporal-polyfill@1.0.4:
+    dependencies:
+      temporal-spec: 1.0.1
+      temporal-utils: 1.0.2
+
+  temporal-spec@1.0.1: {}
+
+  temporal-utils@1.0.2: {}
+
   terminal-size@4.0.1: {}
 
   text-decoder@1.2.7:
@@ -7046,6 +7134,8 @@ snapshots:
   zod-validation-error@4.0.2(zod@4.5.2):
     dependencies:
       zod: 4.5.2
+
+  zod@3.25.76: {}
 
   zod@4.5.2: {}
 
