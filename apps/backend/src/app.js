@@ -33,7 +33,15 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(
+  express.json({
+    // Stash exact request bytes for HMAC verification (GitHub webhooks).
+    // JSON parsing must not alter them, so capture before parsing.
+    verify: (req, res, buf) => {
+      req.rawBody = Buffer.from(buf);
+    },
+  })
+);
 
 // Clerk authentication middleware
 app.use(clerkMiddleware());
