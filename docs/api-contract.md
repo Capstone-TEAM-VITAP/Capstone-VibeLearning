@@ -495,6 +495,44 @@ GET /api/v1/repos/:id/snapshots/:sha/diff?base=<sha>&path=<file>
 
 ---
 
+### 8. Run Analysis (stub engine until ai-service lands)
+
+```http
+POST /api/v1/repos/:id/snapshots/:sha/analyze
+```
+
+- **Purpose**: Enqueue the snapshot (idempotent — one job per snapshot) and wait for completion. New snapshots from sync/connect are enqueued automatically in the background.
+- **Success Status**: `200 OK` — the finished job (see below).
+- **Error Statuses**: `404` unknown repo/snapshot; `500` engine failure (also recorded on the job row).
+
+---
+
+### 9. Get Analysis Result
+
+```http
+GET /api/v1/repos/:id/snapshots/:sha/analysis
+```
+
+- **Response Example**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "status": "done",
+      "attempts": 1,
+      "error": null,
+      "result": {
+        "engine": "stub",
+        "summary": "2 files changed, +4 −2",
+        "files": [{ "path": "src/app.js", "status": "M", "additions": 3, "deletions": 2, "impact": "medium", "explanation": null }]
+      }
+    }
+  }
+  ```
+- `status` is `pending` | `running` | `done` | `failed`. `engine: "stub"` means diff-stat output; set `AI_SERVICE_URL` for the real `POST {AI_SERVICE_URL}/v1/analyze` engine.
+
+---
+
 ## Webhooks Endpoints
 
 Public endpoints called by GitHub, not by users — no Clerk token. Authentication is the `X-Hub-Signature-256` HMAC header verified against `GITHUB_WEBHOOK_SECRET`.
