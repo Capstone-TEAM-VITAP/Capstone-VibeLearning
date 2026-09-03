@@ -84,3 +84,18 @@ export async function getDiff(getToken, id, sha, base) {
   const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/diff${query}`);
   return body.data;
 }
+
+// --- Analysis jobs (demo: stub engine until ai-service lands) ---
+
+export async function analyzeSnapshot(getToken, id, sha) {
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/analyze`, {
+    method: "POST",
+    body: JSON.stringify({}),
+  });
+  return body.data;
+}
+
+export async function getAnalysis(getToken, id, sha) {
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/analysis`);
+  return body.data;
+}
