@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth, UserButton } from "@clerk/react";
 import { getCurrentUser } from "../services/api.js";
+import ReposSection from "../components/ReposSection.jsx";
 
 function Dashboard() {
   const { getToken, isLoaded, isSignedIn } = useAuth();
@@ -75,6 +76,8 @@ function Dashboard() {
           </p>
         )}
       </div>
+
+      <ReposSection getToken={getToken} />
     </div>
   );
 }

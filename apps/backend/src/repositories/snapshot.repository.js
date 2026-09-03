@@ -1,4 +1,5 @@
 import { db } from "../config/db.js";
+import { toInstant } from "../utils/time.js";
 
 /**
  * Snapshot rows hang off a Repository; ownership is enforced in the
@@ -22,7 +23,7 @@ export const snapshotRepository = {
       baseSha: data.baseSha ?? null,
       message: data.message ?? null,
       authorName: data.authorName ?? null,
-      committedAt: data.committedAt ?? null,
+      committedAt: toInstant(data.committedAt),
       fileCount: data.fileCount ?? 0,
       additions: data.additions ?? 0,
       deletions: data.deletions ?? 0,
