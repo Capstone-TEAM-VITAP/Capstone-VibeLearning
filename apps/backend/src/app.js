@@ -3,6 +3,8 @@ import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 
 import authRoutes from "./routes/auth.routes.js";
+import projectRoutes from "./routes/project.routes.js";
+import { notFoundHandler, errorHandler } from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -35,9 +37,6 @@ app.use(express.json());
 // Clerk authentication middleware
 app.use(clerkMiddleware());
 
-// Routes
-app.use("/api/v1/auth", authRoutes);
-
 // Health check
 app.get("/api/v1/health", (req, res) => {
   res.json({
@@ -47,5 +46,15 @@ app.get("/api/v1/health", (req, res) => {
     },
   });
 });
+
+// API Routes
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/projects", projectRoutes);
+
+// Catch-all 404 handler for undefined routes
+app.use(notFoundHandler);
+
+// Centralized error handling middleware
+app.use(errorHandler);
 
 export default app;

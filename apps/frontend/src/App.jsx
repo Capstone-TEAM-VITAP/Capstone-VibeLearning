@@ -12,17 +12,17 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <div className="brand-container">
-          <h1 className="brand-title">Code Ai </h1>
+          <h1 className="brand-title" data-testid="brand-title">CodeAI</h1>
           <span className="brand-badge">Dashboard</span>
         </div>
 
         <div className="auth-nav">
           <Show when="signed-out">
             <SignInButton mode="modal">
-              <button className="btn-sign-in">Sign In</button>
+              <button className="btn-sign-in" data-testid="sign-in-btn">Sign In</button>
             </SignInButton>
             <SignUpButton mode="modal">
-              <button className="btn-sign-up">Sign Up</button>
+              <button className="btn-sign-up" data-testid="sign-up-btn">Sign Up</button>
             </SignUpButton>
           </Show>
 
@@ -71,12 +71,12 @@ function App() {
 
       <main className="app-main">
         <Show when="signed-out">
-          <div className="hero-card">
-            <h2>Welcome to VibeLearning</h2>
-            <p>Your interactive learning workspace. Sign in to access your projects and personalized dashboard.</p>
+          <div className="hero-card" data-testid="hero-card">
+            <h2>Welcome to CodeAI</h2>
+            <p>AI-powered coding learning platform that connects GitHub repositories with personalized code analysis, learning paths, and developer insights.</p>
             <div style={{ marginTop: "24px" }}>
               <SignInButton mode="modal">
-                <button className="btn-sign-up">Get Started</button>
+                <button className="btn-sign-up" data-testid="hero-get-started-btn">Get Started</button>
               </SignInButton>
             </div>
           </div>
