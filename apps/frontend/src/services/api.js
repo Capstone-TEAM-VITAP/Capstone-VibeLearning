@@ -16,3 +16,71 @@ export async function getCurrentUser(getToken) {
 
   return response.json();
 }
+
+async function authedFetch(getToken, path, options = {}) {
+  const token = await getToken();
+
+  const response = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...(options.headers || {}),
+    },
+  });
+
+  if (response.status === 204) return null;
+
+  const body = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(body.message || `Request failed (${response.status})`);
+  }
+
+  return body;
+}
+
+// --- Connected repositories (GitHub ingest pipeline) ---
+
+export async function listRepos(getToken) {
+  const body = await authedFetch(getToken, "/repos");
+  return body.data;
+}
+
+export async function connectRepo(getToken, payload) {
+  const body = await authedFetch(getToken, "/repos/connect", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return body.data;
+}
+
+export async function syncRepo(getToken, id, payload = {}) {
+  const body = await authedFetch(getToken, `/repos/${id}/sync`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return body.data;
+}
+
+export async function deleteRepo(getToken, id) {
+  await authedFetch(getToken, `/repos/${id}`, { method: "DELETE" });
+  return true;
+}
+
+export async function listSnapshots(getToken, id) {
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots`);
+  return body.data;
+}
+
+export async function getChangedFiles(getToken, id, sha, base) {
+  const query = base ? `?base=${encodeURIComponent(base)}` : "";
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/files${query}`);
+  return body.data;
+}
+
+export async function getDiff(getToken, id, sha, base) {
+  const query = base ? `?base=${encodeURIComponent(base)}` : "";
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/diff${query}`);
+  return body.data;
+}
