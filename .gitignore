@@ -14,3 +14,9 @@ dist/
 .claude/
 .cursor/
 .devin/
+
+
+apps/ai-service/.venv/
+apps/ai-service/__pycache__/
+apps/ai-service/**/__pycache__/
+.pytest_cache/
