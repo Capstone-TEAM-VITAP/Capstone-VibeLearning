@@ -736,7 +736,7 @@ class TestReactImportEvidence:
     def test_react_import_is_hook(self) -> None:
         rr = _ext_resolved("src/App.js", "react")
         fc = classify_file(_fi("src/App.js"), resolved=[rr])
-        assert has_role(fc, ArchitectureRole.HOOK)
+        assert not has_role(fc, ArchitectureRole.HOOK)
 
     def test_react_import_evidence_category(self) -> None:
         rr = _ext_resolved("src/App.js", "react")
@@ -777,7 +777,7 @@ class TestMongooseImportEvidence:
     def test_mongoose_import_is_repository(self) -> None:
         rr = _ext_resolved("src/user.js", "mongoose")
         fc = classify_file(_fi("src/user.js"), resolved=[rr])
-        assert has_role(fc, ArchitectureRole.REPOSITORY)
+        assert not has_role(fc, ArchitectureRole.REPOSITORY)
 
 
 # ===========================================================================
@@ -1180,3 +1180,226 @@ class TestEnums:
 
     def test_layer_is_str(self) -> None:
         assert isinstance(ArchitecturalLayer.PRESENTATION, str)
+
+
+# ===========================================================================
+# 57. Architecture Detection Quality Refinement Regression Suite
+# ===========================================================================
+
+
+class TestArchitectureRefinementRegressions:
+    def test_controller_calling_model_not_repository(self) -> None:
+        """taskController.js calling Task.findById and task.save is CONTROLLER, not REPOSITORY."""
+        rels = [
+            _call("backend/controllers/taskController.js", "Task.findById"),
+            _call("backend/controllers/taskController.js", "task.save"),
+            _call("backend/controllers/taskController.js", "Task.find"),
+            _call("backend/controllers/taskController.js", "Task.findByIdAndUpdate"),
+            _call("backend/controllers/taskController.js", "task.deleteOne"),
+        ]
+        resolved = [_ext_resolved("backend/controllers/taskController.js", "mongoose")]
+        fc = classify_file(
+            _fi("backend/controllers/taskController.js"),
+            relationships=rels,
+            resolved=resolved,
+        )
+        assert has_role(fc, ArchitectureRole.CONTROLLER)
+        assert not has_role(fc, ArchitectureRole.REPOSITORY)
+
+    def test_route_calling_delete_not_repository(self) -> None:
+        """taskRoutes.js calling router.delete is ROUTE, not REPOSITORY."""
+        rels = [
+            _call("backend/routes/taskRoutes.js", "router.get"),
+            _call("backend/routes/taskRoutes.js", "router.post"),
+            _call("backend/routes/taskRoutes.js", "router.delete"),
+        ]
+        resolved = [_ext_resolved("backend/routes/taskRoutes.js", "express")]
+        fc = classify_file(
+            _fi("backend/routes/taskRoutes.js"),
+            relationships=rels,
+            resolved=resolved,
+        )
+        assert has_role(fc, ArchitectureRole.ROUTE)
+        assert not has_role(fc, ArchitectureRole.REPOSITORY)
+
+    def test_app_jsx_not_hook_not_repository_not_entrypoint(self) -> None:
+        """App.jsx with React hooks and axios.delete is COMPONENT, not HOOK, REPOSITORY, or ENTRYPOINT."""
+        rels = [
+            _call("todo-frontend/src/App.jsx", "useState"),
+            _call("todo-frontend/src/App.jsx", "useEffect"),
+            _call("todo-frontend/src/App.jsx", "axios.get"),
+            _call("todo-frontend/src/App.jsx", "axios.post"),
+            _call("todo-frontend/src/App.jsx", "axios.delete"),
+        ]
+        resolved = [_ext_resolved("todo-frontend/src/App.jsx", "react")]
+        symbols = [_sym("App", "todo-frontend/src/App.jsx", SymbolKind.FUNCTION)]
+        fc = classify_file(
+            _fi("todo-frontend/src/App.jsx", ".jsx"),
+            symbols=symbols,
+            relationships=rels,
+            resolved=resolved,
+        )
+        assert has_role(fc, ArchitectureRole.COMPONENT)
+        assert not has_role(fc, ArchitectureRole.HOOK)
+        assert not has_role(fc, ArchitectureRole.REPOSITORY)
+        assert not has_role(fc, ArchitectureRole.ENTRYPOINT)
+
+    def test_taskform_using_usestate_not_hook(self) -> None:
+        """TaskForm.jsx using useState is COMPONENT, not HOOK."""
+        rels = [_call("todo-frontend/src/components/TaskForm.jsx", "useState")]
+        resolved = [_ext_resolved("todo-frontend/src/components/TaskForm.jsx", "react")]
+        symbols = [_sym("TaskForm", "todo-frontend/src/components/TaskForm.jsx", SymbolKind.FUNCTION)]
+        fc = classify_file(
+            _fi("todo-frontend/src/components/TaskForm.jsx", ".jsx"),
+            symbols=symbols,
+            relationships=rels,
+            resolved=resolved,
+        )
+        assert has_role(fc, ArchitectureRole.COMPONENT)
+        assert not has_role(fc, ArchitectureRole.HOOK)
+
+    def test_css_and_html_not_entrypoint(self) -> None:
+        """App.css, index.css, and index.html are not executable application entrypoints."""
+        fc_app_css = classify_file(_fi("todo-frontend/src/App.css", ".css"))
+        assert not has_role(fc_app_css, ArchitectureRole.ENTRYPOINT)
+        assert has_role(fc_app_css, ArchitectureRole.UNKNOWN)
+
+        fc_idx_css = classify_file(_fi("todo-frontend/src/index.css", ".css"))
+        assert not has_role(fc_idx_css, ArchitectureRole.ENTRYPOINT)
+        assert has_role(fc_idx_css, ArchitectureRole.UNKNOWN)
+
+        fc_html = classify_file(_fi("todo-frontend/index.html", ".html"))
+        assert not has_role(fc_html, ArchitectureRole.ENTRYPOINT)
+        assert has_role(fc_html, ArchitectureRole.UNKNOWN)
+
+    def test_main_jsx_is_entrypoint_and_component(self) -> None:
+        """main.jsx calling createRoot is ENTRYPOINT and COMPONENT (from JSX), not HOOK."""
+        rels = [_call("todo-frontend/src/main.jsx", "createRoot")]
+        resolved = [_ext_resolved("todo-frontend/src/main.jsx", "react")]
+        fc = classify_file(
+            _fi("todo-frontend/src/main.jsx", ".jsx"),
+            relationships=rels,
+            resolved=resolved,
+        )
+        assert has_role(fc, ArchitectureRole.ENTRYPOINT)
+        assert has_role(fc, ArchitectureRole.COMPONENT)
+        assert not has_role(fc, ArchitectureRole.HOOK)
+
+    def test_server_js_bootstrap_is_entrypoint(self) -> None:
+        """server.js calling app.listen is ENTRYPOINT."""
+        rels = [_call("server.js", "app.listen")]
+        fc = classify_file(_fi("server.js"), relationships=rels)
+        assert has_role(fc, ArchitectureRole.ENTRYPOINT)
+
+    def test_genuine_custom_hook_detection(self) -> None:
+        """useAuth.js or custom hook function is legitimately detected as HOOK."""
+        fc_file = classify_file(_fi("src/hooks/useCustom.js"))
+        assert has_role(fc_file, ArchitectureRole.HOOK)
+
+        sym = _sym("useToggle", "src/toggle.js", SymbolKind.FUNCTION)
+        fc_sym = classify_file(_fi("src/toggle.js"), symbols=[sym])
+        assert has_role(fc_sym, ArchitectureRole.HOOK)
+
+    def test_genuine_repository_detection(self) -> None:
+        """Genuine repository by path, symbol, or direct db.query call is detected."""
+        fc_path = classify_file(_fi("src/repositories/userRepository.js"))
+        assert has_role(fc_path, ArchitectureRole.REPOSITORY)
+
+        sym = _sym("UserRepository", "src/user.js", SymbolKind.CLASS)
+        fc_sym = classify_file(_fi("src/user.js"), symbols=[sym])
+        assert has_role(fc_sym, ArchitectureRole.REPOSITORY)
+
+        rels = [_call("src/user.js", "db.query")]
+        fc_call = classify_file(_fi("src/user.js"), relationships=rels)
+        assert has_role(fc_call, ArchitectureRole.REPOSITORY)
+
+    def test_report_controller_not_repository(self) -> None:
+        """reportController.js must not match 'repo' substring to become REPOSITORY."""
+        fc = classify_file(_fi("src/controllers/reportController.js"))
+        assert has_role(fc, ArchitectureRole.CONTROLLER)
+        assert not has_role(fc, ArchitectureRole.REPOSITORY)
+
+
+# ===========================================================================
+# 45. Gym-Buddy Architectural Quality Regressions
+# ===========================================================================
+
+
+class TestGymBuddyArchitecturalRegressions:
+    def test_middleware_calling_model_is_not_repository(self) -> None:
+        """backend/middleware/requireAuth.js calling User.findOne is MIDDLEWARE, not REPOSITORY."""
+        rels = [_call("backend/middleware/requireAuth.js", "User.findOne")]
+        fc = classify_file(_fi("backend/middleware/requireAuth.js"), relationships=rels)
+        assert has_role(fc, ArchitectureRole.MIDDLEWARE)
+        assert not has_role(fc, ArchitectureRole.REPOSITORY)
+
+    def test_model_calling_this_findone_is_not_repository(self) -> None:
+        """backend/models/usermodel.js calling this.findOne is MODEL, not REPOSITORY."""
+        rels = [_call("backend/models/usermodel.js", "this.findOne")]
+        fc = classify_file(_fi("backend/models/usermodel.js"), relationships=rels)
+        assert has_role(fc, ArchitectureRole.MODEL)
+        assert not has_role(fc, ArchitectureRole.REPOSITORY)
+
+    def test_hook_importing_react_is_not_component(self) -> None:
+        """frontend/src/hooks/useAuthContext.js is HOOK, not COMPONENT."""
+        imp_rr = _ext_resolved("frontend/src/hooks/useAuthContext.js", "react")
+        rels = [_call("frontend/src/hooks/useAuthContext.js", "useContext")]
+        fc = classify_file(
+            _fi("frontend/src/hooks/useAuthContext.js"),
+            relationships=rels,
+            resolved=[imp_rr],
+        )
+        assert has_role(fc, ArchitectureRole.HOOK)
+        assert not has_role(fc, ArchitectureRole.COMPONENT)
+
+    def test_frontend_index_js_is_entrypoint_not_component(self) -> None:
+        """frontend/src/index.js calling createRoot is ENTRYPOINT, not COMPONENT."""
+        imp_rr = _ext_resolved("frontend/src/index.js", "react")
+        rels = [_call("frontend/src/index.js", "createRoot")]
+        fc = classify_file(
+            _fi("frontend/src/index.js"),
+            relationships=rels,
+            resolved=[imp_rr],
+        )
+        assert has_role(fc, ArchitectureRole.ENTRYPOINT)
+        assert not has_role(fc, ArchitectureRole.COMPONENT)
+
+    def test_frontend_app_js_with_symbol_is_component(self) -> None:
+        """frontend/src/App.js declaring function App() is COMPONENT."""
+        sym = _sym("App", "frontend/src/App.js", SymbolKind.FUNCTION)
+        fc = classify_file(_fi("frontend/src/App.js"), symbols=[sym])
+        assert has_role(fc, ArchitectureRole.COMPONENT)
+        assert not has_role(fc, ArchitectureRole.ENTRYPOINT)
+
+    def test_server_js_entrypoint_is_not_route(self) -> None:
+        """backend/server.js importing express and mounting router is ENTRYPOINT, not ROUTE."""
+        imp_rr = _ext_resolved("backend/server.js", "express")
+        rels = [
+            _call("backend/server.js", "app.listen"),
+            _call("backend/server.js", "app.use"),
+            _call("backend/server.js", "app.get"),
+        ]
+        fc = classify_file(
+            _fi("backend/server.js"),
+            relationships=rels,
+            resolved=[imp_rr],
+        )
+        assert has_role(fc, ArchitectureRole.ENTRYPOINT)
+        assert not has_role(fc, ArchitectureRole.ROUTE)
+
+    def test_no_component_to_hook_arch_relationship(self) -> None:
+        """COMPONENT -> HOOK should not produce architectural relationships."""
+        fi_comp = _fi("src/components/Nav.jsx", ".jsx")
+        fi_hook = _fi("src/hooks/useAuth.js")
+        sym_comp = _sym("Nav", fi_comp.path, SymbolKind.FUNCTION)
+        sym_hook = _sym("useAuth", fi_hook.path, SymbolKind.FUNCTION)
+        resolved_rr = _local_resolved(fi_comp.path, fi_hook.path, "./hooks/useAuth")
+
+        arch = classify_repository(
+            files=[fi_comp, fi_hook],
+            symbols=[sym_comp, sym_hook],
+            relationships=[resolved_rr.source_relationship],
+            resolved=[resolved_rr],
+        )
+        assert len(arch.architectural_relationships) == 0
+

@@ -227,9 +227,12 @@ def _extract_statement(
         # Recurse into the child blocks of control-flow statements
         results: list[Symbol] = []
         for child in node.children:  # type: ignore[attr-defined]
-            if child.type in ("statement_block",) | _BLOCK_STATEMENT_TYPES:
+            if child.type == "statement_block" or child.type in _BLOCK_STATEMENT_TYPES:
                 results.extend(_extract_statement(child, path, parent_name))
         return results
+
+    if nt == "expression_statement":
+        return _handle_expression_statement(node, path, parent_name)
 
     return []
 
@@ -467,6 +470,72 @@ def _handle_export_statement(
             "variable_declaration",
         ):
             results.extend(_extract_statement(child, path, parent_name))
+    return results
+
+
+def _handle_expression_statement(
+    node: object,
+    path: str,
+    parent_name: str | None,
+) -> list[Symbol]:
+    """
+    Extract symbols from CommonJS export assignments in expression_statement nodes.
+
+    Handles:
+    - ``exports.myFunc = async (req, res) => ...``
+    - ``module.exports.myFunc = function(...) ...``
+    - ``exports.MyClass = class ...``
+    """
+    results: list[Symbol] = []
+    for child in node.children:  # type: ignore[attr-defined]
+        if child.type != "assignment_expression":  # type: ignore[attr-defined]
+            continue
+        left = _field(child, "left")
+        right = _field(child, "right")
+        if left is None or right is None:
+            continue
+
+        name: str | None = None
+        if left.type == "member_expression":  # type: ignore[attr-defined]
+            obj = _field(left, "object")
+            prop = _field(left, "property")
+            if obj is not None and prop is not None:
+                obj_text = _node_text(obj)
+                prop_text = _node_text(prop)
+                if obj_text in ("exports", "module.exports"):
+                    name = prop_text
+
+        if not name:
+            continue
+
+        right_type: str = right.type  # type: ignore[attr-defined]
+        if right_type in _CALLABLE_TYPES:
+            sym = Symbol(
+                name=name,
+                kind=SymbolKind.FUNCTION,
+                path=path,
+                start=_pos(child.start_point),  # type: ignore[attr-defined]
+                end=_pos(child.end_point),  # type: ignore[attr-defined]
+                parent=parent_name,
+            )
+            results.append(sym)
+            body = _field(right, "body")
+            if body is not None and body.type == "statement_block":  # type: ignore[attr-defined]
+                results.extend(_extract_statements(body.children, path, name))  # type: ignore[attr-defined]
+        elif right_type == "class":
+            sym = Symbol(
+                name=name,
+                kind=SymbolKind.CLASS,
+                path=path,
+                start=_pos(child.start_point),  # type: ignore[attr-defined]
+                end=_pos(child.end_point),  # type: ignore[attr-defined]
+                parent=parent_name,
+            )
+            results.append(sym)
+            body = _field(right, "body")
+            if body is not None:
+                results.extend(_extract_statements(body.children, path, name))  # type: ignore[attr-defined]
+
     return results
 
 

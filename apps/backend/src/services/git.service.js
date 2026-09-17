@@ -223,6 +223,52 @@ export async function getSnapshotDiff(repositoryId, baseSha, headSha, paths = []
   return { baseSha: baseSha || null, headSha, fileCount: files.length, additions, deletions, files };
 }
 
+/**
+ * Extract or locate an isolated directory containing the exact files for a commit SHA.
+ */
+export async function ensureSnapshotTree(repositoryId, commitSha) {
+  const dir = getMirrorDir(repositoryId);
+  const snapshotDir = path.join(getCacheDir(), "snapshots", String(repositoryId), String(commitSha));
+
+  if (fs.existsSync(snapshotDir) && fs.readdirSync(snapshotDir).length > 0) {
+    return snapshotDir;
+  }
+
+  // If the mirror directory exists as a bare git repository
+  if (fs.existsSync(dir)) {
+    fs.mkdirSync(snapshotDir, { recursive: true });
+    const tarPath = path.join(snapshotDir, `__tree_${commitSha}.tar`);
+    try {
+      await runGit(["--git-dir", dir, "archive", "--format=tar", "-o", tarPath, commitSha]);
+      await execFileAsync("tar", ["-xf", tarPath, "-C", snapshotDir]);
+    } catch (err) {
+      // Clean up partially extracted snapshot
+      try {
+        fs.rmSync(snapshotDir, { recursive: true, force: true });
+      } catch {
+        // ignore cleanup errors
+      }
+      throw toGitError(err, `Unable to extract snapshot tree for commit ${commitSha}`);
+    } finally {
+      if (fs.existsSync(tarPath)) {
+        try {
+          fs.rmSync(tarPath, { force: true });
+        } catch {
+          // ignore cleanup errors
+        }
+      }
+    }
+    return snapshotDir;
+  }
+
+  // Fallback: if mirror doesn't exist, check if repositoryId is itself a directory path (e.g. for mock/test environments)
+  if (fs.existsSync(repositoryId) && fs.statSync(repositoryId).isDirectory()) {
+    return repositoryId;
+  }
+
+  throw new BadRequestError(`Repository mirror not found for repository ${repositoryId}`);
+}
+
 export default {
   getCacheDir,
   getMirrorDir,
@@ -234,4 +280,6 @@ export default {
   getCommitMeta,
   getChangedFiles,
   getSnapshotDiff,
+  ensureSnapshotTree,
 };
+

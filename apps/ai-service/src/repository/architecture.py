@@ -264,11 +264,13 @@ class RepositoryArchitecture:
 # ---------------------------------------------------------------------------
 
 # filename stem substring → role (first matching keyword wins per role)
+# Note: "repo" abbreviation is checked specifically in _detect_by_path with boundary guards
+# to prevent substrings like "report" from triggering REPOSITORY.
 _STEM_CHECKS: list[tuple[ArchitectureRole, tuple[str, ...]]] = [
     (ArchitectureRole.TEST,       ("test", "spec")),
     (ArchitectureRole.CONTROLLER, ("controller", "controllers", "ctrl")),
     (ArchitectureRole.SERVICE,    ("service", "services", "svc")),
-    (ArchitectureRole.REPOSITORY, ("repository", "repositories", "repo")),
+    (ArchitectureRole.REPOSITORY, ("repository", "repositories")),
     (ArchitectureRole.ROUTE,      ("route", "routes", "router")),
     (ArchitectureRole.MODEL,      ("model", "models", "schema", "schemas")),
     (ArchitectureRole.ENTITY,     ("entity", "entities")),
@@ -294,8 +296,13 @@ _SEGMENT_CHECKS: list[tuple[ArchitectureRole, frozenset[str]]] = [
     (ArchitectureRole.COMPONENT,  frozenset({"components", "component", "pages", "views", "screens", "ui"})),
 ]
 
+# Executable code file extensions eligible for ENTRYPOINT detection
+_EXECUTABLE_EXTENSIONS: frozenset[str] = frozenset({
+    ".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".py",
+})
+
 # ENTRYPOINT: stem must be exactly one of these (lowercase)
-_ENTRYPOINT_STEMS: frozenset[str] = frozenset({"index", "main", "server", "app"})
+_ENTRYPOINT_STEMS: frozenset[str] = frozenset({"index", "main", "server"})
 
 # Express route registration callees (M4 CALLS target_name)
 _EXPRESS_ROUTE_CALLEES: frozenset[str] = frozenset({
@@ -305,6 +312,18 @@ _EXPRESS_ROUTE_CALLEES: frozenset[str] = frozenset({
     "app.patch",  "app.use",     "app.all",
 })
 
+# Application bootstrap callees → ENTRYPOINT evidence
+_BOOTSTRAP_CALLEES: frozenset[str] = frozenset({
+    "createRoot",
+    "ReactDOM.createRoot",
+    "ReactDOMClient.createRoot",
+    "ReactDOM.render",
+    "app.listen",
+    "server.listen",
+    "http.createServer",
+    "https.createServer",
+})
+
 # React hook callees (from M4 CALLS)
 _REACT_HOOK_CALLEES: frozenset[str] = frozenset({
     "useState", "useEffect", "useCallback", "useMemo",
@@ -312,19 +331,30 @@ _REACT_HOOK_CALLEES: frozenset[str] = frozenset({
     "useId", "useTransition", "useDeferredValue",
 })
 
+# Prefixes to strictly exclude from database query operation matching
+_NON_DB_CALLEE_PREFIXES: tuple[str, ...] = (
+    "router.", "app.", "route.",
+    "axios.", "http.", "https.", "api.", "fetch",
+    "req.", "res.", "request.", "response.",
+    "Set.", "Map.", "Object.", "Array.", "console.", "JSON.", "Math.",
+    "React.", "ReactDOM.", "this.",
+)
+
 # Database operation callee prefixes → REPOSITORY evidence
 _DB_CALLEE_PREFIXES: tuple[str, ...] = (
     "prisma.", "db.", "knex.", "sequelize.",
     "mongoose.connection.", "pool.", "client.",
 )
 
-# Database operation callee suffixes → REPOSITORY evidence
+# Model/ORM query method suffixes → REPOSITORY evidence
 _DB_CALLEE_SUFFIXES: tuple[str, ...] = (
     ".findMany", ".findById", ".findOne", ".findAll", ".findBy",
     ".findByPk", ".findAndCountAll",
-    ".createMany", ".create", ".save",
-    ".updateMany", ".update",
-    ".deleteMany", ".delete", ".destroy",
+    ".createMany", ".updateMany",
+    ".deleteMany", ".deleteOne", ".destroy",
+    ".findByIdAndUpdate", ".findOneAndUpdate",
+    ".findByIdAndDelete", ".findByIdAndRemove",
+    ".save",
     ".query", ".execute", ".raw",
 )
 
@@ -336,22 +366,20 @@ _MODEL_CREATION_CALLEES: frozenset[str] = frozenset({
 # External module patterns → (module_path_exact, role, description)
 _EXTERNAL_IMPORT_PATTERNS: list[tuple[str, ArchitectureRole, str]] = [
     ("react",          ArchitectureRole.COMPONENT, "imports 'react'"),
-    ("react",          ArchitectureRole.HOOK,      "imports 'react'"),
     ("react-dom",      ArchitectureRole.COMPONENT, "imports 'react-dom'"),
     ("express",        ArchitectureRole.ROUTE,     "imports 'express'"),
-    ("mongoose",       ArchitectureRole.MODEL,      "imports 'mongoose'"),
-    ("mongoose",       ArchitectureRole.REPOSITORY, "imports 'mongoose'"),
+    ("mongoose",       ArchitectureRole.MODEL,     "imports 'mongoose'"),
     ("@prisma/client", ArchitectureRole.REPOSITORY, "imports '@prisma/client'"),
 ]
 
 # Architectural relationship patterns: (source_role, target_role, pattern_label)
+# Note: COMPONENT → HOOK is intentionally omitted to keep architectural layers clean.
 _ARCH_PATTERNS: list[tuple[ArchitectureRole, ArchitectureRole, str]] = [
     (ArchitectureRole.ROUTE,      ArchitectureRole.CONTROLLER, "ROUTE → CONTROLLER"),
     (ArchitectureRole.CONTROLLER, ArchitectureRole.SERVICE,    "CONTROLLER → SERVICE"),
     (ArchitectureRole.SERVICE,    ArchitectureRole.REPOSITORY, "SERVICE → REPOSITORY"),
     (ArchitectureRole.REPOSITORY, ArchitectureRole.MODEL,      "REPOSITORY → MODEL"),
     (ArchitectureRole.SERVICE,    ArchitectureRole.MODEL,      "SERVICE → MODEL"),
-    (ArchitectureRole.COMPONENT,  ArchitectureRole.HOOK,       "COMPONENT → HOOK"),
     (ArchitectureRole.COMPONENT,  ArchitectureRole.SERVICE,    "COMPONENT → SERVICE"),
     (ArchitectureRole.MIDDLEWARE, ArchitectureRole.SERVICE,    "MIDDLEWARE → SERVICE"),
 ]
@@ -397,6 +425,24 @@ def _is_hook_name(raw_stem: str) -> bool:
     return raw_stem.startswith("use") and raw_stem[3].isupper()
 
 
+def _is_repo_stem(stem: str) -> bool:
+    """
+    Return True if *stem* specifically indicates a repository abbreviation.
+
+    Prevents false-positives on words like 'report', 'repositoryReport', etc.
+    Matches 'repo', 'userRepo', 'user.repo', 'user_repo', 'repo.service', etc.
+    """
+    if stem.startswith("report"):
+        return False
+    if stem == "repo":
+        return True
+    if stem.endswith((".repo", "_repo", "-repo", "repo")):
+        return True
+    if stem.startswith("repo.") or ".repo." in stem:
+        return True
+    return False
+
+
 # ---------------------------------------------------------------------------
 # Detection: file path and extension
 # ---------------------------------------------------------------------------
@@ -425,14 +471,20 @@ def _detect_by_path(file: FileInfo) -> dict[ArchitectureRole, list[EvidenceItem]
     if ext in {".jsx", ".tsx"}:
         add(ArchitectureRole.COMPONENT, f"JSX/TSX file extension ({ext!r})", "extension")
 
-    # --- Special stem cases ---
-    # ENTRYPOINT: stem is exactly one of the recognised entry filenames
-    if stem in _ENTRYPOINT_STEMS:
-        add(ArchitectureRole.ENTRYPOINT, f"filename is {stem!r} (common application entrypoint)")
+    # ENTRYPOINT: Only executable code files (not CSS, HTML, config, etc.)
+    if ext in _EXECUTABLE_EXTENSIONS:
+        if stem in _ENTRYPOINT_STEMS:
+            add(ArchitectureRole.ENTRYPOINT, f"filename is {stem!r} (common application entrypoint)")
+        elif stem_raw == "app":
+            add(ArchitectureRole.ENTRYPOINT, "filename is 'app' (common application entrypoint)")
 
     # HOOK: stem follows React hook naming convention (useXxx)
     if _is_hook_name(stem_raw):
         add(ArchitectureRole.HOOK, "filename follows React hook naming convention (use*)")
+
+    # REPOSITORY: stem specifically indicates repository ('repo' abbreviation guard)
+    if _is_repo_stem(stem):
+        add(ArchitectureRole.REPOSITORY, "filename indicates repository ('repo')")
 
     # --- General stem keyword matching ---
     for role, keywords in _STEM_CHECKS:
@@ -503,14 +555,20 @@ def _detect_by_symbols(
         ):
             add(ArchitectureRole.MODEL, f"symbol {name!r} follows model/schema naming convention")
 
-        # React component: capitalized name in a JSX/TSX file
+        # React component: capitalized name in a JSX/TSX file, or component symbol in React component/page/App file
         if (
             sym.kind in {SymbolKind.FUNCTION, SymbolKind.CLASS}
             and name
             and name[0].isupper()
-            and file.extension in {".jsx", ".tsx"}
         ):
-            add(ArchitectureRole.COMPONENT, f"symbol {name!r} is a capitalized component identifier")
+            stem_raw, _, ext, segments = _file_decompose(file.path)
+            is_comp_context = (
+                ext in {".jsx", ".tsx"}
+                or stem_raw == "App"
+                or any(seg in {"components", "component", "pages", "views", "screens", "ui"} for seg in segments)
+            )
+            if is_comp_context:
+                add(ArchitectureRole.COMPONENT, f"symbol {name!r} is a capitalized component identifier")
 
     return evidence
 
@@ -527,8 +585,8 @@ def _detect_by_calls(
     """
     Derive architectural role evidence from M4 CALLS relationships of *file*.
 
-    Detects Express route registration, React hook calls, and database
-    operation patterns.
+    Detects Express route registration, application bootstrap, React hook calls,
+    and database operation patterns.
     """
     evidence: dict[ArchitectureRole, list[EvidenceItem]] = {}
     seen: dict[ArchitectureRole, set[str]] = {}
@@ -549,25 +607,38 @@ def _detect_by_calls(
         if callee in _EXPRESS_ROUTE_CALLEES:
             add(ArchitectureRole.ROUTE, f"calls {callee!r} — Express route registration")
 
+        # Application bootstrap callees
+        if callee in _BOOTSTRAP_CALLEES:
+            add(ArchitectureRole.ENTRYPOINT, f"calls {callee!r} — application bootstrap")
+
         # React hook usage (component or hook file)
         if callee in _REACT_HOOK_CALLEES:
             add(ArchitectureRole.COMPONENT, f"calls {callee!r} — React hook usage")
 
+        # Model creation
+        if callee in _MODEL_CREATION_CALLEES:
+            add(ArchitectureRole.MODEL, f"calls {callee!r} — model definition")
+
+        # Strictly exclude non-DB callees (Express routes, HTTP clients, request/response, builtins)
+        if callee in _EXPRESS_ROUTE_CALLEES or callee.startswith(_NON_DB_CALLEE_PREFIXES):
+            continue
+
         # Database operations — prefix match
+        matched_db_prefix = False
         for prefix in _DB_CALLEE_PREFIXES:
             if callee.startswith(prefix):
                 add(ArchitectureRole.REPOSITORY, f"calls {callee!r} — database operation")
+                matched_db_prefix = True
                 break
 
-        # Database operations — suffix match
+        if matched_db_prefix:
+            continue
+
+        # Database operations — suffix match (ORM / model queries)
         for suffix in _DB_CALLEE_SUFFIXES:
             if callee.endswith(suffix):
                 add(ArchitectureRole.REPOSITORY, f"calls {callee!r} — database query pattern")
                 break
-
-        # Model creation
-        if callee in _MODEL_CREATION_CALLEES:
-            add(ArchitectureRole.MODEL, f"calls {callee!r} — model definition")
 
     return evidence
 
@@ -787,12 +858,136 @@ def classify_file(
     relationships = relationships or []
     resolved = resolved or []
 
-    role_evidence = _merge_evidence(
-        _detect_by_path(file),
-        _detect_by_symbols(file, symbols),
-        _detect_by_calls(file, relationships),
-        _detect_by_imports(file, resolved),
-    )
+def _refine_role_evidence(
+    file: FileInfo,
+    path_ev: dict[ArchitectureRole, list[EvidenceItem]],
+    sym_ev: dict[ArchitectureRole, list[EvidenceItem]],
+    call_ev: dict[ArchitectureRole, list[EvidenceItem]],
+    imp_ev: dict[ArchitectureRole, list[EvidenceItem]],
+) -> dict[ArchitectureRole, list[EvidenceItem]]:
+    """
+    Refine and filter merged evidence to prevent false-positive role propagation.
+
+    Guarantees:
+    1. Non-repository files (controllers, routes, middleware, models, components, hooks)
+       do NOT become a REPOSITORY merely because they call model/ORM query methods
+       (e.g. User.findOne, this.findOne, task.save) or reference models.
+       They only retain REPOSITORY if independent repository evidence exists (path, symbols,
+       @prisma/client import, or direct DB client queries).
+    2. Hook files do NOT become a COMPONENT merely because they import React or call useState/useEffect.
+    3. Entrypoint files (server.js, index.js) do NOT become a COMPONENT merely by importing React.
+    4. Entrypoint files (server.js, app.js) do NOT become a ROUTE merely from mounting routers via app.use/app.get.
+    5. Non-executable files (e.g. .css, .html) do not become ENTRYPOINT.
+    """
+    merged = _merge_evidence(path_ev, sym_ev, call_ev, imp_ev)
+
+    # --- Rule 1: Non-repository layers querying/referencing models do NOT become REPOSITORY ---
+    non_repo_roles = {
+        ArchitectureRole.CONTROLLER,
+        ArchitectureRole.ROUTE,
+        ArchitectureRole.MIDDLEWARE,
+        ArchitectureRole.MODEL,
+        ArchitectureRole.COMPONENT,
+        ArchitectureRole.HOOK,
+    }
+    has_non_repo_role = bool(merged.keys() & non_repo_roles)
+
+    if has_non_repo_role and ArchitectureRole.REPOSITORY in merged:
+        # Check for independent repository evidence:
+        has_repo_path = ArchitectureRole.REPOSITORY in path_ev
+        has_repo_sym = ArchitectureRole.REPOSITORY in sym_ev
+        has_repo_import = ArchitectureRole.REPOSITORY in imp_ev
+        has_direct_db_call = any(
+            e.description.startswith("calls 'prisma.")
+            or e.description.startswith("calls 'db.")
+            or e.description.startswith("calls 'knex.")
+            or e.description.startswith("calls 'sequelize.")
+            or e.description.startswith("calls 'pool.")
+            or e.description.startswith("calls 'mongoose.connection.")
+            or any(m in e.description for m in ("client.query", "pool.query", "conn.query", "db.query"))
+            for e in call_ev.get(ArchitectureRole.REPOSITORY, [])
+        )
+        has_independent_repo_evidence = (
+            has_repo_path or has_repo_sym or has_repo_import or has_direct_db_call
+        )
+        if not has_independent_repo_evidence:
+            del merged[ArchitectureRole.REPOSITORY]
+
+    # --- Rule 2: Hook files should NOT become COMPONENT merely from importing 'react' or calling useState ---
+    if ArchitectureRole.HOOK in merged and ArchitectureRole.COMPONENT in merged:
+        stem_raw, _, ext, segments = _file_decompose(file.path)
+        has_comp_path = (
+            any(seg in {"components", "component", "pages", "views", "screens", "ui"} for seg in segments)
+            or "component" in stem_raw.lower()
+        )
+        has_comp_sym = ArchitectureRole.COMPONENT in sym_ev
+        if not (has_comp_path or has_comp_sym):
+            del merged[ArchitectureRole.COMPONENT]
+
+    # --- Rule 3: Entrypoint files should NOT become COMPONENT merely from importing 'react' ---
+    if ArchitectureRole.ENTRYPOINT in merged and ArchitectureRole.COMPONENT in merged:
+        stem_raw, _, ext, segments = _file_decompose(file.path)
+        has_comp_path = (
+            any(seg in {"components", "component", "pages", "views", "screens", "ui"} for seg in segments)
+            or "component" in stem_raw.lower()
+            or stem_raw == "App"
+        )
+        has_comp_sym = ArchitectureRole.COMPONENT in sym_ev
+        is_jsx = ext in {".jsx", ".tsx"}
+        if not (has_comp_path or has_comp_sym or is_jsx):
+            del merged[ArchitectureRole.COMPONENT]
+
+    # --- Rule 4: Server entrypoint files (server.js, index.js) should NOT become ROUTE merely from app.use/app.get ---
+    if ArchitectureRole.ENTRYPOINT in merged and ArchitectureRole.ROUTE in merged:
+        _, stem, _, segments = _file_decompose(file.path)
+        if stem in {"server", "index"}:
+            has_route_path = (
+                any(seg in {"routes", "route", "router"} for seg in segments)
+                or any(kw in stem for kw in ("route", "routes", "router"))
+            )
+            if not has_route_path:
+                del merged[ArchitectureRole.ROUTE]
+
+    return merged
+
+
+def classify_file(
+    file: FileInfo,
+    symbols: list[Symbol] | None = None,
+    relationships: list[Relationship] | None = None,
+    resolved: list[ResolvedRelationship] | None = None,
+) -> FileClassification:
+    """
+    Classify a single file into architectural roles.
+
+    Runs all four detection passes (path, symbols, calls, imports) and
+    merges and refines their evidence.  Returns a ``FileClassification``
+    with one ``ArchitecturalClassification`` per detected role, or a single
+    ``UNKNOWN`` classification when no evidence was found.
+
+    Parameters
+    ----------
+    file:
+        ``FileInfo`` from the M1 scanner.
+    symbols:
+        M3 symbols extracted from this file (defaults to ``[]``).
+    relationships:
+        M4 relationships where ``source_path == file.path``
+        (defaults to ``[]``).
+    resolved:
+        M5 resolved relationships where source file is this file
+        (defaults to ``[]``).
+    """
+    symbols = symbols or []
+    relationships = relationships or []
+    resolved = resolved or []
+
+    path_ev = _detect_by_path(file)
+    sym_ev = _detect_by_symbols(file, symbols)
+    call_ev = _detect_by_calls(file, relationships)
+    imp_ev = _detect_by_imports(file, resolved)
+
+    role_evidence = _refine_role_evidence(file, path_ev, sym_ev, call_ev, imp_ev)
 
     return _build_file_classification(file, role_evidence)
 

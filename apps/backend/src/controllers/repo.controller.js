@@ -87,6 +87,23 @@ export const repoController = {
       next(error);
     }
   },
+
+  async getSnapshotGraph(req, res, next) {
+    try {
+      const graph = await repoService.getSnapshotGraph(
+        req.userId,
+        req.params.id,
+        req.params.sha
+      );
+      if (req.query?.envelope === "true") {
+        return successResponse(res, graph, 200);
+      }
+      return res.status(200).json(graph);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export default repoController;
+

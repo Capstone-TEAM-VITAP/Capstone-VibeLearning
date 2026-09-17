@@ -760,3 +760,29 @@ class TestCallbackArrows:
         src = "fetch('/api').then(r => r.json()).catch(e => console.error(e));"
         syms = js(src)
         assert syms == []
+
+
+# ===========================================================================
+# 28. CommonJS exports assignment (exports.fn = ... / module.exports.fn = ...)
+# ===========================================================================
+
+
+class TestCommonJSExportAssignments:
+    def test_exports_arrow_function(self) -> None:
+        src = "exports.loginUser = async (req, res) => { const user = req.body; res.json(user); };"
+        syms = js(src)
+        sym = by_name(syms, "loginUser")
+        assert sym.kind == SymbolKind.FUNCTION
+
+    def test_exports_function_expression(self) -> None:
+        src = "exports.signupUser = function(req, res) { res.send('ok'); };"
+        syms = js(src)
+        sym = by_name(syms, "signupUser")
+        assert sym.kind == SymbolKind.FUNCTION
+
+    def test_module_exports_property_function(self) -> None:
+        src = "module.exports.createWorkout = async (req, res) => { return res.status(200).json({}); };"
+        syms = js(src)
+        sym = by_name(syms, "createWorkout")
+        assert sym.kind == SymbolKind.FUNCTION
+
