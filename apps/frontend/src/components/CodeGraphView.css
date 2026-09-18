@@ -1,0 +1,742 @@
+/* CodeGraphView.css — Terminal Horizon Style */
+
+.codegraph-workspace {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  background: var(--bg-canvas);
+  overflow: hidden;
+  position: relative;
+}
+
+.codegraph-workspace--fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  background: var(--bg-canvas);
+}
+
+/* Header */
+.codegraph-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 18px 24px;
+  background: var(--bg-surface-low);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  gap: 20px;
+}
+
+.codegraph-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.codegraph-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.codegraph-heading {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.codegraph-desc {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.codegraph-context-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.codegraph-context-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  background: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+}
+
+.codegraph-context-pill .material-symbols-outlined {
+  font-size: 14px;
+}
+
+.repo-pill {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.status-dot-complete {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+.codegraph-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.codegraph-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.codegraph-action-btn .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.codegraph-action-btn--secondary {
+  background: var(--bg-surface-container);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.codegraph-action-btn--secondary:hover {
+  background: var(--bg-surface-high);
+  border-color: var(--border-focus);
+}
+
+.codegraph-action-btn--primary {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: #818cf8;
+}
+
+.codegraph-action-btn--primary:hover {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: #818cf8;
+}
+
+/* Toolbar */
+.codegraph-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background: var(--bg-surface-container);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Search Box with Dropdown */
+.graph-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 0 10px;
+  width: 280px;
+  height: 32px;
+  transition: border-color 0.15s ease;
+}
+
+.graph-search-box:focus-within {
+  border-color: var(--primary);
+}
+
+.graph-search-icon {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-right: 6px;
+}
+
+.graph-search-input {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 12px;
+  width: 100%;
+  outline: none;
+}
+
+.graph-search-input::placeholder {
+  color: var(--text-disabled);
+}
+
+.graph-search-clear {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.graph-search-clear:hover {
+  color: var(--text-primary);
+}
+
+.graph-search-clear .material-symbols-outlined {
+  font-size: 14px;
+}
+
+/* Search Results Dropdown */
+.graph-search-results {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  width: 320px;
+  max-height: 280px;
+  overflow-y: auto;
+  background: var(--bg-surface-high);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  z-index: 50;
+  padding: 4px;
+}
+
+.graph-search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.graph-search-result-item:hover {
+  background: var(--bg-surface-highest);
+}
+
+.result-icon {
+  font-size: 16px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.result-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.result-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-role {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(20, 184, 166, 0.15);
+  color: #2dd4bf;
+  border: 1px solid rgba(20, 184, 166, 0.3);
+  flex-shrink: 0;
+}
+
+/* Select Wrapper */
+.graph-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.graph-select-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.graph-select {
+  background: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 11px;
+  border-radius: 6px;
+  padding: 5px 8px;
+  outline: none;
+  cursor: pointer;
+  height: 32px;
+}
+
+.graph-select:focus {
+  border-color: var(--primary);
+}
+
+/* Toolbar Buttons */
+.toolbar-btn-group {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.toolbar-icon-btn {
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+  padding: 6px 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.toolbar-icon-btn:last-child {
+  border-right: none;
+}
+
+.toolbar-icon-btn:hover {
+  background: var(--bg-surface-high);
+  color: var(--text-primary);
+}
+
+.toolbar-icon-btn .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.toolbar-icon-btn--active {
+  background: var(--bg-surface-high) !important;
+  color: var(--primary) !important;
+}
+
+/* Main Graph Body (Canvas + Inspector) */
+.codegraph-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.codegraph-body--no-inspector {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.codegraph-canvas {
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: var(--bg-canvas);
+}
+
+.codegraph-canvas .react-flow {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Custom Node Styles */
+.codegraph-node {
+  background: var(--bg-surface-container);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 210px;
+  min-width: 210px;
+  max-width: 210px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.codegraph-node-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.codegraph-node-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.codegraph-node-icon {
+  font-size: 16px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.codegraph-node-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.codegraph-node-badges {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.codegraph-type-tag {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--bg-surface-high);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-hairline);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.codegraph-role-tag {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(20, 184, 166, 0.15);
+  color: #2dd4bf;
+  border: 1px solid rgba(20, 184, 166, 0.35);
+  text-transform: uppercase;
+}
+
+.codegraph-node-path {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Node Variants */
+.codegraph-node--file {
+  border-left: 3px solid #818cf8;
+}
+
+.codegraph-node--function,
+.codegraph-node--method,
+.codegraph-node--class {
+  border-left: 3px solid #38bdf8;
+  padding: 8px 12px;
+}
+
+.codegraph-node--external {
+  border-left: 3px solid #94a3b8;
+  opacity: 0.85;
+}
+
+.codegraph-node--unresolved {
+  border-left: 3px solid #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* Node Interactive States */
+.codegraph-node:hover {
+  border-color: var(--border-focus);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.codegraph-node--selected {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  background: var(--bg-surface-high) !important;
+}
+
+.codegraph-node--highlighted {
+  border-color: var(--secondary) !important;
+  box-shadow: 0 0 0 1.5px rgba(56, 189, 248, 0.35) !important;
+}
+
+.codegraph-node--dimmed {
+  opacity: 0.22 !important;
+  filter: grayscale(0.5);
+}
+
+/* Handles */
+.codegraph-handle {
+  width: 6px !important;
+  height: 6px !important;
+  background: var(--border-subtle) !important;
+  border: 1px solid var(--border-focus) !important;
+  border-radius: 50% !important;
+  opacity: 0.6;
+}
+
+.codegraph-handle:hover {
+  background: var(--primary) !important;
+  opacity: 1;
+}
+
+/* React Flow Overrides */
+.codegraph-controls {
+  background: var(--bg-surface-low) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 6px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.codegraph-controls button {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border-hairline) !important;
+  color: var(--text-primary) !important;
+  fill: var(--text-primary) !important;
+}
+
+.codegraph-controls button:last-child {
+  border-bottom: none !important;
+}
+
+.codegraph-controls button:hover {
+  background: var(--bg-surface-high) !important;
+}
+
+.codegraph-minimap {
+  background: var(--bg-surface-low) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: 6px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+  margin-right: 14px !important;
+  margin-bottom: 14px !important;
+}
+
+/* Telemetry Strip */
+.codegraph-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 20px;
+  background: var(--bg-surface-container);
+  border-top: 1px solid var(--border-subtle);
+  font-size: 11px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  overflow-x: auto;
+  height: 32px;
+  box-sizing: border-box;
+}
+
+.telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.telemetry-label {
+  font-weight: 600;
+  color: var(--text-disabled);
+  letter-spacing: 0.05em;
+}
+
+.telemetry-val {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.telemetry-val.highlight {
+  color: var(--primary);
+}
+
+.telemetry-val.selected-tag {
+  color: var(--secondary);
+}
+
+.telemetry-divider {
+  color: var(--border-subtle);
+}
+
+/* State Fallboxes */
+.codegraph-state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 60px 24px;
+  text-align: center;
+  background: var(--bg-canvas);
+}
+
+.codegraph-state-icon {
+  font-size: 48px;
+  color: var(--text-disabled);
+  margin-bottom: 16px;
+}
+
+.codegraph-state-icon--error {
+  color: #ef4444;
+}
+
+.codegraph-state-icon--warn {
+  color: #f59e0b;
+}
+
+.codegraph-state-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.codegraph-state-desc {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+  max-width: 440px;
+  line-height: 1.5;
+}
+
+.codegraph-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 6px;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.codegraph-primary-btn:hover {
+  background: #4f46e5;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+}
+
+.codegraph-primary-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.codegraph-loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  background: var(--bg-canvas);
+}
+
+.codegraph-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border-subtle);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: codegraph-spin 0.8s linear infinite;
+}
+
+@keyframes codegraph-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.codegraph-loading-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.codegraph-loading-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Responsive Viewport Rules */
+@media (max-width: 1200px) {
+  .codegraph-body {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .codegraph-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .codegraph-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  .codegraph-header-actions {
+    justify-content: flex-start;
+  }
+  .codegraph-toolbar {
+    padding: 8px 16px;
+    gap: 10px;
+  }
+}
+

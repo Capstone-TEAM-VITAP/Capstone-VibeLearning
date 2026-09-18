@@ -1,0 +1,468 @@
+/* =========================================================
+   CODEAI WORKSTATION — OVERVIEW DASHBOARD STYLING
+   Google Stitch: Terminal Horizon Visual Direction
+   ========================================================= */
+
+/* --- Overview Hero --- */
+.overview-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.overview-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+.overview-eyebrow .material-symbols-outlined {
+  font-size: 14px;
+}
+
+.overview-title {
+  font-family: var(--font-sans);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.overview-subtitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 680px;
+  margin: 0;
+}
+
+.overview-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* --- Section Containers --- */
+.overview-section {
+  margin-bottom: 28px;
+}
+
+.overview-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.overview-section-title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* --- Repository Cards Grid --- */
+.overview-repo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.overview-repo-card {
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 16px 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.15s ease;
+}
+
+.overview-repo-card:hover {
+  border-color: var(--border-active);
+  background-color: var(--bg-surface-container);
+}
+
+.overview-repo-card.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.overview-repo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.overview-repo-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.overview-repo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background-color: var(--bg-surface-high);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.overview-repo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.overview-repo-name {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.overview-repo-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.overview-repo-status {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  border: 1px solid var(--border-hairline);
+  background-color: var(--bg-surface-container);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.overview-repo-status.complete {
+  background-color: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: var(--status-success);
+}
+
+.overview-repo-commit-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+}
+
+.overview-repo-commit-info code {
+  color: var(--secondary-light);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.overview-repo-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+/* --- Empty Repository State --- */
+.overview-empty-repo {
+  background-color: var(--bg-surface-low);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 10px;
+  padding: 44px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.overview-empty-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: var(--primary-dim);
+  color: var(--primary-light);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.overview-empty-icon .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.overview-empty-repo h3 {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.overview-empty-repo p {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 440px;
+  line-height: 1.4;
+  margin: 0 0 8px;
+}
+
+/* --- Quick Actions Grid --- */
+.overview-quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.quick-action-card {
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.quick-action-card:hover:not(.disabled) {
+  background-color: var(--bg-surface-container);
+  border-color: var(--border-active);
+  transform: translateY(-1px);
+}
+
+.quick-action-card.disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.quick-action-icon {
+  font-size: 18px;
+  color: var(--primary-light);
+  flex-shrink: 0;
+}
+
+.quick-action-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.quick-action-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.quick-action-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   REPOSITORY INTELLIGENCE WORKSPACE STYLING (PHASE 4)
+   ========================================================= */
+
+.intel-workspace-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.intel-hero-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.intel-hero-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.intel-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--secondary);
+}
+
+.intel-hero-title {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.intel-hero-desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 620px;
+}
+
+.intel-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.intel-meta-cluster {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+}
+
+.intel-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-hairline);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--text-secondary);
+}
+
+.intel-meta-tag strong {
+  color: var(--text-primary);
+}
+
+/* Intelligence Empty / Notice Cards */
+.intel-notice-card {
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 48px 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 580px;
+  margin: 40px auto;
+  box-sizing: border-box;
+}
+
+.intel-notice-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background-color: var(--primary-dim);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  color: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intel-notice-icon .material-symbols-outlined {
+  font-size: 24px;
+}
+
+.intel-notice-card h3 {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.intel-notice-card p {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 8px;
+  max-width: 440px;
+}
+
+/* --- CodeGraph Fullbleed Viewport --- */
+.codeai-main-container--graph {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.codeai-page-content--fullbleed {
+  padding: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  width: 100% !important;
+  height: calc(100vh - 64px) !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+

@@ -1,111 +1,175 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* =========================================================
+     GOOGLE STITCH: TERMINAL HORIZON DESIGN TOKENS
+     ========================================================= */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  /* Canvas & Background */
+  --bg-canvas: #0f131b;
+  --bg-surface-lowest: #0a0e15;
+  --bg-surface-low: #181c23;
+  --bg-surface-container: #1c2027;
+  --bg-surface-high: #262a32;
+  --bg-surface-highest: #31353d;
+  --bg-surface-bright: #353941;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  /* Primary Accent: Electric Indigo */
+  --primary: #6366f1;
+  --primary-light: #c0c1ff;
+  --primary-container: #4338ca;
+  --primary-dim: rgba(99, 102, 241, 0.12);
+  --on-primary: #ffffff;
+
+  /* Secondary Data Accent: Data Cyan */
+  --secondary: #38bdf8;
+  --secondary-light: #7bd0ff;
+  --secondary-container: #0369a1;
+  --secondary-dim: rgba(56, 189, 248, 0.12);
+  --on-secondary: #0f172a;
+
+  /* AI Accent: Neural Purple */
+  --tertiary: #a855f7;
+  --tertiary-light: #ddb7ff;
+  --tertiary-container: #6b21a8;
+  --tertiary-dim: rgba(168, 85, 247, 0.12);
+  --on-tertiary: #ffffff;
+
+  /* Semantic Status */
+  --status-success: #10b981;
+  --status-success-dim: rgba(16, 185, 129, 0.12);
+  --status-warning: #f59e0b;
+  --status-warning-dim: rgba(245, 158, 11, 0.12);
+  --status-error: #ef4444;
+  --status-error-dim: rgba(239, 68, 68, 0.12);
+
+  /* Borders & Hairlines */
+  --border-subtle: #1e2638;
+  --border-hairline: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(99, 102, 241, 0.4);
+  --border-focus: #6366f1;
+
+  /* Typography Colors */
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #0f172a;
+
+  /* Shadows (Subtle, crisp) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+
+  /* Font Families */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Backward Compatibility Mappings */
+  --text: var(--text-secondary);
+  --text-h: var(--text-primary);
+  --bg: var(--bg-surface-low);
+  --border: var(--border-subtle);
+  --code-bg: var(--bg-surface-container);
+  --accent: var(--primary);
+  --accent-bg: var(--primary-dim);
+  --accent-border: var(--border-active);
+  --social-bg: var(--bg-surface-high);
+  --shadow: var(--shadow-md);
+  --sans: var(--font-sans);
+  --heading: var(--font-sans);
+  --mono: var(--font-mono);
+
+  /* Typography Settings */
+  font: 14px/150% var(--font-sans);
+  letter-spacing: -0.01em;
+  color-scheme: dark;
+  color: var(--text-primary);
+  background: var(--bg-canvas);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
 }
 
 body {
   margin: 0;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 #root {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  background-color: var(--bg-canvas);
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+h1 {
+  font-size: 28px;
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+code, .counter, pre, kbd {
+  font-family: var(--font-mono);
+  font-feature-settings: 'liga' 0, 'calt' 0;
 }
 
 code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  font-size: 13px;
+  line-height: 140%;
+  padding: 2px 6px;
+  background: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+  border-radius: 4px;
+  color: var(--secondary-light);
 }
+
+/* Scrollbar styling for developer workstation */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-surface-lowest);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-surface-highest);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+

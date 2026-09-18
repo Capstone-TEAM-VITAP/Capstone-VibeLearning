@@ -1,0 +1,143 @@
+/* =========================================================
+   CODEAI WORKSTATION — RECENT ACTIVITY STYLING
+   Google Stitch: Terminal Horizon Visual Direction
+   ========================================================= */
+
+.recent-activity-card {
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.recent-activity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recent-activity-title {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.recent-activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.recent-activity-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+  margin-bottom: 6px;
+  transition: all 0.15s ease;
+  gap: 14px;
+}
+
+.recent-activity-item:hover {
+  background-color: var(--bg-surface-high);
+  border-color: var(--border-subtle);
+}
+
+.activity-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.activity-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: var(--status-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activity-badge.sync {
+  background-color: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.25);
+  color: var(--secondary);
+}
+
+.activity-badge .material-symbols-outlined {
+  font-size: 15px;
+}
+
+.activity-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.activity-message {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.activity-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.activity-sha {
+  color: var(--secondary-light);
+  background: var(--bg-surface-low);
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid var(--border-hairline);
+}
+
+.activity-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.activity-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.activity-empty {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 24px 0;
+}

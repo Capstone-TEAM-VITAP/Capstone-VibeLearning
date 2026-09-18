@@ -99,3 +99,8 @@ export async function getAnalysis(getToken, id, sha) {
   const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/analysis`);
   return body.data;
 }
+
+export async function getSnapshotGraph(getToken, id, sha) {
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/graph`);
+  return body.data || body;
+}
