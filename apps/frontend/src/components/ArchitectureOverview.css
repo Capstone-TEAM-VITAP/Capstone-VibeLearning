@@ -1,0 +1,250 @@
+/* =========================================================
+   CODEAI WORKSTATION — ARCHITECTURE OVERVIEW STYLING
+   Google Stitch: Terminal Horizon Visual Direction
+   ========================================================= */
+
+.arch-overview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.arch-card {
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+
+.arch-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.arch-card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arch-card-icon {
+  font-size: 18px;
+  color: var(--secondary);
+}
+
+.arch-card-title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.arch-card-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* --- Roles Grid --- */
+.arch-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.arch-role-pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.arch-role-pill-btn:hover {
+  background-color: var(--bg-surface-high);
+  border-color: var(--border-active);
+}
+
+.arch-role-pill-btn.active {
+  background-color: var(--primary-dim);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.role-pill-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.role-pill-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background-color: var(--bg-surface-high);
+  color: var(--secondary-light);
+}
+
+.arch-role-pill-btn.active .role-pill-count {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+/* --- Layers Grid --- */
+.arch-layers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.arch-layer-card {
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.arch-layer-card:hover {
+  background-color: var(--bg-surface-high);
+  border-color: var(--border-subtle);
+}
+
+.arch-layer-card.active {
+  border-color: var(--primary);
+  background-color: var(--primary-dim);
+}
+
+.arch-layer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.arch-layer-name {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.arch-layer-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--secondary-light);
+}
+
+.arch-layer-desc {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.arch-layer-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.arch-layer-empty {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* --- Architecture Flow --- */
+.arch-flow-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 12px 4px 6px;
+}
+
+.arch-flow-node {
+  flex: 1;
+  min-width: 140px;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.arch-flow-node.active {
+  border-color: var(--primary);
+  background-color: rgba(99, 102, 241, 0.08);
+}
+
+.arch-flow-node-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+}
+
+.arch-flow-node.active .arch-flow-node-title {
+  color: var(--primary-light);
+}
+
+.arch-flow-node-roles {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.arch-flow-arrow {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.arch-flow-arrow .material-symbols-outlined {
+  font-size: 20px;
+}
+
+@media (max-width: 1024px) {
+  .arch-layers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .arch-layers-grid {
+    grid-template-columns: 1fr;
+  }
+}

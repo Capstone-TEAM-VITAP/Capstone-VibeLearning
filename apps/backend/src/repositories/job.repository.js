@@ -28,6 +28,23 @@ export const jobRepository = {
     }
   },
 
+  /**
+   * Atomically transition a job from "pending" to "running".
+   * Returns true if this request acquired the job, false if already acquired/running/done.
+   * Single atomic conditional UPDATE: WHERE id = $id AND status = 'pending'.
+   * Uses updateAndCount() to execute a single atomic UPDATE statement with no preceding SELECT.
+   */
+  async tryAcquireRunning(id, attempts = 1) {
+    const res = await db.orm.public.AnalysisJob.where({ id, status: "pending" }).updateAndCount({
+      status: "running",
+      attempts,
+    });
+    // In @prisma/orm-postgres, updateAndCount returns affectedRows (number) directly
+    if (typeof res === "number") return res === 1;
+    if (res && typeof res.affectedRows === "number") return res.affectedRows === 1;
+    return false;
+  },
+
   async markRunning(id, attempts) {
     return db.orm.public.AnalysisJob.where({ id }).update({ status: "running", attempts });
   },

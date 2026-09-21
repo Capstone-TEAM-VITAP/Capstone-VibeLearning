@@ -3,10 +3,13 @@ import { repositoryRepository } from "../repositories/repository.repository.js";
 import { snapshotRepository } from "../repositories/snapshot.repository.js";
 import { projectRepository } from "../repositories/project.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
-import { ConflictError, NotFoundError } from "../utils/errors.js";
+import { ConflictError, GatewayTimeoutError, NotFoundError, ServiceUnavailableError } from "../utils/errors.js";
 import { analysisService } from "./analysis.service.js";
-import {
+import { jobRepository } from "../repositories/job.repository.js";
+import { aiService } from "./ai.service.js";
+import gitService, {
   ensureMirror,
+  ensureSnapshotTree,
   getChangedFiles,
   getCommitMeta,
   getMirrorDir,
@@ -14,6 +17,7 @@ import {
   parseRepoUrl,
   resolveSha,
 } from "./git.service.js";
+
 
 /**
  * Backend slice of the pipeline:
@@ -212,6 +216,151 @@ export const repoService = {
     await ensureMirror({ repositoryId: repo.id, repoUrl: repo.repoUrl, defaultBranch: repo.defaultBranch });
     const paths = filePath ? [filePath] : [];
     return getSnapshotDiff(repo.id, base && base !== headSha ? base : null, headSha, paths);
+  },
+
+  /**
+   * Return the canonical Graph IR for a specific repository snapshot.
+   * Ensures the snapshot files are extracted on disk, runs analysis via AI service,
+   * and caches the result in AnalysisJob.
+   */
+  async getSnapshotGraph(clerkUserId, repositoryId, commitSha) {
+    const { repo } = await this._requireRepo(clerkUserId, repositoryId);
+    const snapshot = await snapshotRepository.findByRepoAndSha(repo.id, commitSha);
+    if (!snapshot) throw new NotFoundError("Snapshot not found");
+
+    // 1. Return from cache if already computed
+    let job = await jobRepository.findBySnapshotId(snapshot.id);
+    if (job && job.resultJson) {
+      try {
+        const parsed = JSON.parse(job.resultJson);
+        if (parsed.graph && parsed.graph.schema_version === "1.0") {
+          return parsed.graph;
+        }
+        if (parsed.schema_version === "1.0") {
+          return parsed;
+        }
+      } catch {
+        // invalid cached JSON, recompute
+      }
+    }
+
+    // Helper: poll boundedly for job completion
+    const pollForRunningJob = async () => {
+      const startTime = Date.now();
+      const timeoutMs = Number(process.env.GRAPH_POLL_TIMEOUT_MS) || (process.env.NODE_ENV === "test" ? 400 : 15000);
+      const intervalMs = Number(process.env.GRAPH_POLL_INTERVAL_MS) || (process.env.NODE_ENV === "test" ? 30 : 250);
+
+      while (Date.now() - startTime < timeoutMs) {
+        await new Promise((resolve) => setTimeout(resolve, intervalMs));
+        const currentJob = await jobRepository.findBySnapshotId(snapshot.id);
+        if (!currentJob) break;
+
+        if (currentJob.resultJson) {
+          try {
+            const parsed = JSON.parse(currentJob.resultJson);
+            if (parsed.graph && parsed.graph.schema_version === "1.0") {
+              return parsed.graph;
+            }
+            if (parsed.schema_version === "1.0") {
+              return parsed;
+            }
+          } catch {
+            // invalid JSON, wait or proceed
+          }
+        }
+
+        if (currentJob.status === "failed") {
+          throw new ServiceUnavailableError(currentJob.error || "Analysis job failed");
+        }
+
+        if (currentJob.status === "done") {
+          break;
+        }
+      }
+
+      const latestJob = await jobRepository.findBySnapshotId(snapshot.id);
+      if (latestJob && latestJob.status === "running") {
+        throw new GatewayTimeoutError("Analysis is currently in progress. Timed out waiting for completion");
+      }
+      if (latestJob && latestJob.resultJson) {
+        try {
+          const parsed = JSON.parse(latestJob.resultJson);
+          if (parsed.graph && parsed.graph.schema_version === "1.0") return parsed.graph;
+          if (parsed.schema_version === "1.0") return parsed;
+        } catch {
+          // ignore
+        }
+      }
+      throw new ServiceUnavailableError("Analysis completed without producing a valid graph");
+    };
+
+    // 2. If an existing job is already "running", poll for completion as currently implemented
+    if (job && job.status === "running") {
+      return pollForRunningJob();
+    }
+
+    // 3. Handle no-job case safely: findOrCreateBySnapshotId ensures concurrent callers share/get the same row
+    if (!job) {
+      job = await jobRepository.findOrCreateBySnapshotId(snapshot.id);
+      if (job && job.resultJson) {
+        try {
+          const parsed = JSON.parse(job.resultJson);
+          if (parsed.graph && parsed.graph.schema_version === "1.0") return parsed.graph;
+          if (parsed.schema_version === "1.0") return parsed;
+        } catch {
+          // ignore
+        }
+      }
+      if (job && job.status === "running") {
+        return pollForRunningJob();
+      }
+    }
+
+    // 4. Atomically try to acquire running status (conditional UPDATE: status='pending' -> status='running')
+    const attempts = (job.attempts || 0) + 1;
+    const acquired = typeof jobRepository.tryAcquireRunning === "function"
+      ? await jobRepository.tryAcquireRunning(job.id, attempts)
+      : true;
+
+    if (!acquired) {
+      // Another request acquired the job.
+      // DO NOT call aiService.analyzeRepository(). Enter the bounded polling path instead.
+      return pollForRunningJob();
+    }
+
+    // 5. This request is the analysis owner!
+    // Perform: ensureSnapshotTree(), aiService.analyzeRepository(), markDone()
+    const snapshotDir = await gitService.ensureSnapshotTree(repo.id, snapshot.commitSha);
+
+    let graphIr;
+    try {
+      graphIr = await aiService.analyzeRepository(snapshotDir, repo.name);
+    } catch (err) {
+      if (typeof jobRepository.markFailed === "function") {
+        try {
+          await jobRepository.markFailed(job.id, err.message?.slice(0, 500) || "Analysis failed");
+        } catch {
+          // ignore cleanup errors
+        }
+      }
+      throw err;
+    }
+
+    // 6. Cache in AnalysisJob and mark done
+    try {
+      let existingResult = {};
+      try {
+        existingResult = job.resultJson ? JSON.parse(job.resultJson) : {};
+      } catch {
+        existingResult = {};
+      }
+      const updatedResult = { ...existingResult, graph: graphIr };
+      await jobRepository.markDone(job.id, JSON.stringify(updatedResult));
+    } catch (err) {
+      console.error("[Graph Cache Warning]", err.message);
+    }
+
+    return graphIr;
   },
 };
 

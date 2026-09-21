@@ -1,0 +1,130 @@
+/* =========================================================
+   CODEAI WORKSTATION — DEPENDENCY & STRUCTURAL HEALTH
+   Google Stitch: Terminal Horizon Visual Direction
+   ========================================================= */
+
+.dep-health-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.dep-health-card {
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dep-health-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dep-health-title {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dep-health-title .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--secondary);
+}
+
+.dep-health-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Key Value Table */
+.health-facts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.health-fact-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+  font-size: 12px;
+}
+
+.health-fact-label {
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.health-fact-value {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.health-fact-value.clean {
+  color: var(--status-success);
+}
+
+.health-fact-value.notice {
+  color: var(--status-warning);
+}
+
+/* Most Connected Modules List */
+.connected-modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.connected-module-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: var(--bg-surface-container);
+  border: 1px solid var(--border-hairline);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.connected-module-path {
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 260px;
+}
+
+.connected-module-degree {
+  color: var(--secondary-light);
+  background: var(--bg-surface-high);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .dep-health-grid {
+    grid-template-columns: 1fr;
+  }
+}

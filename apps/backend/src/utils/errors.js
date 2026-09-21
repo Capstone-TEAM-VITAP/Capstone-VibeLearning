@@ -37,3 +37,22 @@ export class ConflictError extends AppError {
     super(message, 409);
   }
 }
+
+export class BadGatewayError extends AppError {
+  constructor(message = "Bad Gateway") {
+    super(message, 502);
+  }
+}
+
+export class ServiceUnavailableError extends AppError {
+  constructor(message = "Service Unavailable") {
+    super(message, 503);
+  }
+}
+
+export class GatewayTimeoutError extends AppError {
+  constructor(message = "Gateway Timeout") {
+    super(message, 504);
+  }
+}
+

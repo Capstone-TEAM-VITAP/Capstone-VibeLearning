@@ -1,25 +1,22 @@
+import { db } from "../config/db.js";
 import { jobRepository } from "../repositories/job.repository.js";
 import { repositoryRepository } from "../repositories/repository.repository.js";
 import { snapshotRepository } from "../repositories/snapshot.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
-import { NotFoundError } from "../utils/errors.js";
-import { getSnapshotDiff } from "./git.service.js";
+import {
+  GatewayTimeoutError,
+  NotFoundError,
+  ServiceUnavailableError,
+} from "../utils/errors.js";
+import gitService from "./git.service.js";
+import { aiService, validateGraphIr } from "./ai.service.js";
 
 /**
  * Analysis job orchestration.
  *
- * Contract for apps/ai-service (to be implemented there):
- *   POST {AI_SERVICE_URL}/v1/analyze
- *   { snapshot: { commitSha, baseSha, message }, files: [{ path, status, additions, deletions, hunks }] }
- *   -> 200 { summary: string, files: [{ path, impact, explanation }] }
- *
- * Until ai-service exists, dispatch falls back to the local stub engine
- * below (diff-stat summary). The stub is intentionally obvious so no one
- * mistakes it for real analysis.
+ * Runs full static analysis via the Python AI Service (POST /analyze)
+ * and produces canonical CodeGraph IR conforming to schema version 1.0.
  */
-
-const AI_SERVICE_URL = process.env.AI_SERVICE_URL || null;
-const AI_SERVICE_TIMEOUT_MS = 60000;
 
 function scoreImpact({ status, additions, deletions }) {
   if (status === "D") return "high";
@@ -30,7 +27,7 @@ function scoreImpact({ status, additions, deletions }) {
 }
 
 async function runStubAnalyzer(repo, snapshot) {
-  const diff = await getSnapshotDiff(
+  const diff = await gitService.getSnapshotDiff(
     repo.id,
     snapshot.baseSha && snapshot.baseSha !== snapshot.commitSha ? snapshot.baseSha : null,
     snapshot.commitSha
@@ -46,36 +43,25 @@ async function runStubAnalyzer(repo, snapshot) {
       impact: scoreImpact(f),
       explanation: null,
     })),
-    note: "Stub result from diff stats. Set AI_SERVICE_URL for LLM explanations.",
+    note: "Stub result from diff stats.",
   };
 }
 
-async function callAiService(repo, snapshot) {
-  const diff = await getSnapshotDiff(
-    repo.id,
-    snapshot.baseSha && snapshot.baseSha !== snapshot.commitSha ? snapshot.baseSha : null,
-    snapshot.commitSha
-  );
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), AI_SERVICE_TIMEOUT_MS);
+export function hasValidGraph(job) {
+  if (!job || job.status !== "done" || !job.resultJson) return false;
   try {
-    const res = await fetch(`${AI_SERVICE_URL}/v1/analyze`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        snapshot: { commitSha: snapshot.commitSha, baseSha: snapshot.baseSha, message: snapshot.message },
-        files: diff.files,
-      }),
-      signal: controller.signal,
-    });
-    if (!res.ok) throw new Error(`ai-service responded ${res.status}`);
-    return { engine: "ai-service", ...(await res.json()) };
-  } finally {
-    clearTimeout(timer);
+    const parsed = typeof job.resultJson === "string" ? JSON.parse(job.resultJson) : job.resultJson;
+    if (parsed?.graph?.schema_version === "1.0") return true;
+    if (parsed?.schema_version === "1.0") return true;
+    return false;
+  } catch {
+    return false;
   }
 }
 
 export const analysisService = {
+  hasValidGraph,
+
   async _requireSnapshot(clerkUserId, repositoryId, commitSha) {
     const user = await userRepository.findOrCreateByClerkId(clerkUserId);
     const repo = await repositoryRepository.findByIdAndUserId(repositoryId, user.id);
@@ -90,12 +76,35 @@ export const analysisService = {
     return jobRepository.findOrCreateBySnapshotId(snapshot.id);
   },
 
-  /** Run a job to completion (stub or ai-service). Throws on failure. */
+  /** Run a job to completion via ai-service. Throws on failure. */
   async dispatch(job, repo, snapshot) {
-    await jobRepository.markRunning(job.id, (job.attempts || 0) + 1);
+    const attempts = (job.attempts || 0) + 1;
+    await jobRepository.markRunning(job.id, attempts);
     try {
-      const result = AI_SERVICE_URL ? await callAiService(repo, snapshot) : await runStubAnalyzer(repo, snapshot);
-      return jobRepository.markDone(job.id, JSON.stringify(result));
+      const snapshotDir = await gitService.ensureSnapshotTree(repo.id, snapshot.commitSha);
+      const graphIr = await aiService.analyzeRepository(snapshotDir, repo.name);
+
+      // Strictly validate Graph IR schema version 1.0 contract
+      validateGraphIr(graphIr);
+
+      let diffStats = {};
+      try {
+        diffStats = await runStubAnalyzer(repo, snapshot);
+      } catch {
+        diffStats = {
+          summary: `Static analysis completed for ${repo.name}`,
+          files: [],
+        };
+      }
+
+      const result = {
+        ...diffStats,
+        engine: "ai-service",
+        graph: graphIr,
+      };
+
+      await jobRepository.markDone(job.id, JSON.stringify(result));
+      return jobRepository.findBySnapshotId(snapshot.id);
     } catch (err) {
       const message = err?.message || "Analysis failed";
       await jobRepository.markFailed(job.id, message.slice(0, 500));
@@ -111,17 +120,81 @@ export const analysisService = {
     jobRepository
       .findOrCreateBySnapshotId(snapshot.id)
       .then((job) => {
-        if (job.status === "done") return job;
+        if (hasValidGraph(job)) return job;
         return this.dispatch(job, repo, snapshot).catch(() => null);
       })
       .catch(() => null);
   },
 
-  /** Manual trigger: enqueue then wait for completion (stub is ms-fast). */
+  /** Manual trigger: enqueue then wait for completion. */
   async analyze(clerkUserId, repositoryId, commitSha) {
     const { repo, snapshot } = await this._requireSnapshot(clerkUserId, repositoryId, commitSha);
-    const job = await jobRepository.findOrCreateBySnapshotId(snapshot.id);
-    if (job.status === "done") return this._present(job);
+    let job = await jobRepository.findOrCreateBySnapshotId(snapshot.id);
+
+    // 1. Return from cache if already computed valid canonical Graph IR
+    if (hasValidGraph(job)) {
+      return this._present(job);
+    }
+
+    // Helper: poll boundedly for job completion if another request acquired the job
+    const pollForRunningJob = async () => {
+      const timeoutMs = Number(process.env.GRAPH_POLL_TIMEOUT_MS) || (process.env.NODE_ENV === "test" ? 400 : 15000);
+      const intervalMs = Number(process.env.GRAPH_POLL_INTERVAL_MS) || (process.env.NODE_ENV === "test" ? 30 : 250);
+      const startTime = Date.now();
+
+      while (Date.now() - startTime < timeoutMs) {
+        await new Promise((resolve) => setTimeout(resolve, intervalMs));
+        const currentJob = await jobRepository.findBySnapshotId(snapshot.id);
+        if (!currentJob) break;
+
+        if (hasValidGraph(currentJob)) {
+          return currentJob;
+        }
+
+        if (currentJob.status === "failed") {
+          throw new ServiceUnavailableError(currentJob.error || "Analysis job failed");
+        }
+
+        if (currentJob.status === "done") {
+          break;
+        }
+      }
+
+      const latestJob = await jobRepository.findBySnapshotId(snapshot.id);
+      if (latestJob && latestJob.status === "running") {
+        throw new GatewayTimeoutError("Analysis is currently in progress. Timed out waiting for completion");
+      }
+      if (latestJob && hasValidGraph(latestJob)) {
+        return latestJob;
+      }
+      throw new ServiceUnavailableError("Analysis completed without producing a valid graph");
+    };
+
+    // 2. If an existing job is already "running", poll for completion
+    if (job.status === "running") {
+      const finishedJob = await pollForRunningJob();
+      return this._present(finishedJob);
+    }
+
+    // 3. If stale "done" (missing Graph IR) or "failed", reset to "pending" so it can be atomically acquired
+    if (job.status !== "pending") {
+      await db.orm.public.AnalysisJob.where({ id: job.id, status: job.status }).update({ status: "pending" });
+      job = await jobRepository.findBySnapshotId(snapshot.id);
+    }
+
+    // 4. Atomically try to acquire running status (conditional UPDATE: status='pending' -> status='running')
+    const attempts = (job.attempts || 0) + 1;
+    const acquired = typeof jobRepository.tryAcquireRunning === "function"
+      ? await jobRepository.tryAcquireRunning(job.id, attempts)
+      : true;
+
+    if (!acquired) {
+      // Lost race to concurrent caller — enter bounded polling path
+      const finishedJob = await pollForRunningJob();
+      return this._present(finishedJob);
+    }
+
+    // 5. This request acquired the lock: dispatch analysis
     const finished = await this.dispatch(job, repo, snapshot);
     return this._present(finished);
   },

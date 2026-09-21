@@ -75,4 +75,12 @@ router.get(
   analysisController.getAnalysis
 );
 
+// GET /api/v1/repos/:id/snapshots/:sha/graph — Graph IR for this snapshot
+router.get(
+  "/:id/snapshots/:sha/graph",
+  validate({ params: snapshotParamSchema }),
+  repoController.getSnapshotGraph
+);
+
 export default router;
+
