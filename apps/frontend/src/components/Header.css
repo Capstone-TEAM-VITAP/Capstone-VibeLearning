@@ -9,7 +9,7 @@
   left: 288px;
   right: 0;
   height: 64px;
-  background: rgba(10, 14, 21, 0.85);
+  background: var(--header-bg, rgba(10, 14, 21, 0.85));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);

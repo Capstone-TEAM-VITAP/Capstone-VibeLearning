@@ -278,9 +278,15 @@
 .repo-popover-connect-btn:hover {
   background: var(--bg-surface-highest);
   border-color: var(--primary);
-  color: #818cf8;
+  color: var(--primary);
 }
 
 .repo-popover-connect-btn .material-symbols-outlined {
   font-size: 14px;
 }
+
+/* Light Mode Popover Shadows */
+[data-theme="light"] .repo-selector-popover {
+  box-shadow: 0 12px 32px rgba(40, 54, 24, 0.16), 0 2px 6px rgba(40, 54, 24, 0.08);
+}
+

@@ -17,31 +17,34 @@ const nodeTypes = {
   codeGraphNode: CodeGraphNode,
 };
 
-// Architecture tier priorities for swimlanes layout
+// Architecture tier priorities for swimlanes layout (top-down architectural flow)
 const LAYER_ORDER = {
-  PRESENTATION: 0,
-  APPLICATION: 1,
-  DOMAIN: 2,
-  DATA: 3,
-  INFRASTRUCTURE: 4,
-  DEPENDENCIES: 5,
-  SYMBOLS: 6,
-  OTHER: 7,
+  ENTRYPOINT: 0,
+  PRESENTATION: 1,
+  ROUTING: 2,
+  APPLICATION: 3,
+  DOMAIN: 4,
+  DATA: 5,
+  INFRASTRUCTURE: 6,
+  DEPENDENCIES: 7,
+  SYMBOLS: 8,
+  OTHER: 9,
 };
 
 function mapNodeToLayer(node) {
   const role = (node.architecture_role || node.metadata?.role || "").toUpperCase();
   const type = (node.type || "").toLowerCase();
 
+  if (role === "ENTRYPOINT") return "ENTRYPOINT";
   if (role === "COMPONENT" || role === "HOOK") return "PRESENTATION";
-  if (role === "ROUTE" || role === "CONTROLLER" || role === "SERVICE") return "APPLICATION";
+  if (role === "ROUTE") return "ROUTING";
+  if (role === "CONTROLLER" || role === "SERVICE" || role === "HANDLER") return "APPLICATION";
   if (role === "MODEL" || role === "ENTITY") return "DOMAIN";
   if (role === "REPOSITORY_ROLE") return "DATA";
   if (
     role === "MIDDLEWARE" ||
     role === "CONFIG" ||
-    role === "UTILITY" ||
-    role === "ENTRYPOINT"
+    role === "UTILITY"
   ) {
     return "INFRASTRUCTURE";
   }
@@ -54,7 +57,44 @@ function mapNodeToLayer(node) {
   return "OTHER";
 }
 
-function computeLayout(nodes, edges, mode = "architecture") {
+// Helper to extract clean domain/module stem for grouping (e.g. auth, user, workout)
+function getModuleStem(node) {
+  const raw = (node.metadata?.path || (node.id.startsWith("file:") ? node.id.replace(/^file:/, "") : node.id))
+    .replace(/\\/g, "/")
+    .toLowerCase();
+  const filename = raw.split("/").pop() || "";
+  const base = filename.replace(/\.[^.]+$/, "");
+  return (
+    base
+      .replace(/(controller|service|routes?|router|handler|model|entity|repo|repository|view|component|hook|test|spec)$/i, "")
+      .replace(/[-_.]/g, "") || base
+  );
+}
+
+// Sub-role priority within layers (e.g. Route -> Controller -> Service)
+function getSubRolePriority(role, type) {
+  const r = (role || "").toUpperCase();
+  const t = (type || "").toLowerCase();
+  if (r === "ENTRYPOINT") return 0;
+  if (r === "COMPONENT") return 0;
+  if (r === "HOOK") return 1;
+  if (r === "ROUTE") return 0;
+  if (r === "CONTROLLER") return 0;
+  if (r === "SERVICE") return 1;
+  if (r === "HANDLER") return 2;
+  if (r === "MODEL") return 0;
+  if (r === "ENTITY") return 1;
+  if (r === "REPOSITORY_ROLE") return 0;
+  if (r === "MIDDLEWARE") return 0;
+  if (r === "CONFIG") return 1;
+  if (r === "UTILITY") return 2;
+  if (t === "function") return 0;
+  if (t === "class") return 1;
+  if (t === "method") return 2;
+  return 5;
+}
+
+function computeLayout(nodes, edges = [], mode = "architecture") {
   if (!nodes || nodes.length === 0) return [];
 
   const positions = {};
@@ -72,14 +112,86 @@ function computeLayout(nodes, edges, mode = "architecture") {
       buckets[layer].push(node);
     }
 
-    let currentY = 40;
-    const MAX_COLS_PER_TIER = 4;
-    const X_SPACING = 240;
-    const Y_ROW_SPACING = 95;
-    const Y_TIER_GAP = 55;
+    // Build incoming and outgoing connection maps for barycentric crossing minimization
+    const incomingMap = {};
+    const outgoingMap = {};
+    for (const e of edges) {
+      if (!incomingMap[e.target]) incomingMap[e.target] = [];
+      incomingMap[e.target].push(e.source);
+      if (!outgoingMap[e.source]) outgoingMap[e.source] = [];
+      outgoingMap[e.source].push(e.target);
+    }
+
+    // Extract unique module stems across nodes to assign consistent horizontal lanes
+    const allStems = Array.from(
+      new Set(nodes.map((n) => getModuleStem(n)).filter(Boolean)),
+    ).sort();
+    const stemLaneIndex = {};
+    allStems.forEach((stem, idx) => {
+      stemLaneIndex[stem] = idx;
+    });
+
+    let currentY = 50;
+    const MAX_COLS_PER_TIER = Math.max(4, Math.min(6, allStems.length || 4));
+    const X_SPACING = 300;
+    const Y_ROW_SPACING = 125;
+    const Y_TIER_GAP = 95;
 
     for (const [, group] of Object.entries(buckets)) {
       if (group.length === 0) continue;
+
+      // Sort nodes within tier to minimize edge crossings:
+      // Priority 1: Average X of upstream connected nodes (barycentric heuristic)
+      // Priority 2: Average X of downstream connected nodes
+      // Priority 3: Module stem alignment (e.g. auth, user, workout in matching lane)
+      // Priority 4: Sub-role order (e.g. ROUTE before CONTROLLER before SERVICE)
+      group.sort((a, b) => {
+        const aIncoming = incomingMap[a.id] || [];
+        const bIncoming = incomingMap[b.id] || [];
+
+        const getConnectedX = (ids) => {
+          let sum = 0, count = 0;
+          for (const id of ids) {
+            if (positions[id]) {
+              sum += positions[id].x;
+              count++;
+            }
+          }
+          return count > 0 ? sum / count : null;
+        };
+
+        const aInX = getConnectedX(aIncoming);
+        const bInX = getConnectedX(bIncoming);
+
+        if (aInX !== null && bInX !== null && Math.abs(aInX - bInX) > 15) {
+          return aInX - bInX;
+        }
+        if (aInX !== null && bInX === null) return -1;
+        if (aInX === null && bInX !== null) return 1;
+
+        // Try outgoing targets if neither has incoming placed
+        const aOutX = getConnectedX(outgoingMap[a.id] || []);
+        const bOutX = getConnectedX(outgoingMap[b.id] || []);
+        if (aOutX !== null && bOutX !== null && Math.abs(aOutX - bOutX) > 15) {
+          return aOutX - bOutX;
+        }
+        if (aOutX !== null && bOutX === null) return -1;
+        if (aOutX === null && bOutX !== null) return 1;
+
+        // Module stem lane priority
+        const aStem = getModuleStem(a);
+        const bStem = getModuleStem(b);
+        const aLane = stemLaneIndex[aStem] ?? 99;
+        const bLane = stemLaneIndex[bStem] ?? 99;
+        if (aLane !== bLane) return aLane - bLane;
+
+        // Sub-role priority within layer (e.g. Route -> Controller -> Service)
+        const aRole = getSubRolePriority(a.architecture_role || a.metadata?.role, a.type);
+        const bRole = getSubRolePriority(b.architecture_role || b.metadata?.role, b.type);
+        if (aRole !== bRole) return aRole - bRole;
+
+        return (a.label || a.id).localeCompare(b.label || b.id);
+      });
 
       const numRows = Math.ceil(group.length / MAX_COLS_PER_TIER);
 
@@ -90,10 +202,10 @@ function computeLayout(nodes, edges, mode = "architecture") {
         const itemsInThisRow =
           row === numRows - 1 && group.length % MAX_COLS_PER_TIER !== 0
             ? group.length % MAX_COLS_PER_TIER
-            : MAX_COLS_PER_TIER;
+            : Math.min(group.length, MAX_COLS_PER_TIER);
 
         const rowWidth = (itemsInThisRow - 1) * X_SPACING;
-        const startX = Math.max(40, (960 - rowWidth) / 2);
+        const startX = Math.max(60, (1150 - rowWidth) / 2);
 
         positions[node.id] = {
           x: Math.round(startX + col * X_SPACING),
@@ -125,43 +237,88 @@ function computeLayout(nodes, edges, mode = "architecture") {
       dirBuckets[bucket].push(node);
     }
 
-    let colX = 40;
-    const COL_WIDTH = 250;
-    const ROW_HEIGHT = 100;
+    let colX = 60;
+    const COL_WIDTH = 300;
+    const ROW_HEIGHT = 125;
 
     for (const [, group] of Object.entries(dirBuckets)) {
+      // Sort nodes in directory column by architectural layer so each directory flows logically
+      group.sort((a, b) => {
+        const aLayer = LAYER_ORDER[mapNodeToLayer(a)] ?? 99;
+        const bLayer = LAYER_ORDER[mapNodeToLayer(b)] ?? 99;
+        if (aLayer !== bLayer) return aLayer - bLayer;
+        return (a.label || a.id).localeCompare(b.label || b.id);
+      });
+
       group.forEach((node, rowIdx) => {
         positions[node.id] = {
           x: colX,
-          y: 40 + rowIdx * ROW_HEIGHT,
+          y: 60 + rowIdx * ROW_HEIGHT,
         };
       });
       colX += COL_WIDTH;
     }
   } else {
-    // Hierarchical DAG (approximate topological layer via in-degree)
+    // Hierarchical DAG: Topological layer grouping via in-degree
     const inDegree = {};
     for (const n of nodes) inDegree[n.id] = 0;
     for (const e of edges) {
       if (inDegree[e.target] !== undefined) inDegree[e.target]++;
     }
 
-    const sorted = [...nodes].sort(
-      (a, b) => (inDegree[a.id] || 0) - (inDegree[b.id] || 0),
-    );
+    // Assign topological rank (0 = sources/roots, 1, 2...)
+    const rankMap = {};
+    const queue = [];
+    for (const n of nodes) {
+      if ((inDegree[n.id] || 0) === 0) {
+        rankMap[n.id] = 0;
+        queue.push(n.id);
+      }
+    }
 
-    const COLS = Math.min(4, Math.max(2, Math.ceil(Math.sqrt(nodes.length))));
-    const X_GAP = 240;
-    const Y_GAP = 105;
+    while (queue.length > 0) {
+      const u = queue.shift();
+      const currentRank = rankMap[u] || 0;
+      for (const e of edges) {
+        if (e.source === u) {
+          const nextRank = Math.max(rankMap[e.target] || 0, currentRank + 1);
+          rankMap[e.target] = nextRank;
+        }
+      }
+    }
 
-    sorted.forEach((node, index) => {
-      const col = index % COLS;
-      const row = Math.floor(index / COLS);
-      positions[node.id] = {
-        x: 40 + col * X_GAP + (row % 2 === 1 ? 30 : 0),
-        y: 40 + row * Y_GAP,
-      };
-    });
+    // Group nodes by rank
+    const rankBuckets = {};
+    for (const n of nodes) {
+      const r = rankMap[n.id] || 0;
+      if (!rankBuckets[r]) rankBuckets[r] = [];
+      rankBuckets[r].push(n);
+    }
+
+    const X_GAP = 300;
+    const Y_GAP = 130;
+    let currentY = 60;
+
+    for (const [, group] of Object.entries(rankBuckets)) {
+      group.sort((a, b) => {
+        const aStem = getModuleStem(a);
+        const bStem = getModuleStem(b);
+        if (aStem !== bStem) return aStem.localeCompare(bStem);
+        return (a.label || a.id).localeCompare(b.label || b.id);
+      });
+
+      const totalWidth = (group.length - 1) * X_GAP;
+      const startX = Math.max(60, (1150 - totalWidth) / 2);
+
+      group.forEach((node, colIdx) => {
+        positions[node.id] = {
+          x: Math.round(startX + colIdx * X_GAP),
+          y: currentY,
+        };
+      });
+
+      currentY += Y_GAP;
+    }
   }
 
   return nodes.map((node) => ({
@@ -182,6 +339,8 @@ function CodeGraphContent({
   const { fitView, zoomIn, zoomOut, setCenter, setViewport } = useReactFlow();
 
   const [selectedNodeId, setSelectedNodeId] = useState(null);
+  const [hoveredNodeId, setHoveredNodeId] = useState(null);
+  const [hoveredEdgeId, setHoveredEdgeId] = useState(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const workspaceRef = useRef(null);
@@ -193,6 +352,26 @@ function CodeGraphContent({
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const searchWrapRef = useRef(null);
+
+  // Theme listener for graph canvas adaptation
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    if (typeof document !== "undefined") {
+      return document.documentElement.getAttribute("data-theme") || "dark";
+    }
+    return "dark";
+  });
+
+  useEffect(() => {
+    const handleTheme = (e) => {
+      if (e.detail?.theme) {
+        setCurrentTheme(e.detail.theme);
+      }
+    };
+    window.addEventListener("codeai-theme-change", handleTheme);
+    return () => window.removeEventListener("codeai-theme-change", handleTheme);
+  }, []);
+
+  const isLight = currentTheme === "light";
 
   // Close search dropdown on click outside
   useEffect(() => {
@@ -346,18 +525,29 @@ function CodeGraphContent({
       .slice(0, 8);
   }, [rawNodes, searchQuery]);
 
-  // Direct neighbors of selected node (for graph highlighting)
-  const directNeighbors = useMemo(() => {
-    if (!selectedNodeId) return null;
-    const neighbors = new Set();
-    neighbors.add(selectedNodeId);
+  // Active focus node: hovered node takes precedence for immediate feedback, falling back to selected node
+  const activeFocusNodeId = hoveredNodeId || selectedNodeId;
 
-    for (const e of rawEdges) {
-      if (e.source === selectedNodeId) neighbors.add(e.target);
-      if (e.target === selectedNodeId) neighbors.add(e.source);
+  // Direct neighbors of active focus node or hovered edge
+  const activeFocusNeighbors = useMemo(() => {
+    if (!activeFocusNodeId && !hoveredEdgeId) return null;
+    const neighbors = new Set();
+    if (activeFocusNodeId) {
+      neighbors.add(activeFocusNodeId);
+      for (const e of rawEdges) {
+        if (e.source === activeFocusNodeId) neighbors.add(e.target);
+        if (e.target === activeFocusNodeId) neighbors.add(e.source);
+      }
+    }
+    if (hoveredEdgeId) {
+      const edge = rawEdges.find((e) => e.id === hoveredEdgeId);
+      if (edge) {
+        neighbors.add(edge.source);
+        neighbors.add(edge.target);
+      }
     }
     return neighbors;
-  }, [selectedNodeId, rawEdges]);
+  }, [activeFocusNodeId, hoveredEdgeId, rawEdges]);
 
   // Compute layout positions for nodes
   const layoutedNodes = useMemo(() => {
@@ -368,8 +558,9 @@ function CodeGraphContent({
   const rfNodes = useMemo(() => {
     return layoutedNodes.map((n) => {
       const isSelected = n.id === selectedNodeId;
-      const isHighlighted = directNeighbors ? directNeighbors.has(n.id) : false;
-      const isDimmed = directNeighbors ? !directNeighbors.has(n.id) : false;
+      const isHovered = n.id === hoveredNodeId;
+      const isHighlighted = activeFocusNeighbors ? activeFocusNeighbors.has(n.id) : false;
+      const isDimmed = activeFocusNeighbors ? !activeFocusNeighbors.has(n.id) : false;
 
       const path =
         n.metadata?.path?.replace(/\\/g, "/") ||
@@ -385,47 +576,84 @@ function CodeGraphContent({
           role: n.architecture_role || n.metadata?.role || null,
           path,
           isSelected,
+          isHovered,
           isHighlighted,
           isDimmed,
         },
       };
     });
-  }, [layoutedNodes, selectedNodeId, directNeighbors]);
+  }, [layoutedNodes, selectedNodeId, hoveredNodeId, activeFocusNeighbors]);
 
-  // Transform to React Flow Edges
+  // Transform to React Flow Edges with Noise-Reduction & Low-Opacity Default
   const rfEdges = useMemo(() => {
     return filteredEdges.map((e) => {
-      const isConnectedToSelected =
-        selectedNodeId &&
-        (e.source === selectedNodeId || e.target === selectedNodeId);
-
-      const isDimmed =
-        selectedNodeId &&
-        e.source !== selectedNodeId &&
-        e.target !== selectedNodeId;
+      const isConnectedToFocus =
+        activeFocusNodeId &&
+        (e.source === activeFocusNodeId || e.target === activeFocusNodeId);
+      const isEdgeHovered = hoveredEdgeId === e.id;
+      const isHighlighted = isConnectedToFocus || isEdgeHovered;
+      const isDimmed = Boolean(activeFocusNodeId || hoveredEdgeId) && !isHighlighted;
 
       const typeUpper = (e.type || "DEPENDS_ON").toUpperCase();
 
-      let strokeColor = "#64748b";
+      // Semantic highlight colors (vibrant and prominent only when focused)
+      let highlightColor = isLight ? "#BC6C25" : "#38bdf8";
       let strokeDash = undefined;
 
       if (typeUpper === "IMPORTS") {
-        strokeColor = "#818cf8";
+        highlightColor = isLight ? "#BC6C25" : "#818cf8";
       } else if (typeUpper === "CALLS") {
-        strokeColor = "#38bdf8";
+        highlightColor = isLight ? "#386641" : "#38bdf8";
         strokeDash = "5,5";
       } else if (typeUpper === "DEPENDS_ON") {
-        strokeColor = "#2dd4bf";
+        highlightColor = isLight ? "#283618" : "#2dd4bf";
         strokeDash = "4,4";
       } else if (typeUpper === "CONTAINS") {
-        strokeColor = "#52525b";
+        highlightColor = isLight ? "#7E8B54" : "#94a3b8";
         strokeDash = "2,3";
       } else if (typeUpper === "CLASSIFIED_AS") {
-        strokeColor = "#c084fc";
+        highlightColor = isLight ? "#9B4811" : "#c084fc";
       }
 
-      if (isConnectedToSelected) {
-        strokeColor = "#38bdf8";
+      // Default neutral low-opacity trace (reduces visual noise)
+      const neutralColor = isLight
+        ? "rgba(126, 139, 84, 0.28)"
+        : "rgba(148, 163, 184, 0.20)";
+
+      let strokeColor = neutralColor;
+      let strokeWidth = 1.0;
+      let opacity = isLight ? 0.24 : 0.20;
+      let zIndex = 2;
+      let animated = false;
+
+      // Small subtle arrowhead on default edges to avoid visual clutter
+      let markerEnd = {
+        type: MarkerType.ArrowClosed,
+        color: neutralColor,
+        width: 7,
+        height: 7,
+      };
+
+      if (isHighlighted) {
+        strokeColor = highlightColor;
+        strokeWidth = 2.4;
+        opacity = 1.0;
+        zIndex = 30;
+        animated = true;
+        markerEnd = {
+          type: MarkerType.ArrowClosed,
+          color: highlightColor,
+          width: 14,
+          height: 14,
+        };
+      } else if (isDimmed) {
+        strokeColor = isLight
+          ? "rgba(212, 163, 115, 0.12)"
+          : "rgba(100, 116, 139, 0.08)";
+        strokeWidth = 0.75;
+        opacity = 0.05;
+        zIndex = 1;
+        markerEnd = undefined;
       }
 
       return {
@@ -433,23 +661,19 @@ function CodeGraphContent({
         source: e.source,
         target: e.target,
         type: "default",
-        animated: isConnectedToSelected,
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          color: strokeColor,
-          width: 14,
-          height: 14,
-        },
+        animated,
+        markerEnd,
         style: {
           stroke: strokeColor,
-          strokeWidth: isConnectedToSelected ? 2.5 : 1.3,
-          strokeDasharray: strokeDash,
-          opacity: isDimmed ? 0.12 : isConnectedToSelected ? 1 : 0.75,
+          strokeWidth,
+          strokeDasharray: isHighlighted ? strokeDash : undefined,
+          opacity,
+          transition: "stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease",
         },
-        zIndex: isConnectedToSelected ? 10 : 1,
+        zIndex,
       };
     });
-  }, [filteredEdges, selectedNodeId]);
+  }, [filteredEdges, activeFocusNodeId, hoveredEdgeId, isLight]);
 
   // Handle node selection & centering
   const handleSelectNode = useCallback(
@@ -476,6 +700,24 @@ function CodeGraphContent({
 
   const handlePaneClick = useCallback(() => {
     setSelectedNodeId(null);
+    setHoveredNodeId(null);
+    setHoveredEdgeId(null);
+  }, []);
+
+  const handleNodeMouseEnter = useCallback((_, node) => {
+    setHoveredNodeId(node.id);
+  }, []);
+
+  const handleNodeMouseLeave = useCallback(() => {
+    setHoveredNodeId(null);
+  }, []);
+
+  const handleEdgeMouseEnter = useCallback((_, edge) => {
+    setHoveredEdgeId(edge.id);
+  }, []);
+
+  const handleEdgeMouseLeave = useCallback(() => {
+    setHoveredEdgeId(null);
   }, []);
 
   // Fit view on initial load or layout/scope/inspector changes
@@ -831,20 +1073,24 @@ function CodeGraphContent({
             edges={rfEdges}
             nodeTypes={nodeTypes}
             onNodeClick={handleNodeClick}
+            onNodeMouseEnter={handleNodeMouseEnter}
+            onNodeMouseLeave={handleNodeMouseLeave}
+            onEdgeMouseEnter={handleEdgeMouseEnter}
+            onEdgeMouseLeave={handleEdgeMouseLeave}
             onPaneClick={handlePaneClick}
             minZoom={0.2}
             maxZoom={2.0}
             defaultViewport={{ x: 50, y: 50, zoom: 0.9 }}
             proOptions={{ hideAttribution: true }}
           >
-            <Background color="#27272a" gap={24} size={1} />
+            <Background color={isLight ? "rgba(212, 163, 115, 0.45)" : "#27272a"} gap={24} size={1} />
             <Controls showInteractive={false} className="codegraph-controls" />
             <MiniMap
               className="codegraph-minimap"
               position="bottom-right"
-              nodeStrokeColor="#38bdf8"
-              nodeColor="#1e293b"
-              maskColor="rgba(9, 9, 11, 0.75)"
+              nodeStrokeColor={isLight ? "#BC6C25" : "#38bdf8"}
+              nodeColor={isLight ? "#FAEDCD" : "#1e293b"}
+              maskColor={isLight ? "rgba(233, 237, 201, 0.75)" : "rgba(9, 9, 11, 0.75)"}
             />
           </ReactFlow>
         </div>

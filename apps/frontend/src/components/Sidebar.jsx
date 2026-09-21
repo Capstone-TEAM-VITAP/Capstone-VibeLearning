@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUser, UserButton } from "@clerk/react";
 import RepositorySelectorDropdown from "./RepositorySelectorDropdown.jsx";
+import ThemeToggle from "./ThemeToggle.jsx";
 import "./Sidebar.css";
 
 function Sidebar({
@@ -283,6 +284,9 @@ function Sidebar({
                 : "GitHub: Not connected"}
             </span>
           </div>
+
+          {/* Theme Switcher Toggle */}
+          <ThemeToggle showLabel={true} className="sidebar-theme-toggle" />
 
           {/* User Information & Clerk UserButton */}
           <div className="sidebar-user-row">

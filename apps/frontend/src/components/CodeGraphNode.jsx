@@ -10,6 +10,8 @@ function CodeGraphNode({ data, selected }) {
     path,
     isDimmed,
     isHighlighted,
+    isHovered,
+    isSelected,
     badgeText,
   } = data;
 
@@ -64,13 +66,17 @@ function CodeGraphNode({ data, selected }) {
     }
   }
 
+  const isNodeSelected = Boolean(selected || isSelected);
+  const isNodeHighlighted = Boolean(isHighlighted || isHovered);
+  const isNodeDimmed = Boolean(isDimmed && !isNodeSelected && !isNodeHighlighted);
+
   const classNames = [
     "codegraph-node",
     `codegraph-node--${nodeType}`,
     role ? `codegraph-node--role-${role.toLowerCase()}` : "",
-    selected ? "codegraph-node--selected" : "",
-    isHighlighted ? "codegraph-node--highlighted" : "",
-    isDimmed ? "codegraph-node--dimmed" : "",
+    isNodeSelected ? "codegraph-node--selected" : "",
+    isNodeHighlighted && !isNodeSelected ? "codegraph-node--highlighted" : "",
+    isNodeDimmed ? "codegraph-node--dimmed" : "",
   ]
     .filter(Boolean)
     .join(" ");

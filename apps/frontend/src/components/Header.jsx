@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { UserButton } from "@clerk/react";
 import RepositorySelectorDropdown from "./RepositorySelectorDropdown.jsx";
+import ThemeToggle from "./ThemeToggle.jsx";
 import "./Header.css";
 
 function Header({
@@ -122,6 +123,9 @@ function Header({
           <span className="header-search-text">Search</span>
           <kbd className="header-search-kbd">Ctrl K</kbd>
         </button>
+
+        {/* Theme Toggle (Light / Dark) */}
+        <ThemeToggle />
 
         {/* Clerk User Button */}
         <UserButton

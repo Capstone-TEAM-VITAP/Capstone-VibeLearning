@@ -198,9 +198,9 @@
 
 .sidebar-nav-item.active {
   background-color: var(--primary-dim);
-  border-color: rgba(99, 102, 241, 0.2);
+  border-color: var(--border-active);
   border-left: 2px solid var(--primary);
-  color: #ffffff;
+  color: var(--nav-active-text, #ffffff);
   font-weight: 600;
 }
 
@@ -406,5 +406,33 @@
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(4px);
     z-index: 35;
+  }
+}
+
+/* Sidebar Theme Toggle */
+.sidebar-theme-toggle {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 6px 10px;
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+}
+
+.sidebar-theme-toggle:hover {
+  background-color: var(--bg-surface-high);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .sidebar-theme-toggle {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+  .sidebar-theme-toggle .theme-toggle-label {
+    display: none;
   }
 }

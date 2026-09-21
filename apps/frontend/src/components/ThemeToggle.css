@@ -1,0 +1,68 @@
+/* ThemeToggle.css — Light / Dark Mode Switcher */
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background-color: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--bg-surface-high);
+  color: var(--primary);
+  border-color: var(--border-active);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(0);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-dim);
+}
+
+.theme-toggle-icon {
+  font-size: 18px;
+  transition: transform 0.25s ease, color 0.18s ease;
+  color: var(--primary);
+}
+
+.theme-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(18deg) scale(1.05);
+}
+
+.theme-toggle-btn--light .theme-toggle-icon {
+  color: var(--primary);
+}
+
+.theme-toggle-btn--dark .theme-toggle-icon {
+  color: var(--status-warning);
+}
+
+.theme-toggle-label {
+  white-space: nowrap;
+}
+
+/* Compact icon-only variant */
+.theme-toggle-btn--icon-only {
+  width: 32px;
+  padding: 0;
+}

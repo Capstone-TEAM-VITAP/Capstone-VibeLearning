@@ -132,7 +132,7 @@
 
 .arch-layer-card.active {
   border-color: var(--primary);
-  background-color: rgba(99, 102, 241, 0.06);
+  background-color: var(--primary-dim);
 }
 
 .arch-layer-header {

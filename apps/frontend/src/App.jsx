@@ -4,6 +4,7 @@ import {
   Show,
 } from "@clerk/react";
 import Dashboard from "./pages/Dashboard.jsx";
+import ThemeToggle from "./components/ThemeToggle.jsx";
 import "./App.css";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           </div>
 
           <div className="auth-nav">
+            <ThemeToggle />
             <SignInButton mode="modal">
               <button className="btn-sign-in" data-testid="sign-in-btn">Sign In</button>
             </SignInButton>
