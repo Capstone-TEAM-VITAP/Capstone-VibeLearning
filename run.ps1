@@ -24,6 +24,7 @@ $ErrorActionPreference = "Stop"
 
 $BackendDir = Join-Path $PSScriptRoot "apps\backend"
 $FrontendDir = Join-Path $PSScriptRoot "apps\frontend"
+$AiServiceDir = Join-Path $PSScriptRoot "apps\ai-service"
 
 function Test-Command($Name) {
   return [bool](Get-Command $Name -ErrorAction SilentlyContinue)
@@ -118,10 +119,11 @@ $ApiBase = "http://localhost:$BackendPort/api/v1"
 Write-Host "=== 6/6 Starting servers (each in its own window) ==="
 Start-Process powershell -ArgumentList @("-NoExit", "-Command", "Set-Location -LiteralPath '$BackendDir'; pnpm dev") -WorkingDirectory $BackendDir
 Start-Process powershell -ArgumentList @("-NoExit", "-Command", "Set-Location -LiteralPath '$FrontendDir'; pnpm dev") -WorkingDirectory $FrontendDir
-Write-Host "  ai-service: skipped (empty scaffold, nothing runnable yet)."
+Start-Process powershell -ArgumentList @("-NoExit", "-Command", "Set-Location -LiteralPath '$AiServiceDir'; python -m uvicorn src.main:app --port 8000 --reload") -WorkingDirectory $AiServiceDir
 
 $backendUp = Wait-Healthy "Backend" "$ApiBase/health"
 $frontendUp = Wait-Healthy "Frontend" "http://localhost:$FrontendPort/"
+$aiUp = Wait-Healthy "AI Service" "http://localhost:8000/health"
 
 # --- Links -------------------------------------------------------------------
 Write-Host ""
@@ -130,6 +132,7 @@ Write-Host "  CodeAI is running"
 Write-Host "=============================================================="
 Write-Host "  Frontend (app UI)      http://localhost:$FrontendPort/"
 Write-Host "  Backend health check   $ApiBase/health"
+Write-Host "  AI Service health      http://localhost:8000/health"
 Write-Host ""
 Write-Host "  API endpoints (need Clerk Bearer token, except health):"
 Write-Host "    GET    $ApiBase/health"
@@ -141,9 +144,10 @@ Write-Host "    POST   $ApiBase/repos/connect"
 Write-Host "    POST   $ApiBase/repos/:id/sync"
 Write-Host "    GET    $ApiBase/repos/:id/snapshots/:sha/files"
 Write-Host "    GET    $ApiBase/repos/:id/snapshots/:sha/diff"
+Write-Host "    POST   $ApiBase/repos/:id/chat"
 Write-Host ""
-if (-not $backendUp -or -not $frontendUp) {
+if (-not $backendUp -or -not $frontendUp -or -not $aiUp) {
   Write-Warning "One or more servers did not pass its health check. Read the errors in its window."
 }
-Write-Host "  To stop: close the two server windows (Ctrl+C inside each works too)."
+Write-Host "  To stop: close the server windows (Ctrl+C inside each works too)."
 Write-Host "=============================================================="

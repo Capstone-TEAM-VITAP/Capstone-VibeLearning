@@ -15,10 +15,22 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel, Field
 
-from repository import (
-    RepositoryAnalysisError,
-    analyze_repository,
-)
+import sys
+
+src_dir = Path(__file__).resolve().parent
+if str(src_dir) not in sys.path:
+    sys.path.insert(0, str(src_dir))
+
+try:
+    from repository import (
+        RepositoryAnalysisError,
+        analyze_repository,
+    )
+except ImportError:
+    from src.repository import (
+        RepositoryAnalysisError,
+        analyze_repository,
+    )
 
 logger = logging.getLogger(__name__)
 

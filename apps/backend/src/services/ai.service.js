@@ -6,7 +6,7 @@ import {
   ServiceUnavailableError,
 } from "../utils/errors.js";
 
-const DEFAULT_AI_SERVICE_URL = "http://localhost:8000";
+const DEFAULT_AI_SERVICE_URL = "http://127.0.0.1:8000";
 const DEFAULT_TIMEOUT_MS = 60000;
 
 /**
@@ -43,7 +43,8 @@ export function validateGraphIr(ir) {
  */
 export const aiService = {
   getBaseUrl() {
-    return (process.env.AI_SERVICE_URL || DEFAULT_AI_SERVICE_URL).replace(/\/+$/, "");
+    const url = (process.env.AI_SERVICE_URL || DEFAULT_AI_SERVICE_URL).replace(/\/+$/, "");
+    return url.replace("://localhost:", "://127.0.0.1:");
   },
 
   getTimeoutMs() {

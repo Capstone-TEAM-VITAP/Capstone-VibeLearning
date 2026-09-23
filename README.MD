@@ -60,13 +60,17 @@ VITE_CLERK_PUBLISHABLE_KEY=pk_test_...
 
 ### 3. Run Development Servers
 
+**Option A: Single Terminal (All services together)**
 ```bash
-# Start backend dev server
-pnpm --filter backend dev
-
-# Start frontend dev server
-pnpm --filter frontend dev
+pnpm dev
 ```
+Runs AI Service (port 8000), Backend (port 5000), and Frontend (port 5173) concurrently in a single terminal with colored logs.
+
+**Option B: One-Click Window Launcher**
+```powershell
+.\run.ps1
+```
+
 
 ---
 

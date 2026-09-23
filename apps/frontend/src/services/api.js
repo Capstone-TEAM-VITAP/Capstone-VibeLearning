@@ -103,4 +103,14 @@ export async function getAnalysis(getToken, id, sha) {
 export async function getSnapshotGraph(getToken, id, sha) {
   const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/graph`);
   return body.data || body;
+}
+
+// --- Repository AI Assistant ---
+
+export async function askRepoQuestion(getToken, id, message, history = []) {
+  const body = await authedFetch(getToken, `/repos/${id}/chat`, {
+    method: "POST",
+    body: JSON.stringify({ message, history }),
+  });
+  return body.data;
 }

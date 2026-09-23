@@ -533,6 +533,50 @@ GET /api/v1/repos/:id/snapshots/:sha/analysis
 
 ---
 
+### 10. Repository AI Assistant (Chat / QA)
+
+```http
+POST /api/v1/repos/:id/chat
+```
+
+- **Purpose**: Ask questions grounded in the connected repository's architecture, routes, database models, and source code.
+- **Headers**: `Authorization: Bearer <clerk_token>`, `Content-Type: application/json`
+- **Request Body**:
+  ```json
+  {
+    "message": "Where is the authentication middleware defined and what does it do?",
+    "history": [
+      { "role": "user", "content": "Hello" },
+      { "role": "assistant", "content": "Hi! I am your AI architect for this repo." }
+    ]
+  }
+  ```
+- **Success Status**: `200 OK`
+- **Response Example**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "message": "The function `requireAuth` is defined in `src/middleware/auth.middleware.js`...",
+      "citations": [
+        { "path": "src/middleware/auth.middleware.js", "startLine": 1, "endLine": 35 }
+      ],
+      "suggestedQuestions": [
+        "Explain the architectural layers of this codebase",
+        "Where are the API routes and controllers located?"
+      ],
+      "model": "grok-2-latest",
+      "snapshotSha": "6a7c89be..."
+    }
+  }
+  ```
+- **Error Statuses**:
+  - `400 Bad Request`: Empty or missing message.
+  - `401 Unauthorized`: Missing or invalid Clerk authentication.
+  - `404 Not Found`: Repository not found or not owned by user.
+
+---
+
 ## Webhooks Endpoints
 
 Public endpoints called by GitHub, not by users — no Clerk token. Authentication is the `X-Hub-Signature-256` HMAC header verified against `GITHUB_WEBHOOK_SECRET`.

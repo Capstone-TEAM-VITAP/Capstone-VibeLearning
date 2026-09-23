@@ -12,6 +12,10 @@ export const snapshotRepository = {
       .all();
   },
 
+  async listByRepo(repositoryId) {
+    return this.findManyByRepositoryId(repositoryId);
+  },
+
   async findByRepoAndSha(repositoryId, commitSha) {
     return db.orm.public.RepoSnapshot.where({ repositoryId, commitSha }).first();
   },

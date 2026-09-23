@@ -3,7 +3,9 @@ import { z } from "zod";
 import { requireAuth } from "../middleware/auth.middleware.js";
 import { validate } from "../middleware/validate.middleware.js";
 import { analysisController } from "../controllers/analysis.controller.js";
+import { chatController } from "../controllers/chat.controller.js";
 import { repoController } from "../controllers/repo.controller.js";
+import { chatMessageSchema } from "../validators/chat.validator.js";
 import {
   connectRepoSchema,
   diffQuerySchema,
@@ -80,6 +82,13 @@ router.get(
   "/:id/snapshots/:sha/graph",
   validate({ params: snapshotParamSchema }),
   repoController.getSnapshotGraph
+);
+
+// POST /api/v1/repos/:id/chat — ask a repository-grounded AI question
+router.post(
+  "/:id/chat",
+  validate({ params: repoIdParamSchema, body: chatMessageSchema }),
+  chatController.chat
 );
 
 export default router;

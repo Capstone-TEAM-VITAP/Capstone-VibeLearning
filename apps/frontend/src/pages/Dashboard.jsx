@@ -10,6 +10,7 @@ import {
   syncRepo,
 } from "../services/api.js";
 import AnalysisDemo from "../components/AnalysisDemo.jsx";
+import AIAssistant from "../components/AIAssistant.jsx";
 import ReposSection from "../components/ReposSection.jsx";
 import Sidebar from "../components/Sidebar.jsx";
 import Header from "../components/Header.jsx";
@@ -681,9 +682,24 @@ function Dashboard() {
           )}
 
           {/* =========================================================
-             CODE ANALYSIS / AI ASSISTANT
+             AI ASSISTANT WORKSPACE
              ========================================================= */}
-          {(view === "analysis" || view === "assistant") && (
+          {view === "assistant" && (
+            <section className="dashboard-content">
+              <AIAssistant
+                getToken={getToken}
+                selectedRepo={selectedRepo}
+                latestSelectedSnapshot={latestSelectedSnapshot}
+                graphData={activeGraph}
+                setView={setView}
+              />
+            </section>
+          )}
+
+          {/* =========================================================
+             CODE ANALYSIS DEMO
+             ========================================================= */}
+          {view === "analysis" && (
             <section className="dashboard-content">
               <AnalysisDemo getToken={getToken} />
             </section>

@@ -4,7 +4,8 @@
   "description": "AI-powered coding learning platform that connects GitHub repositories with personalized code analysis, learning paths, and developer insights.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently -n \"ai-service,backend,frontend\" -c \"magenta,blue,green\" \"python -m uvicorn src.main:app --app-dir apps/ai-service --port 8000 --reload\" \"pnpm --filter backend dev\" \"pnpm --filter frontend dev\"",
+    "test": "pnpm --filter backend test"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +20,8 @@
   "type": "module",
   "dependencies": {
     "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
   }
 }
