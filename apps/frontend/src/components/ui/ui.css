@@ -1,0 +1,289 @@
+/* shadcn-style UI primitives, scoped to the Learning workspace.
+   Token-driven: follows the app's dark/light design tokens, no Tailwind. */
+
+/* ---------- Button ---------- */
+.scn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+.scn-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.scn-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.scn-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+.scn-btn .material-symbols-outlined {
+  font-size: 17px;
+}
+
+.scn-btn-default {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: var(--shadow-sm);
+}
+.scn-btn-default:hover:not(:disabled) {
+  background: var(--primary-container);
+  box-shadow: var(--shadow-md);
+}
+
+.scn-btn-secondary {
+  background: var(--bg-surface-high);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+.scn-btn-secondary:hover:not(:disabled) {
+  background: var(--bg-surface-highest);
+  border-color: var(--border-active);
+}
+
+.scn-btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
+}
+.scn-btn-outline:hover:not(:disabled) {
+  background: var(--bg-surface-high);
+  border-color: var(--border-focus);
+}
+
+.scn-btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+.scn-btn-ghost:hover:not(:disabled) {
+  background: var(--bg-surface-high);
+  color: var(--text-primary);
+}
+
+.scn-btn-destructive {
+  background: var(--status-error);
+  color: #ffffff;
+}
+.scn-btn-destructive:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.scn-btn-md {
+  height: 38px;
+  padding: 0 16px;
+}
+.scn-btn-sm {
+  height: 31px;
+  padding: 0 12px;
+  font-size: 12px;
+  border-radius: 8px;
+}
+.scn-btn-lg {
+  height: 44px;
+  padding: 0 22px;
+  font-size: 14px;
+}
+.scn-btn-icon {
+  height: 34px;
+  width: 34px;
+  padding: 0;
+  border-radius: 9px;
+}
+
+/* ---------- Card ---------- */
+.scn-card {
+  background: var(--bg-surface-low);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.scn-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 20px 0;
+}
+.scn-card-title {
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text-primary);
+  letter-spacing: -0.015em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scn-card-title .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--primary);
+}
+.scn-card-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+.scn-card-content {
+  padding: 16px 20px 20px;
+}
+.scn-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px 18px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Input / Select ---------- */
+.scn-input,
+.scn-select {
+  height: 38px;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-surface-container);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  padding: 0 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.scn-input::placeholder {
+  color: var(--text-muted);
+}
+.scn-input:focus,
+.scn-select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--primary-dim);
+}
+.scn-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 32px;
+  cursor: pointer;
+}
+.scn-select-wrap {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+.scn-select-chevron {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* ---------- Badge ---------- */
+.scn-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.scn-badge .material-symbols-outlined {
+  font-size: 13px;
+}
+.scn-badge-default {
+  background: var(--primary-dim);
+  color: var(--primary-light);
+  border-color: var(--border-active);
+}
+[data-theme="light"] .scn-badge-default {
+  color: var(--primary-container);
+}
+.scn-badge-secondary {
+  background: var(--bg-surface-highest);
+  color: var(--text-secondary);
+  border-color: var(--border-hairline);
+}
+.scn-badge-outline {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+}
+.scn-badge-success {
+  background: var(--status-success-dim);
+  color: var(--status-success);
+  border-color: var(--status-success);
+}
+.scn-badge-warning {
+  background: var(--status-warning-dim);
+  color: var(--status-warning);
+  border-color: var(--status-warning);
+}
+.scn-badge-destructive {
+  background: var(--status-error-dim);
+  color: var(--status-error);
+  border-color: var(--status-error);
+}
+
+/* ---------- Progress ---------- */
+.scn-progress {
+  height: 8px;
+  width: 100%;
+  background: var(--bg-surface-high);
+  border: 1px solid var(--border-hairline);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.scn-progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- Skeleton ---------- */
+.scn-skeleton {
+  border-radius: 8px;
+  background: linear-gradient(
+    100deg,
+    var(--bg-surface-high) 40%,
+    var(--bg-surface-highest) 50%,
+    var(--bg-surface-high) 60%
+  );
+  background-size: 200% 100%;
+  animation: scn-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes scn-shimmer {
+  from {
+    background-position: 180% 0;
+  }
+  to {
+    background-position: -20% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scn-skeleton {
+    animation: none;
+  }
+  .scn-progress-bar {
+    transition: none;
+  }
+}

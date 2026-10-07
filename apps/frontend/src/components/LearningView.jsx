@@ -6,9 +6,30 @@ import {
   submitLearningAnswers,
   getLearningProgress,
 } from "../services/api.js";
+import Blocks from "./Blocks.jsx";
+import Button from "./ui/button.jsx";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "./ui/card.jsx";
+import { Input, Select } from "./ui/input.jsx";
+import Badge from "./ui/badge.jsx";
+import { Progress } from "./ui/progress.jsx";
+import "./ui/ui.css";
 import "./LearningView.css";
 
 const DIFFICULTIES = ["beginner", "intermediate", "advanced"];
+const OPTION_LETTERS = ["A", "B", "C", "D"];
+
+const DIFFICULTY_BADGE = {
+  beginner: "success",
+  intermediate: "warning",
+  advanced: "destructive",
+};
 
 function LearningView({ getToken, selectedRepo, setView }) {
   const [topic, setTopic] = useState("");
@@ -141,18 +162,23 @@ function LearningView({ getToken, selectedRepo, setView }) {
   }
 
   const needsAnalysis = error && /not enough repository context|run analysis first/i.test(error);
+  const answeredCount = activeSet?.questions?.filter((q) => picks[q.id] != null).length || 0;
+  const scorePct = result && result.total ? Math.round((result.correct / result.total) * 100) : 0;
 
   if (!selectedRepo) {
     return (
-      <div className="intel-notice-card" data-testid="learning-empty">
-        <div className="intel-notice-icon">
-          <span className="material-symbols-outlined">folder_off</span>
-        </div>
-        <h3>No repository selected</h3>
-        <p>Connect a repository to generate personalized quizzes from its code.</p>
-        <button type="button" className="ws-btn ws-btn-primary" onClick={() => setView?.("repos")}>
-          Open Repositories
-        </button>
+      <div className="learning-workspace" data-testid="learning-empty">
+        <Card className="learning-empty-card">
+          <CardContent className="learning-empty-body">
+            <span className="material-symbols-outlined learning-empty-icon">folder_off</span>
+            <h3>No repository selected</h3>
+            <p>Connect a repository to generate personalized quizzes from its code.</p>
+            <Button type="button" onClick={() => setView?.("repos")}>
+              <span className="material-symbols-outlined">hub</span>
+              Open Repositories
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -160,166 +186,305 @@ function LearningView({ getToken, selectedRepo, setView }) {
   return (
     <div className="learning-workspace" data-testid="learning-view">
       <div className="learning-hero">
-        <div>
-          <span className="intel-hero-eyebrow">
+        <div className="learning-hero-text">
+          <Badge>
             <span className="material-symbols-outlined">school</span>
             Developer Learning
-          </span>
-          <h1 className="intel-hero-title">Learn {repoName}</h1>
-          <p className="intel-hero-desc">
+          </Badge>
+          <h1 className="learning-title">Learn {repoName}</h1>
+          <p className="learning-subtitle">
             Generate MCQ quizzes grounded in the analyzed codebase. Same topic + difficulty returns the saved set.
           </p>
         </div>
         {progress && (
-          <div className="learning-progress" data-testid="learning-progress">
-            <span>{progress.sets} sets</span>
-            <span>·</span>
-            <span>{progress.answered}/{progress.total} answered</span>
-            <span>·</span>
-            <span>{progress.correct} correct</span>
-          </div>
+          <Card className="learning-progress-card" data-testid="learning-progress">
+            <div className="learning-progress-stats">
+              <div className="learning-stat">
+                <span className="learning-stat-value">{progress.sets}</span>
+                <span className="learning-stat-label">sets</span>
+              </div>
+              <div className="learning-stat">
+                <span className="learning-stat-value">{progress.answered}/{progress.total}</span>
+                <span className="learning-stat-label">answered</span>
+              </div>
+              <div className="learning-stat">
+                <span className="learning-stat-value learning-stat-good">{progress.correct}</span>
+                <span className="learning-stat-label">correct</span>
+              </div>
+            </div>
+            <Progress value={progress.answered} max={Math.max(progress.total, 1)} />
+          </Card>
         )}
       </div>
 
       {error && (
-        <div className="learning-error" data-testid="learning-error">
+        <div className="learning-error" data-testid="learning-error" role="alert">
           <span className="material-symbols-outlined">error</span>
           <span>{error}</span>
           {needsAnalysis && (
-            <button type="button" className="ws-btn ws-btn-secondary" onClick={() => setView?.("analysis")}>
+            <Button type="button" size="sm" variant="secondary" onClick={() => setView?.("analysis")}>
               Run analysis
-            </button>
+            </Button>
           )}
         </div>
       )}
 
-      <form className="learning-generator" onSubmit={handleGenerate}>
-        <input
-          className="repo-input learning-topic"
-          data-testid="learning-topic"
-          placeholder="Topic, e.g. authentication"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          maxLength={200}
-        />
-        <select
-          className="repo-input"
-          data-testid="learning-difficulty"
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-        >
-          {DIFFICULTIES.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
-        <select
-          className="repo-input"
-          data-testid="learning-count"
-          value={count}
-          onChange={(e) => setCount(Number(e.target.value))}
-        >
-          {[3, 5, 8, 10].map((n) => (
-            <option key={n} value={n}>{n} questions</option>
-          ))}
-        </select>
-        <button
-          type="submit"
-          className="ws-btn ws-btn-primary"
-          data-testid="learning-generate"
-          disabled={generating}
-        >
-          {generating ? "Generating…" : "Generate quiz"}
-        </button>
-      </form>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <span className="material-symbols-outlined">auto_awesome</span>
+            New quiz
+          </CardTitle>
+          <CardDescription>Pick a topic from this repository and generate grounded questions.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="learning-generator" onSubmit={handleGenerate}>
+            <label className="learning-field learning-field-grow">
+              <span className="learning-label">Topic</span>
+              <Input
+                data-testid="learning-topic"
+                placeholder="e.g. authentication"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                maxLength={200}
+              />
+            </label>
+            <label className="learning-field">
+              <span className="learning-label">Difficulty</span>
+              <Select
+                data-testid="learning-difficulty"
+                value={difficulty}
+                onChange={(e) => setDifficulty(e.target.value)}
+              >
+                {DIFFICULTIES.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </Select>
+            </label>
+            <label className="learning-field learning-field-narrow">
+              <span className="learning-label">Questions</span>
+              <Select
+                data-testid="learning-count"
+                value={count}
+                onChange={(e) => setCount(Number(e.target.value))}
+              >
+                {[3, 5, 8, 10].map((n) => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </Select>
+            </label>
+            <Button
+              type="submit"
+              data-testid="learning-generate"
+              disabled={generating}
+              className="learning-generate-btn"
+            >
+              {generating ? (
+                <>
+                  <Blocks size={16} />
+                  Generating…
+                </>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined">quiz</span>
+                  Generate quiz
+                </>
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
 
       <div className="learning-columns">
-        <div className="learning-sets">
-          <h3>Quiz sets ({sets.length})</h3>
+        <section className="learning-sets" aria-label="Quiz sets">
+          <div className="learning-sets-head">
+            <h3>Quiz sets</h3>
+            <Badge variant="secondary">{sets.length}</Badge>
+          </div>
           {sets.length === 0 ? (
-            <p className="repo-empty">No quizzes yet. Generate one above.</p>
+            <Card className="learning-sets-empty">
+              <CardContent className="learning-sets-empty-body">
+                <span className="material-symbols-outlined">quiz</span>
+                <p>No quizzes yet. Generate one above.</p>
+              </CardContent>
+            </Card>
           ) : (
             <ul>
-              {sets.map((s) => (
-                <li key={s.id}>
-                  <button
-                    type="button"
-                    data-testid={`learning-set-${s.id}`}
-                    className={`learning-set-item ${s.id === activeSetId ? "active" : ""}`}
-                    onClick={() => setActiveSetId(s.id)}
-                  >
-                    <strong>{s.topic}</strong>
-                    <span>{s.difficulty} · {s.questionCount}q</span>
-                    {s.progress && (
-                      <span>{s.progress.answered}/{s.progress.total} answered</span>
-                    )}
-                  </button>
-                </li>
-              ))}
+              {sets.map((s) => {
+                const done = s.progress?.total
+                  ? s.progress.answered >= s.progress.total && s.progress.total > 0
+                  : false;
+                return (
+                  <li key={s.id}>
+                    <button
+                      type="button"
+                      data-testid={`learning-set-${s.id}`}
+                      className={`learning-set-card ${s.id === activeSetId ? "active" : ""}`}
+                      onClick={() => setActiveSetId(s.id)}
+                    >
+                      <span className="learning-set-top">
+                        <strong>{s.topic}</strong>
+                        {done && (
+                          <span className="material-symbols-outlined learning-set-done" title="Completed">
+                            check_circle
+                          </span>
+                        )}
+                      </span>
+                      <span className="learning-set-meta">
+                        <Badge variant={DIFFICULTY_BADGE[s.difficulty] || "secondary"}>
+                          {s.difficulty}
+                        </Badge>
+                        <span>{s.questionCount} questions</span>
+                      </span>
+                      {s.progress && (
+                        <span className="learning-set-progress">
+                          <Progress value={s.progress.answered} max={Math.max(s.progress.total, 1)} />
+                          <span>{s.progress.answered}/{s.progress.total} answered</span>
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           )}
-        </div>
+        </section>
 
-        <div className="learning-quiz">
+        <section className="learning-quiz" aria-label="Quiz solver">
           {loadingSet ? (
-            <p className="repo-empty">Loading quiz…</p>
+            <Card>
+              <CardContent className="learning-loading-panel">
+                <Blocks size={40} />
+                <p>Loading quiz…</p>
+              </CardContent>
+            </Card>
           ) : !activeSet ? (
-            <p className="repo-empty">Select a quiz set to solve it here.</p>
+            <Card className="learning-quiz-empty">
+              <CardContent className="learning-quiz-empty-body">
+                <span className="material-symbols-outlined">touch_app</span>
+                <p>Select a quiz set to solve it here.</p>
+              </CardContent>
+            </Card>
           ) : (
-            <>
-              {activeSet.engine && (
-                <p className="repo-item-meta" data-testid="learning-engine">
-                  Engine: {activeSet.engine}
-                </p>
-              )}
-              <ol className="learning-questions">
-                {(activeSet.questions || []).map((q, idx) => {
-                  const graded = result?.results?.find((r) => r.questionId === q.id);
-                  return (
-                    <li key={q.id} className="learning-question" data-testid={`learning-q-${q.id}`}>
-                      <p><strong>Q{idx + 1}.</strong> {q.prompt}</p>
-                      <div className="learning-options">
-                        {(q.options || []).map((opt, oi) => (
-                          <label key={oi} className={`learning-option ${graded ? (oi === graded.answerIndex ? "correct" : (picks[q.id] === oi ? "wrong" : "")) : ""}`}>
-                            <input
-                              type="radio"
-                              name={q.id}
-                              checked={picks[q.id] === oi}
-                              onChange={() => setPicks((p) => ({ ...p, [q.id]: oi }))}
-                              disabled={submitting}
-                            />
-                            {opt}
-                          </label>
-                        ))}
-                      </div>
-                      {q.citationPath && (
-                        <p className="repo-item-meta">{q.citationPath}{q.citationStart != null ? `:${q.citationStart}` : ""}</p>
-                      )}
-                      {graded && (
-                        <p className={`repo-item-meta ${graded.correct ? "" : "repo-error"}`}>
-                          {graded.correct ? "Correct" : `Correct answer: ${graded.answerIndex + 1}`} — {graded.explanation || q.explanation || ""}
+            <Card>
+              <CardHeader>
+                <div className="learning-quiz-head">
+                  <CardTitle>{activeSet.topic}</CardTitle>
+                  <div className="learning-quiz-badges">
+                    <Badge variant={DIFFICULTY_BADGE[activeSet.difficulty] || "secondary"}>
+                      {activeSet.difficulty}
+                    </Badge>
+                    {activeSet.engine && (
+                      <Badge
+                        variant="outline"
+                        data-testid="learning-engine"
+                        title={activeSet.engine === "llm" ? "Generated by the configured LLM" : "Generated offline from code symbols"}
+                      >
+                        <span className="material-symbols-outlined">
+                          {activeSet.engine === "llm" ? "smart_toy" : "terminal"}
+                        </span>
+                        {activeSet.engine}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+                <CardDescription>
+                  {answeredCount}/{activeSet.questions?.length || 0} answered
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {result && (
+                  <div className="learning-score" data-testid="learning-score">
+                    <span className="material-symbols-outlined">emoji_events</span>
+                    <strong>Score: {result.correct}/{result.total}</strong>
+                    <span className="learning-score-pct">{scorePct}%</span>
+                  </div>
+                )}
+                <ol className="learning-questions">
+                  {(activeSet.questions || []).map((q, idx) => {
+                    const graded = result?.results?.find((r) => r.questionId === q.id);
+                    return (
+                      <li key={q.id} className="learning-question" data-testid={`learning-q-${q.id}`}>
+                        <p className="learning-question-prompt">
+                          <Badge variant="secondary" className="learning-qnum">Q{idx + 1}</Badge>
+                          {q.prompt}
                         </p>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-              <div className="learning-actions">
-                <button
+                        <div className="learning-options" role="radiogroup" aria-label={q.prompt}>
+                          {(q.options || []).map((opt, oi) => {
+                            const selected = picks[q.id] === oi;
+                            const isAnswer = graded && oi === graded.answerIndex;
+                            const isWrongPick = graded && !graded.correct && selected;
+                            return (
+                              <button
+                                key={oi}
+                                type="button"
+                                role="radio"
+                                aria-checked={selected}
+                                disabled={submitting}
+                                onClick={() => setPicks((p) => ({ ...p, [q.id]: oi }))}
+                                className={[
+                                  "learning-option",
+                                  selected && !graded ? "selected" : "",
+                                  isAnswer ? "correct" : "",
+                                  isWrongPick ? "wrong" : "",
+                                ].filter(Boolean).join(" ")}
+                              >
+                                <span className="learning-option-letter">{OPTION_LETTERS[oi]}</span>
+                                <span>{opt}</span>
+                                {isAnswer && (
+                                  <span className="material-symbols-outlined learning-option-icon">check_circle</span>
+                                )}
+                                {isWrongPick && (
+                                  <span className="material-symbols-outlined learning-option-icon">cancel</span>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        {q.citationPath && (
+                          <p className="learning-citation">
+                            <span className="material-symbols-outlined">description</span>
+                            {q.citationPath}{q.citationStart != null ? `:${q.citationStart}` : ""}
+                          </p>
+                        )}
+                        {graded && (
+                          <p className={`learning-explanation ${graded.correct ? "good" : "bad"}`}>
+                            <span className="material-symbols-outlined">
+                              {graded.correct ? "lightbulb" : "info"}
+                            </span>
+                            <span>
+                              {graded.correct ? "Correct" : `Correct answer: ${OPTION_LETTERS[graded.answerIndex]}`} — {graded.explanation || q.explanation || ""}
+                            </span>
+                          </p>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </CardContent>
+              <CardFooter>
+                <Button
                   type="button"
-                  className="ws-btn ws-btn-primary"
                   data-testid="learning-submit"
                   onClick={handleSubmit}
                   disabled={submitting}
                 >
-                  {submitting ? "Submitting…" : "Submit answers"}
-                </button>
-                {result && (
-                  <span data-testid="learning-score">Score: {result.correct}/{result.total}</span>
-                )}
-              </div>
-            </>
+                  {submitting ? (
+                    <>
+                      <Blocks size={16} />
+                      Submitting…
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined">check</span>
+                      Submit answers
+                    </>
+                  )}
+                </Button>
+              </CardFooter>
+            </Card>
           )}
-        </div>
+        </section>
       </div>
     </div>
   );
