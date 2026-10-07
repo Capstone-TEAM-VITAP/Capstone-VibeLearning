@@ -8,6 +8,18 @@
       "model": "AnalysisJob",
       "namespace": "public"
     },
+    "learning_attempt": {
+      "model": "LearningAttempt",
+      "namespace": "public"
+    },
+    "learning_question": {
+      "model": "LearningQuestion",
+      "namespace": "public"
+    },
+    "learning_set": {
+      "model": "LearningSet",
+      "namespace": "public"
+    },
     "project": {
       "model": "Project",
       "namespace": "public"
@@ -134,6 +146,377 @@
               },
               "namespaceId": "public",
               "table": "analysis_job"
+            }
+          },
+          "LearningAttempt": {
+            "fields": {
+              "correct": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "pickedIndex": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "questionId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "question": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "questionId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "LearningQuestion",
+                  "namespace": "public"
+                }
+              },
+              "user": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "correct": {
+                  "column": "correct"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "pickedIndex": {
+                  "column": "pickedIndex"
+                },
+                "questionId": {
+                  "column": "questionId"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "learning_attempt"
+            }
+          },
+          "LearningQuestion": {
+            "fields": {
+              "answerIndex": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "citationEnd": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "citationPath": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "citationStart": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "explanation": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "optionsJson": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "prompt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "setId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "attempts": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "questionId"
+                  ]
+                },
+                "to": {
+                  "model": "LearningAttempt",
+                  "namespace": "public"
+                }
+              },
+              "set": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "setId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "LearningSet",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "answerIndex": {
+                  "column": "answerIndex"
+                },
+                "citationEnd": {
+                  "column": "citationEnd"
+                },
+                "citationPath": {
+                  "column": "citationPath"
+                },
+                "citationStart": {
+                  "column": "citationStart"
+                },
+                "explanation": {
+                  "column": "explanation"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "optionsJson": {
+                  "column": "optionsJson"
+                },
+                "prompt": {
+                  "column": "prompt"
+                },
+                "setId": {
+                  "column": "setId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "learning_question"
+            }
+          },
+          "LearningSet": {
+            "fields": {
+              "commitSha": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "difficulty": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "questionCount": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "repositoryId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              },
+              "topic": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/uuid@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "questions": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "setId"
+                  ]
+                },
+                "to": {
+                  "model": "LearningQuestion",
+                  "namespace": "public"
+                }
+              },
+              "repository": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "repositoryId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Repository",
+                  "namespace": "public"
+                }
+              },
+              "user": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "commitSha": {
+                  "column": "commitSha"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "difficulty": {
+                  "column": "difficulty"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "questionCount": {
+                  "column": "questionCount"
+                },
+                "repositoryId": {
+                  "column": "repositoryId"
+                },
+                "topic": {
+                  "column": "topic"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "learning_set"
             }
           },
           "Project": {
@@ -464,6 +847,21 @@
               }
             },
             "relations": {
+              "learningSets": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "repositoryId"
+                  ]
+                },
+                "to": {
+                  "model": "LearningSet",
+                  "namespace": "public"
+                }
+              },
               "project": {
                 "cardinality": "N:1",
                 "on": {
@@ -593,6 +991,36 @@
               }
             },
             "relations": {
+              "learningAttempts": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "LearningAttempt",
+                  "namespace": "public"
+                }
+              },
+              "learningSets": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "LearningSet",
+                  "namespace": "public"
+                }
+              },
               "projects": {
                 "cardinality": "1:N",
                 "on": {
@@ -759,6 +1187,315 @@
                   ]
                 }
               ]
+            },
+            "learning_attempt": {
+              "columns": {
+                "correct": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false,
+                  "typeRef": "Uuid"
+                },
+                "pickedIndex": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "questionId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false,
+                  "typeRef": "Uuid"
+                },
+                "userId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false,
+                  "typeRef": "Uuid"
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "questionId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_attempt"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_question"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_attempt"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "questionId"
+                  ],
+                  "name": "learning_attempt_questionId_idx_fdb42076",
+                  "prefix": "learning_attempt_questionId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "learning_attempt_userId_idx_a489d58a",
+                  "prefix": "learning_attempt_userId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "learning_question": {
+              "columns": {
+                "answerIndex": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "citationEnd": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "citationPath": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "citationStart": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": true
+                },
+                "explanation": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false,
+                  "typeRef": "Uuid"
+                },
+                "optionsJson": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "prompt": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "setId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false,
+                  "typeRef": "Uuid"
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "setId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_question"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_set"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "setId"
+                  ],
+                  "name": "learning_question_setId_idx_02759a07",
+                  "prefix": "learning_question_setId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "learning_set": {
+              "columns": {
+                "commitSha": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "difficulty": {
+                  "codecId": "pg/text@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": "beginner"
+                  },
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false,
+                  "typeRef": "Uuid"
+                },
+                "questionCount": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": 0
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "repositoryId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false,
+                  "typeRef": "Uuid"
+                },
+                "topic": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/uuid@1",
+                  "nativeType": "uuid",
+                  "nullable": false,
+                  "typeRef": "Uuid"
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_set"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                },
+                {
+                  "source": {
+                    "columns": [
+                      "repositoryId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "learning_set"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "repository"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "repositoryId"
+                  ],
+                  "name": "learning_set_repositoryId_idx_dce7a8ba",
+                  "prefix": "learning_set_repositoryId_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "learning_set_userId_idx_a489d58a",
+                  "prefix": "learning_set_userId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
             },
             "project": {
               "columns": {
@@ -1153,7 +1890,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "ecba3b173c5a62430c5df0397e8f5f5a85f8c2743d2412d0fd414bfb34e00f13",
+    "storageHash": "2a2d0d1936ea4bfb13a044c0b8d5b41b82e5cfadb232659fa48c297e35d75fd5",
     "types": {
       "Uuid": {
         "codecId": "pg/uuid@1",
@@ -1163,7 +1900,7 @@
     }
   },
   "execution": {
-    "executionHash": "75dd7428960f07838a5f0ddbdbad944d09c6c499239647c6d9cc03218ad3327f",
+    "executionHash": "97329f15b55f8e89b16371e550e383afb3e76f108a2d8dedef6f45d85a6d9740",
     "mutations": {
       "defaults": [
         {
@@ -1175,6 +1912,39 @@
             "column": "id",
             "namespace": "public",
             "table": "analysis_job"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "learning_attempt"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "learning_question"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "uuidv4",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "id",
+            "namespace": "public",
+            "table": "learning_set"
           }
         },
         {

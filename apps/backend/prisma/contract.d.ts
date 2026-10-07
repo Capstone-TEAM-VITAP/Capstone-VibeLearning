@@ -33,9 +33,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'ecba3b173c5a62430c5df0397e8f5f5a85f8c2743d2412d0fd414bfb34e00f13'>;
+  StorageHashBase<'2a2d0d1936ea4bfb13a044c0b8d5b41b82e5cfadb232659fa48c297e35d75fd5'>;
 export type ExecutionHash =
-  ExecutionHashBase<'75dd7428960f07838a5f0ddbdbad944d09c6c499239647c6d9cc03218ad3327f'>;
+  ExecutionHashBase<'97329f15b55f8e89b16371e550e383afb3e76f108a2d8dedef6f45d85a6d9740'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -251,6 +251,35 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly LearningAttempt: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly questionId: CodecTypes['pg/uuid@1']['output'];
+      readonly userId: CodecTypes['pg/uuid@1']['output'];
+      readonly pickedIndex: CodecTypes['pg/int4@1']['output'];
+      readonly correct: CodecTypes['pg/int4@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
+    readonly LearningQuestion: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly setId: CodecTypes['pg/uuid@1']['output'];
+      readonly prompt: CodecTypes['pg/text@1']['output'];
+      readonly optionsJson: CodecTypes['pg/text@1']['output'];
+      readonly answerIndex: CodecTypes['pg/int4@1']['output'];
+      readonly explanation: CodecTypes['pg/text@1']['output'] | null;
+      readonly citationPath: CodecTypes['pg/text@1']['output'] | null;
+      readonly citationStart: CodecTypes['pg/int4@1']['output'] | null;
+      readonly citationEnd: CodecTypes['pg/int4@1']['output'] | null;
+    };
+    readonly LearningSet: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly userId: CodecTypes['pg/uuid@1']['output'];
+      readonly repositoryId: CodecTypes['pg/uuid@1']['output'];
+      readonly commitSha: CodecTypes['pg/text@1']['output'];
+      readonly topic: CodecTypes['pg/text@1']['output'];
+      readonly difficulty: CodecTypes['pg/text@1']['output'];
+      readonly questionCount: CodecTypes['pg/int4@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    };
     readonly Project: {
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly name: CodecTypes['pg/text@1']['output'];
@@ -305,6 +334,35 @@ export type FieldInputTypes = {
       readonly resultJson: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly LearningAttempt: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly questionId: CodecTypes['pg/uuid@1']['input'];
+      readonly userId: CodecTypes['pg/uuid@1']['input'];
+      readonly pickedIndex: CodecTypes['pg/int4@1']['input'];
+      readonly correct: CodecTypes['pg/int4@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly LearningQuestion: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly setId: CodecTypes['pg/uuid@1']['input'];
+      readonly prompt: CodecTypes['pg/text@1']['input'];
+      readonly optionsJson: CodecTypes['pg/text@1']['input'];
+      readonly answerIndex: CodecTypes['pg/int4@1']['input'];
+      readonly explanation: CodecTypes['pg/text@1']['input'] | null;
+      readonly citationPath: CodecTypes['pg/text@1']['input'] | null;
+      readonly citationStart: CodecTypes['pg/int4@1']['input'] | null;
+      readonly citationEnd: CodecTypes['pg/int4@1']['input'] | null;
+    };
+    readonly LearningSet: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly userId: CodecTypes['pg/uuid@1']['input'];
+      readonly repositoryId: CodecTypes['pg/uuid@1']['input'];
+      readonly commitSha: CodecTypes['pg/text@1']['input'];
+      readonly topic: CodecTypes['pg/text@1']['input'];
+      readonly difficulty: CodecTypes['pg/text@1']['input'];
+      readonly questionCount: CodecTypes['pg/int4@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
     };
     readonly Project: {
       readonly id: CodecTypes['pg/uuid@1']['input'];
@@ -361,6 +419,35 @@ export type StorageColumnTypes = {
       readonly status: CodecTypes['pg/text@1']['output'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     };
+    readonly learning_attempt: {
+      readonly correct: CodecTypes['pg/int4@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly pickedIndex: CodecTypes['pg/int4@1']['output'];
+      readonly questionId: CodecTypes['pg/uuid@1']['output'];
+      readonly userId: CodecTypes['pg/uuid@1']['output'];
+    };
+    readonly learning_question: {
+      readonly answerIndex: CodecTypes['pg/int4@1']['output'];
+      readonly citationEnd: CodecTypes['pg/int4@1']['output'] | null;
+      readonly citationPath: CodecTypes['pg/text@1']['output'] | null;
+      readonly citationStart: CodecTypes['pg/int4@1']['output'] | null;
+      readonly explanation: CodecTypes['pg/text@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly optionsJson: CodecTypes['pg/text@1']['output'];
+      readonly prompt: CodecTypes['pg/text@1']['output'];
+      readonly setId: CodecTypes['pg/uuid@1']['output'];
+    };
+    readonly learning_set: {
+      readonly commitSha: CodecTypes['pg/text@1']['output'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly difficulty: CodecTypes['pg/text@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly questionCount: CodecTypes['pg/int4@1']['output'];
+      readonly repositoryId: CodecTypes['pg/uuid@1']['output'];
+      readonly topic: CodecTypes['pg/text@1']['output'];
+      readonly userId: CodecTypes['pg/uuid@1']['output'];
+    };
     readonly project: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly description: CodecTypes['pg/text@1']['output'] | null;
@@ -415,6 +502,35 @@ export type StorageColumnInputTypes = {
       readonly snapshotId: CodecTypes['pg/uuid@1']['input'];
       readonly status: CodecTypes['pg/text@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+    };
+    readonly learning_attempt: {
+      readonly correct: CodecTypes['pg/int4@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly pickedIndex: CodecTypes['pg/int4@1']['input'];
+      readonly questionId: CodecTypes['pg/uuid@1']['input'];
+      readonly userId: CodecTypes['pg/uuid@1']['input'];
+    };
+    readonly learning_question: {
+      readonly answerIndex: CodecTypes['pg/int4@1']['input'];
+      readonly citationEnd: CodecTypes['pg/int4@1']['input'] | null;
+      readonly citationPath: CodecTypes['pg/text@1']['input'] | null;
+      readonly citationStart: CodecTypes['pg/int4@1']['input'] | null;
+      readonly explanation: CodecTypes['pg/text@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly optionsJson: CodecTypes['pg/text@1']['input'];
+      readonly prompt: CodecTypes['pg/text@1']['input'];
+      readonly setId: CodecTypes['pg/uuid@1']['input'];
+    };
+    readonly learning_set: {
+      readonly commitSha: CodecTypes['pg/text@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly difficulty: CodecTypes['pg/text@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly questionCount: CodecTypes['pg/int4@1']['input'];
+      readonly repositoryId: CodecTypes['pg/uuid@1']['input'];
+      readonly topic: CodecTypes['pg/text@1']['input'];
+      readonly userId: CodecTypes['pg/uuid@1']['input'];
     };
     readonly project: {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
@@ -552,6 +668,267 @@ type ContractBase = Omit<
                   readonly target: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'repo_snapshot';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly learning_attempt: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly typeRef: 'Uuid';
+                };
+                readonly questionId: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly typeRef: 'Uuid';
+                };
+                readonly userId: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly typeRef: 'Uuid';
+                };
+                readonly pickedIndex: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                };
+                readonly correct: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly createdAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'learning_attempt_questionId_idx_fdb42076';
+                  readonly prefix: 'learning_attempt_questionId_idx';
+                  readonly columns: readonly ['questionId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'learning_attempt_userId_idx_a489d58a';
+                  readonly prefix: 'learning_attempt_userId_idx';
+                  readonly columns: readonly ['userId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_attempt';
+                    readonly columns: readonly ['questionId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_question';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_attempt';
+                    readonly columns: readonly ['userId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'user';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly learning_question: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly typeRef: 'Uuid';
+                };
+                readonly setId: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly typeRef: 'Uuid';
+                };
+                readonly prompt: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly optionsJson: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly answerIndex: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly explanation: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly citationPath: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly citationStart: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly citationEnd: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'learning_question_setId_idx_02759a07';
+                  readonly prefix: 'learning_question_setId_idx';
+                  readonly columns: readonly ['setId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_question';
+                    readonly columns: readonly ['setId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_set';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly learning_set: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly typeRef: 'Uuid';
+                };
+                readonly userId: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly typeRef: 'Uuid';
+                };
+                readonly repositoryId: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly typeRef: 'Uuid';
+                };
+                readonly commitSha: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly topic: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly difficulty: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'beginner'>;
+                  };
+                };
+                readonly questionCount: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly createdAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'learning_set_userId_idx_a489d58a';
+                  readonly prefix: 'learning_set_userId_idx';
+                  readonly columns: readonly ['userId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'learning_set_repositoryId_idx_dce7a8ba';
+                  readonly prefix: 'learning_set_repositoryId_idx';
+                  readonly columns: readonly ['repositoryId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_set';
+                    readonly columns: readonly ['userId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'user';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'learning_set';
+                    readonly columns: readonly ['repositoryId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'repository';
                     readonly columns: readonly ['id'];
                   };
                 },
@@ -896,6 +1273,18 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'AnalysisJob';
     };
+    readonly learning_set: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'LearningSet';
+    };
+    readonly learning_question: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'LearningQuestion';
+    };
+    readonly learning_attempt: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'LearningAttempt';
+    };
   };
   readonly domain: {
     readonly namespaces: {
@@ -967,6 +1356,234 @@ type ContractBase = Omit<
                 readonly resultJson: { readonly column: 'resultJson' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+          readonly LearningAttempt: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly questionId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly userId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly pickedIndex: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly correct: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly question: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningQuestion';
+                };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['questionId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly user: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'learning_attempt';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly questionId: { readonly column: 'questionId' };
+                readonly userId: { readonly column: 'userId' };
+                readonly pickedIndex: { readonly column: 'pickedIndex' };
+                readonly correct: { readonly column: 'correct' };
+                readonly createdAt: { readonly column: 'createdAt' };
+              };
+            };
+          };
+          readonly LearningQuestion: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly setId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly prompt: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly optionsJson: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly answerIndex: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly explanation: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly citationPath: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly citationStart: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly citationEnd: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly attempts: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningAttempt';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['questionId'];
+                };
+              };
+              readonly set: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningSet';
+                };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['setId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'learning_question';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly setId: { readonly column: 'setId' };
+                readonly prompt: { readonly column: 'prompt' };
+                readonly optionsJson: { readonly column: 'optionsJson' };
+                readonly answerIndex: { readonly column: 'answerIndex' };
+                readonly explanation: { readonly column: 'explanation' };
+                readonly citationPath: { readonly column: 'citationPath' };
+                readonly citationStart: { readonly column: 'citationStart' };
+                readonly citationEnd: { readonly column: 'citationEnd' };
+              };
+            };
+          };
+          readonly LearningSet: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly userId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly repositoryId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly commitSha: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly topic: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly difficulty: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly questionCount: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+            };
+            readonly relations: {
+              readonly questions: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningQuestion';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['setId'];
+                };
+              };
+              readonly repository: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Repository';
+                };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['repositoryId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly user: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'learning_set';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly userId: { readonly column: 'userId' };
+                readonly repositoryId: { readonly column: 'repositoryId' };
+                readonly commitSha: { readonly column: 'commitSha' };
+                readonly topic: { readonly column: 'topic' };
+                readonly difficulty: { readonly column: 'difficulty' };
+                readonly questionCount: { readonly column: 'questionCount' };
+                readonly createdAt: { readonly column: 'createdAt' };
               };
             };
           };
@@ -1087,6 +1704,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly learningSets: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningSet';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['repositoryId'];
+                };
+              };
               readonly project: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -1264,6 +1892,28 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly learningAttempts: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningAttempt';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
+              readonly learningSets: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'LearningSet';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
               readonly projects: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -1331,6 +1981,30 @@ type ContractBase = Omit<
           readonly ref: {
             readonly namespace: 'public';
             readonly table: 'analysis_job';
+            readonly column: 'id';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'learning_attempt';
+            readonly column: 'id';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'learning_question';
+            readonly column: 'id';
+          };
+          readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
+        },
+        {
+          readonly ref: {
+            readonly namespace: 'public';
+            readonly table: 'learning_set';
             readonly column: 'id';
           };
           readonly onCreate: { readonly kind: 'generator'; readonly id: 'uuidv4' };
