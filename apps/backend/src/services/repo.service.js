@@ -6,7 +6,8 @@ import { userRepository } from "../repositories/user.repository.js";
 import { ConflictError, GatewayTimeoutError, NotFoundError, ServiceUnavailableError } from "../utils/errors.js";
 import { analysisService } from "./analysis.service.js";
 import { jobRepository } from "../repositories/job.repository.js";
-import { aiService } from "./ai.service.js";
+import { aiService, validateGraphIr } from "./ai.service.js";
+import { db } from "../config/db.js";
 import gitService, {
   ensureMirror,
   ensureSnapshotTree,
@@ -316,6 +317,16 @@ export const repoService = {
       }
     }
 
+    // 3b. Stale "done" (missing Graph IR, e.g. legacy stub) or "failed"
+    // must be reset to "pending" so it can be atomically re-acquired.
+    // Without this, tryAcquireRunning (WHERE status='pending') returns false
+    // and the poll path throws "Analysis completed without producing a valid
+    // graph" forever without ever calling the AI service.
+    if (job && (job.status === "done" || job.status === "failed")) {
+      await db.orm.public.AnalysisJob.where({ id: job.id, status: job.status }).update({ status: "pending" });
+      job = await jobRepository.findBySnapshotId(snapshot.id);
+    }
+
     // 4. Atomically try to acquire running status (conditional UPDATE: status='pending' -> status='running')
     const attempts = (job.attempts || 0) + 1;
     const acquired = typeof jobRepository.tryAcquireRunning === "function"
@@ -335,6 +346,8 @@ export const repoService = {
     let graphIr;
     try {
       graphIr = await aiService.analyzeRepository(snapshotDir, repo.name);
+      // Strictly validate Graph IR schema version 1.0 contract (mirrors analysis.service.dispatch)
+      validateGraphIr(graphIr);
     } catch (err) {
       if (typeof jobRepository.markFailed === "function") {
         try {
