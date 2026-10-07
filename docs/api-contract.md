@@ -529,7 +529,7 @@ GET /api/v1/repos/:id/snapshots/:sha/analysis
     }
   }
   ```
-- `status` is `pending` | `running` | `done` | `failed`. `engine: "stub"` means diff-stat output; set `AI_SERVICE_URL` for the real `POST {AI_SERVICE_URL}/v1/analyze` engine.
+- `status` is `pending` | `running` | `done` | `failed`. `engine: "stub"` means diff-stat output; set `AI_SERVICE_URL` for the real `POST {AI_SERVICE_URL}/analyze` engine.
 
 ---
 
