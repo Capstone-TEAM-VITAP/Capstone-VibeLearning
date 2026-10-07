@@ -14,6 +14,8 @@ model User {
 
   projects     Project[]
   repositories Repository[]
+  learningSets LearningSet[]
+  learningAttempts LearningAttempt[]
 
   @@map("user")
 }
@@ -49,6 +51,8 @@ model Repository {
   project Project? @relation(fields: [projectId], references: [id])
 
   snapshots RepoSnapshot[]
+
+  learningSets LearningSet[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -97,4 +101,61 @@ model AnalysisJob {
 
   @@index([status])
   @@map("analysis_job")
+}
+
+model LearningSet {
+  id          Uuid   @id @default(uuid())
+  userId      Uuid
+  repositoryId Uuid
+  commitSha   String
+  topic       String
+  difficulty  String @default("beginner")
+  questionCount Int  @default(0)
+
+  user       User       @relation(fields: [userId], references: [id])
+  repository Repository @relation(fields: [repositoryId], references: [id])
+
+  questions LearningQuestion[]
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([repositoryId])
+  @@map("learning_set")
+}
+
+model LearningQuestion {
+  id            Uuid   @id @default(uuid())
+  setId         Uuid
+  prompt        String
+  optionsJson   String
+  answerIndex   Int    @default(0)
+  explanation   String?
+  citationPath  String?
+  citationStart Int?
+  citationEnd   Int?
+
+  set LearningSet @relation(fields: [setId], references: [id])
+
+  attempts LearningAttempt[]
+
+  @@index([setId])
+  @@map("learning_question")
+}
+
+model LearningAttempt {
+  id          Uuid @id @default(uuid())
+  questionId  Uuid
+  userId      Uuid
+  pickedIndex Int
+  correct     Int  @default(0)
+
+  question LearningQuestion @relation(fields: [questionId], references: [id])
+  user     User             @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([questionId])
+  @@index([userId])
+  @@map("learning_attempt")
 }

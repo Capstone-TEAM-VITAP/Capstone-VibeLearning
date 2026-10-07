@@ -4,8 +4,14 @@ import { requireAuth } from "../middleware/auth.middleware.js";
 import { validate } from "../middleware/validate.middleware.js";
 import { analysisController } from "../controllers/analysis.controller.js";
 import { chatController } from "../controllers/chat.controller.js";
+import { learningController } from "../controllers/learning.controller.js";
 import { repoController } from "../controllers/repo.controller.js";
 import { chatMessageSchema } from "../validators/chat.validator.js";
+import {
+  generateLearningSchema,
+  learningSetIdParamSchema,
+  submitLearningSchema,
+} from "../validators/learning.validator.js";
 import {
   connectRepoSchema,
   diffQuerySchema,
@@ -89,6 +95,41 @@ router.post(
   "/:id/chat",
   validate({ params: repoIdParamSchema, body: chatMessageSchema }),
   chatController.chat
+);
+
+// POST /api/v1/repos/:id/learning/generate — build (or reuse) an MCQ set
+router.post(
+  "/:id/learning/generate",
+  validate({ params: repoIdParamSchema, body: generateLearningSchema }),
+  learningController.generate
+);
+
+// GET /api/v1/repos/:id/learning/sets — list quiz sets with progress
+router.get(
+  "/:id/learning/sets",
+  validate({ params: repoIdParamSchema }),
+  learningController.listSets
+);
+
+// GET /api/v1/repos/:id/learning/progress — overall learning progress
+router.get(
+  "/:id/learning/progress",
+  validate({ params: repoIdParamSchema }),
+  learningController.progress
+);
+
+// GET /api/v1/repos/:id/learning/sets/:setId — fetch one set for solving
+router.get(
+  "/:id/learning/sets/:setId",
+  validate({ params: learningSetIdParamSchema }),
+  learningController.getSet
+);
+
+// POST /api/v1/repos/:id/learning/sets/:setId/submit — grade + persist attempts
+router.post(
+  "/:id/learning/sets/:setId/submit",
+  validate({ params: learningSetIdParamSchema, body: submitLearningSchema }),
+  learningController.submit
 );
 
 export default router;

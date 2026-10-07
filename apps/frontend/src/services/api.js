@@ -113,4 +113,37 @@ export async function askRepoQuestion(getToken, id, message, history = []) {
     body: JSON.stringify({ message, history }),
   });
   return body.data;
-}
+}
+
+// --- Developer Learning (MCQ quizzes) ---
+
+export async function generateLearningSet(getToken, id, payload) {
+  const body = await authedFetch(getToken, `/repos/${id}/learning/generate`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return body.data;
+}
+
+export async function listLearningSets(getToken, id) {
+  const body = await authedFetch(getToken, `/repos/${id}/learning/sets`);
+  return body.data;
+}
+
+export async function getLearningSet(getToken, id, setId) {
+  const body = await authedFetch(getToken, `/repos/${id}/learning/sets/${setId}`);
+  return body.data;
+}
+
+export async function submitLearningAnswers(getToken, id, setId, answers) {
+  const body = await authedFetch(getToken, `/repos/${id}/learning/sets/${setId}/submit`, {
+    method: "POST",
+    body: JSON.stringify({ answers }),
+  });
+  return body.data;
+}
+
+export async function getLearningProgress(getToken, id) {
+  const body = await authedFetch(getToken, `/repos/${id}/learning/progress`);
+  return body.data;
+}

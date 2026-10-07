@@ -22,6 +22,7 @@ import RepositoryTree from "../components/RepositoryTree.jsx";
 import IntelligenceSummary from "../components/IntelligenceSummary.jsx";
 import DependencyHealth from "../components/DependencyHealth.jsx";
 import CodeGraphView from "../components/CodeGraphView.jsx";
+import LearningView from "../components/LearningView.jsx";
 import "./Dashboard.css";
 
 const KNOWN_ROLES = [
@@ -918,14 +919,15 @@ function Dashboard() {
             />
           )}
 
-          {/* Learning Placeholder (Phase 9 Target) */}
+          {/* Developer Learning Workspace */}
           {view === "learning" && (
-            <PlaceholderView
-              title="Developer Learning & Verification"
-              description="Coming in Phase 9: Interactive comprehension paths, repository Q&A verification, and architectural guided learning."
-              icon="school"
-              phase="Phase 9"
-            />
+            <section className="dashboard-content">
+              <LearningView
+                getToken={getToken}
+                selectedRepo={selectedRepo}
+                setView={setView}
+              />
+            </section>
           )}
 
           {/* Settings Placeholder (Phase 10 Target) */}

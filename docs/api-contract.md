@@ -596,3 +596,110 @@ POST /api/v1/webhooks/github
   - `200 { success: true, data: { matched: N } }` — synced N connected rows.
   - `200 { success: true, data: { ignored: true } }` — ping, non-push, deletion, or unknown repo (not an error; stops GitHub retries).
   - `401` — bad/missing signature. `500` — webhook secret not configured.
+
+---
+
+## Learning Endpoints
+
+MCQ quizzes generated from a deterministic markdown "learning pack"
+(architecture roles + code excerpts from the analysis pipeline), via the
+configured LLM provider (Groq first) with a deterministic offline fallback.
+Questions and attempts are persisted: `LearningSet -> LearningQuestion[] -> LearningAttempt[]`.
+All endpoints are scoped strictly to the authenticated user.
+
+---
+
+### 1. Generate Learning Set (idempotent)
+
+```http
+POST /api/v1/repos/:id/learning/generate
+```
+
+- **Authentication**: Required (`Bearer <clerk_token>`)
+- **Purpose**: Build (or reuse) an MCQ set for a topic. Same user/repo/snapshot/topic/difficulty returns the saved set.
+- **Request Body** (`application/json`):
+  | Field | Type | Required | Rules |
+  | :--- | :--- | :--- | :--- |
+  | `topic` | string | Yes | Trimmed, 1–200 characters |
+  | `difficulty` | string | No | `beginner` \| `intermediate` \| `advanced` (default `beginner`) |
+  | `count` | number | No | 1–10 (default 5) |
+
+  ```json
+  { "topic": "authentication", "difficulty": "beginner", "count": 5 }
+  ```
+- **Success Status**: `201 Created` — the set with questions (answers hidden) and `engine: "llm" | "offline"`
+- **Error Statuses**:
+  - `400 Bad Request`: Invalid topic/difficulty/count, or not enough repository context (run analysis first).
+  - `401 Unauthorized`: Missing or invalid authentication.
+  - `404 Not Found`: Repository does not exist or does not belong to the caller.
+
+---
+
+### 2. List Learning Sets
+
+```http
+GET /api/v1/repos/:id/learning/sets
+```
+
+- **Success Status**: `200 OK` — list envelope; each set carries `progress: { answered, correct, total }`.
+
+---
+
+### 3. Get Learning Set
+
+```http
+GET /api/v1/repos/:id/learning/sets/:setId
+```
+
+- **Success Status**: `200 OK` — the set with questions (options only, no answers) plus the caller's latest attempt per question.
+- **Error Statuses**: `404` unknown/foreign set.
+
+---
+
+### 4. Submit Answers
+
+```http
+POST /api/v1/repos/:id/learning/sets/:setId/submit
+```
+
+- **Request Body** (`application/json`):
+  ```json
+  { "answers": [{ "questionId": "<uuid>", "pickedIndex": 2 }] }
+  ```
+  - `answers`: 1–10 items; `pickedIndex` must be 0–3.
+- **Success Status**: `200 OK`
+- **Response Example**:
+  ```json
+  {
+    "success": true,
+    "data": {
+      "correct": 3,
+      "total": 5,
+      "results": [
+        {
+          "questionId": "<uuid>",
+          "pickedIndex": 2,
+          "correct": true,
+          "answerIndex": 2,
+          "prompt": "In which file is \"requireAuth\" defined?",
+          "options": ["src/a.js", "src/b.js", "src/c.js", "src/d.js"],
+          "explanation": "\"requireAuth\" is defined in src/a.js.",
+          "citationPath": "src/a.js",
+          "citationStart": 10,
+          "citationEnd": 25
+        }
+      ]
+    }
+  }
+  ```
+- **Error Statuses**: `400` empty/invalid answers or unknown question; `404` unknown/foreign set.
+
+---
+
+### 5. Learning Progress
+
+```http
+GET /api/v1/repos/:id/learning/progress
+```
+
+- **Success Status**: `200 OK` — `{ sets, answered, correct, total }` totals for the caller on this repo.
