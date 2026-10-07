@@ -744,19 +744,8 @@
   background: var(--bg-canvas);
 }
 
-.codegraph-loading-spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid var(--border-subtle);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: codegraph-spin 0.8s linear infinite;
-}
-
-@keyframes codegraph-spin {
-  to {
-    transform: rotate(360deg);
-  }
+.codegraph-loading-blocks {
+  color: var(--primary);
 }
 
 .codegraph-loading-title {

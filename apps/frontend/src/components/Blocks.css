@@ -1,0 +1,52 @@
+/* Blocks loading spinner styles, vendored from loading-dev v0.3.5 (MIT License).
+   Source: https://loading.dev/spinners/blocks */
+
+.ld-blocks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: calc(var(--ld-size, 20px) * 0.1);
+  width: var(--ld-size, 20px);
+  height: var(--ld-size, 20px);
+  flex-shrink: 0;
+}
+
+.ld-blocks-cell {
+  background: currentColor;
+  border-radius: calc(var(--ld-size, 20px) * 0.0625);
+  animation: ld-blocks-sweep var(--ld-duration, 1300ms) ease-in-out infinite;
+  animation-play-state: var(--ld-play-state, running);
+}
+
+.ld-blocks-cell-columns {
+  animation-delay: calc(var(--ld-duration, 1300ms) * (var(--ld-step) - 3) / 3);
+}
+
+.ld-blocks-cell-diagonal {
+  animation-delay: calc(var(--ld-duration, 1300ms) * (var(--ld-step) - 5) / 5);
+}
+
+.ld-blocks-cell-rows {
+  animation-delay: calc(var(--ld-duration, 1300ms) * (var(--ld-step) - 3) / 3);
+}
+
+@keyframes ld-blocks-sweep {
+  0%,
+  70%,
+  100% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ld-blocks,
+  .ld-blocks * {
+    animation: none;
+  }
+  .ld-blocks-cell {
+    transform: scale(0.8);
+  }
+}

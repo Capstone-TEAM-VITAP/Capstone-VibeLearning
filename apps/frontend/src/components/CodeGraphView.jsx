@@ -11,6 +11,7 @@ import {
 import "@xyflow/react/dist/style.css";
 import CodeGraphNode from "./CodeGraphNode.jsx";
 import GraphNodeInspector from "./GraphNodeInspector.jsx";
+import Blocks from "./Blocks.jsx";
 import "./CodeGraphView.css";
 
 const nodeTypes = {
@@ -770,7 +771,7 @@ function CodeGraphContent({
   if (isLoading) {
     return (
       <div className="codegraph-loading-wrap">
-        <div className="codegraph-loading-spinner" />
+        <Blocks size={48} className="codegraph-loading-blocks" />
         <div className="codegraph-loading-title font-mono">
           Loading CodeGraph from Graph IR...
         </div>
