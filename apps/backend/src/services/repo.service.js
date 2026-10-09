@@ -15,9 +15,14 @@ import gitService, {
   getCommitMeta,
   getMirrorDir,
   getSnapshotDiff,
+  listRecentCommits,
   parseRepoUrl,
+  planHistoryBackfill,
   resolveSha,
 } from "./git.service.js";
+
+/** Past states recorded per sync so Learning ranges have history to quiz on. */
+const HISTORY_BACKFILL_LIMIT = 20;
 
 
 /**
@@ -51,6 +56,50 @@ export const repoService = {
   async getRepoById(clerkUserId, repositoryId) {
     const { repo } = await this._requireRepo(clerkUserId, repositoryId);
     return repo;
+  },
+
+  /**
+   * Record past commits as snapshot rows so Learning base/head pickers
+   * have history beyond the latest sync. Best-effort: never fails sync.
+   * Skips the current head and already-recorded shas.
+   */
+  async backfillHistory(repo, { headSha = null, ref = null, limit = HISTORY_BACKFILL_LIMIT } = {}) {
+    try {
+      const commits = await listRecentCommits(repo.id, {
+        ref: ref || `origin/${repo.defaultBranch || "main"}`,
+        limit,
+      });
+      if (!commits.length) return { backfilled: 0 };
+      const existing = await snapshotRepository.findManyByRepositoryId(repo.id);
+      const rows = planHistoryBackfill(
+        commits,
+        new Set(existing.map((s) => s.commitSha)),
+        headSha,
+      );
+      let backfilled = 0;
+      for (const row of rows) {
+        try {
+          await snapshotRepository.create({
+            repositoryId: repo.id,
+            commitSha: row.commitSha,
+            baseSha: row.baseSha,
+            message: row.message,
+            authorName: row.authorName,
+            committedAt: row.committedAt,
+            fileCount: 0,
+            additions: 0,
+            deletions: 0,
+          });
+          backfilled += 1;
+        } catch {
+          // Already recorded by a concurrent sync — skip
+        }
+      }
+      return { backfilled };
+    } catch (err) {
+      console.warn("History backfill skipped:", err.message);
+      return { backfilled: 0 };
+    }
   },
 
   /**
@@ -98,7 +147,11 @@ export const repoService = {
         committedAt: meta.committedAt,
       });
       analysisService.enqueueAndDispatch(repo, snapshot);
-      return repositoryRepository.update(repo.id, user.id, { lastSyncSha: meta.commitSha });
+      const history = await this.backfillHistory(repo, { headSha: meta.commitSha });
+      return {
+        ...(await repositoryRepository.update(repo.id, user.id, { lastSyncSha: meta.commitSha })),
+        backfilled: history.backfilled,
+      };
     } catch (err) {
       await repositoryRepository.delete(repo.id, user.id).catch(() => null);
       try {
@@ -149,7 +202,8 @@ export const repoService = {
     if (already) {
       await repositoryRepository.update(repo.id, repo.userId, { lastSyncSha: headSha });
       const files = await getChangedFiles(repo.id, already.baseSha, headSha);
-      return { snapshot: already, files, cached: true };
+      const history = await this.backfillHistory(repo, { headSha, ref: data.ref });
+      return { snapshot: already, files, cached: true, backfilled: history.backfilled };
     }
 
     const baseSha = data.baseSha || repo.lastSyncSha || null;
@@ -169,11 +223,13 @@ export const repoService = {
     });
     await repositoryRepository.update(repo.id, repo.userId, { lastSyncSha: headSha });
     analysisService.enqueueAndDispatch(repo, snapshot);
+    const history = await this.backfillHistory(repo, { headSha, ref: data.ref });
 
     return {
       snapshot,
       files: diff.files.map(({ path, status, additions, deletions }) => ({ path, status, additions, deletions })),
       cached: false,
+      backfilled: history.backfilled,
     };
   },
 
