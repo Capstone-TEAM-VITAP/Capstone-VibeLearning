@@ -429,6 +429,11 @@ function LearningView({ getToken, selectedRepo, setView }) {
                   }}
                 >
                   <option value="">Select base…</option>
+                  {diffBase && !diffSnapshots.some((s) => s.commitSha === diffBase) && (
+                    <option value={diffBase}>
+                      {diffBase.slice(0, 7)} · recorded base
+                    </option>
+                  )}
                   {diffSnapshots.map((s) => (
                     <option key={s.commitSha} value={s.commitSha}>
                       {s.commitSha.slice(0, 7)} · {s.branch || "?"}
