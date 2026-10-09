@@ -403,6 +403,12 @@
   flex-shrink: 0;
 }
 
+[data-theme="light"] .inspector-link-badge {
+  background: rgba(4, 98, 211, 0.1);
+  color: #0462d3;
+  border-color: rgba(4, 98, 211, 0.3);
+}
+
 .inspector-edge-tag {
   font-size: 9px;
   padding: 1px 5px;

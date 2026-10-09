@@ -189,6 +189,10 @@
   color: #818cf8;
 }
 
+[data-theme="light"] .repo-popover-item.active .repo-item-name {
+  color: var(--secondary);
+}
+
 .repo-item-meta {
   display: flex;
   align-items: center;
