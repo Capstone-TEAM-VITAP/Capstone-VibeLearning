@@ -19,7 +19,6 @@ import {
 import { Input, Select } from "./ui/input.jsx";
 import Badge from "./ui/badge.jsx";
 import { Progress } from "./ui/progress.jsx";
-import "./ui/ui.css";
 import "./LearningView.css";
 
 const DIFFICULTIES = ["beginner", "intermediate", "advanced"];
