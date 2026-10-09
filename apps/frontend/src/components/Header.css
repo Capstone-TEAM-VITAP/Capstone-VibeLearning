@@ -83,7 +83,7 @@
 .header-meta-pill--open {
   background-color: var(--bg-surface-high);
   border-color: var(--primary);
-  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 0 1px var(--border-active);
 }
 
 .header-chevron-icon {
@@ -97,6 +97,14 @@
   font-size: 15px;
   color: var(--text-muted);
   flex-shrink: 0;
+  display: inline-flex;
+}
+
+.header-chevron-icon svg,
+.header-meta-icon svg,
+.header-search-icon svg,
+.header-menu-btn svg {
+  display: block;
 }
 
 .header-meta-text {

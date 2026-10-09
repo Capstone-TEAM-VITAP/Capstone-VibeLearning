@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { Moon, Sun } from "lucide-react";
 import { THEME_STORAGE_KEY, getStoredTheme, applyTheme } from "../services/theme.js";
 import "./ThemeToggle.css";
 
@@ -53,8 +54,8 @@ export default function ThemeToggle({ showLabel = false, className = "" }) {
       aria-label={isLight ? "Switch to Dark Mode (Terminal Horizon)" : "Switch to Light Mode (Golden Summer Fields)"}
       title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
     >
-      <span className="material-symbols-outlined theme-toggle-icon">
-        {isLight ? "dark_mode" : "light_mode"}
+      <span className="theme-toggle-icon">
+        {isLight ? <Moon size={16} /> : <Sun size={16} />}
       </span>
       {showLabel && (
         <span className="theme-toggle-label">

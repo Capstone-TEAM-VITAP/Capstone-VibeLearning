@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { UserButton } from "@clerk/react";
+import { ChevronDown, ChevronUp, FolderOpen, GitFork, Menu, Search } from "lucide-react";
 import RepositorySelectorDropdown from "./RepositorySelectorDropdown.jsx";
 import ThemeToggle from "./ThemeToggle.jsx";
 import "./Header.css";
@@ -40,7 +41,7 @@ function Header({
         onClick={onToggleMobileSidebar}
         aria-label="Toggle navigation menu"
       >
-        <span className="material-symbols-outlined">menu</span>
+        <Menu size={18} />
       </button>
 
       {/* Left: Repository & Branch Context */}
@@ -55,12 +56,12 @@ function Header({
             aria-haspopup="listbox"
             aria-expanded={dropdownOpen}
           >
-            <span className="material-symbols-outlined header-meta-icon">
-              folder_open
+            <span className="header-meta-icon">
+              <FolderOpen size={15} />
             </span>
             <span className="header-meta-text">{repoName}</span>
-            <span className="material-symbols-outlined header-chevron-icon">
-              {dropdownOpen ? "expand_less" : "expand_more"}
+            <span className="header-chevron-icon">
+              {dropdownOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             </span>
           </button>
 
@@ -86,8 +87,8 @@ function Header({
 
         {/* Branch Context */}
         <div className="header-meta-pill branch-pill" title={`Branch: ${branchDisplay}`}>
-          <span className="material-symbols-outlined header-meta-icon">
-            call_split
+          <span className="header-meta-icon">
+            <GitFork size={15} />
           </span>
           <span className="header-meta-text">{branchDisplay}</span>
         </div>
@@ -117,8 +118,8 @@ function Header({
           onClick={onSearchClick}
           title="Search repository code, symbols, and architecture"
         >
-          <span className="material-symbols-outlined header-search-icon">
-            search
+          <span className="header-search-icon">
+            <Search size={15} />
           </span>
           <span className="header-search-text">Search</span>
           <kbd className="header-search-kbd">Ctrl K</kbd>

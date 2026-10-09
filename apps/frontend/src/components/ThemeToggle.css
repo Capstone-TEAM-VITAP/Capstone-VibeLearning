@@ -43,6 +43,11 @@
   font-size: 18px;
   transition: transform 0.25s ease, color 0.18s ease;
   color: var(--primary);
+  display: inline-flex;
+}
+
+.theme-toggle-icon svg {
+  display: block;
 }
 
 .theme-toggle-btn:hover .theme-toggle-icon {
