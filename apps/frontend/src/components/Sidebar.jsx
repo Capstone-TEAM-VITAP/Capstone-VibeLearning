@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUser, UserButton } from "@clerk/react";
 import {
+  BotMessageSquare,
   Boxes,
   Cable,
   ChevronUp,
@@ -13,7 +14,6 @@ import {
   LayoutDashboard,
   Network,
   Settings,
-  Sparkles,
   Webhook,
   Workflow,
   X,
@@ -248,7 +248,7 @@ function Sidebar({
             onClick={() => handleNav("assistant")}
           >
             <span className="sidebar-nav-icon">
-              <Sparkles size={18} />
+              <BotMessageSquare size={18} />
             </span>
             <span className="sidebar-nav-label">AI Assistant</span>
           </button>
