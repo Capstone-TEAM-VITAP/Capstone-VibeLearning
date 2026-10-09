@@ -201,25 +201,49 @@ export function parseCommitList(output) {
 }
 
 /**
+ * Ordered ref candidates for history reads. Mirrors resolve branches
+ * (main/master/HEAD) because a mirror may not have origin/<default>.
+ * Pure function.
+ */
+export function historyRefCandidates(preferredRef, defaultBranch) {
+  const candidates = [
+    preferredRef,
+    defaultBranch ? `origin/${defaultBranch}` : null,
+    "origin/HEAD",
+    "origin/main",
+    "origin/master",
+    "HEAD",
+  ].filter(Boolean);
+  return [...new Set(candidates)];
+}
+
+/**
  * Recent commit history (newest first) with first-parent links.
+ * Tries each ref candidate in order; mirrors without origin/<default>
+ * fall through to origin/HEAD, origin/main, origin/master, HEAD.
  * %s is single-line by definition, so line-splitting is safe.
  */
-export async function listRecentCommits(repositoryId, { ref = null, limit = 10 } = {}) {
+export async function listRecentCommits(repositoryId, { ref = null, defaultBranch = "main", limit = 10 } = {}) {
   const dir = getMirrorDir(repositoryId);
   const n = Math.min(Math.max(Number(limit) || 10, 1), 30);
-  try {
-    const { stdout } = await runGit([
-      "--git-dir",
-      dir,
-      "log",
-      `--max-count=${n}`,
-      "--format=%H%x00%P%x00%s%x00%an%x00%cI",
-      ref || "HEAD",
-    ]);
-    return parseCommitList(stdout);
-  } catch (err) {
-    throw toGitError(err, "Unable to read commit history");
+  const candidates = historyRefCandidates(ref, defaultBranch);
+  let lastErr = null;
+  for (const candidate of candidates) {
+    try {
+      const { stdout } = await runGit([
+        "--git-dir",
+        dir,
+        "log",
+        `--max-count=${n}`,
+        "--format=%H%x00%P%x00%s%x00%an%x00%cI",
+        candidate,
+      ]);
+      return parseCommitList(stdout);
+    } catch (err) {
+      lastErr = err;
+    }
   }
+  throw toGitError(lastErr || new Error("no history refs"), "Unable to read commit history");
 }
 
 /**
@@ -348,6 +372,7 @@ export default {
   resolveSha,
   getCommitMeta,
   parseCommitList,
+  historyRefCandidates,
   listRecentCommits,
   planHistoryBackfill,
   getChangedFiles,

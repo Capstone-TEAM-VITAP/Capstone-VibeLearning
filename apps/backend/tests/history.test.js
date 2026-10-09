@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
+  historyRefCandidates,
   parseCommitList,
   planHistoryBackfill,
 } from "../src/services/git.service.js";
@@ -27,6 +28,33 @@ describe("Commit list parser", () => {
   it("drops malformed lines", () => {
     assert.deepEqual(parseCommitList("garbage\n\n"), []);
     assert.deepEqual(parseCommitList(""), []);
+  });
+});
+
+describe("History ref candidates", () => {
+  it("prefers the requested ref then origin fallbacks", () => {
+    assert.deepEqual(historyRefCandidates("refs/heads/dev", "main"), [
+      "refs/heads/dev",
+      "origin/main",
+      "origin/HEAD",
+      "origin/master",
+      "HEAD",
+    ]);
+  });
+
+  it("dedupes and skips blanks", () => {
+    assert.deepEqual(historyRefCandidates("origin/main", "main"), [
+      "origin/main",
+      "origin/HEAD",
+      "origin/master",
+      "HEAD",
+    ]);
+    assert.deepEqual(historyRefCandidates(null, null), [
+      "origin/HEAD",
+      "origin/main",
+      "origin/master",
+      "HEAD",
+    ]);
   });
 });
 

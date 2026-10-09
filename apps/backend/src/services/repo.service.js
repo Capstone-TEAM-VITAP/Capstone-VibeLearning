@@ -66,7 +66,8 @@ export const repoService = {
   async backfillHistory(repo, { headSha = null, ref = null, limit = HISTORY_BACKFILL_LIMIT } = {}) {
     try {
       const commits = await listRecentCommits(repo.id, {
-        ref: ref || `origin/${repo.defaultBranch || "main"}`,
+        ref,
+        defaultBranch: repo.defaultBranch || "main",
         limit,
       });
       if (!commits.length) return { backfilled: 0 };
