@@ -1,3 +1,38 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
+@theme inline {
+  --color-background: var(--bg-canvas);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--bg-surface-low);
+  --color-card-foreground: var(--text-primary);
+  --color-popover: var(--bg-surface-low);
+  --color-popover-foreground: var(--text-primary);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--on-primary);
+  --color-secondary: var(--bg-surface-high);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted: var(--bg-surface-container);
+  --color-muted-foreground: var(--text-muted);
+  --color-accent: var(--bg-surface-high);
+  --color-accent-foreground: var(--text-primary);
+  --color-destructive: var(--status-error);
+  --color-destructive-foreground: #ffffff;
+  --color-success: var(--status-success);
+  --color-warning: var(--status-warning);
+  --color-border: var(--border-subtle);
+  --color-input: var(--border-subtle);
+  --color-ring: var(--border-focus);
+  --color-data: var(--secondary);
+  --color-neural: var(--tertiary);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --radius-lg: 0.875rem;
+  --radius-md: 0.625rem;
+  --radius-sm: 0.375rem;
+}
+
 :root,
 [data-theme="dark"] {
   /* =========================================================
@@ -257,5 +292,14 @@ code {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
