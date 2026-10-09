@@ -2016,7 +2016,7 @@ body {
   margin: 0 auto 20px;
 }
 
-.placeholder-icon-box .material-symbols-outlined {
+.placeholder-icon-box svg {
   font-size: 26px;
 }
 
@@ -2062,7 +2062,7 @@ body {
   color: var(--text-muted);
 }
 
-.placeholder-badge .material-symbols-outlined {
+.placeholder-badge svg {
   font-size: 14px;
 }
 

@@ -1,6 +1,26 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/react";
 import {
+  Boxes,
+  CircleDot,
+  CirclePlus,
+  CircleX,
+  Clock,
+  FolderOpen,
+  FolderX,
+  GitCompare,
+  GitFork,
+  GitPullRequest,
+  Plus,
+  RefreshCw,
+  Settings,
+  Sparkles,
+  Terminal,
+  Webhook,
+  Workflow,
+  Wrench,
+} from "lucide-react";
+import {
   getCurrentUser,
   listRepos,
   listSnapshots,
@@ -39,21 +59,28 @@ const KNOWN_ROLES = [
   "TEST",
 ];
 
+const PLACEHOLDER_ICONS = {
+  api: Webhook,
+  rate_review: GitPullRequest,
+  settings: Settings,
+};
+
 function PlaceholderView({ title, description, icon, phase }) {
+  const Icon = PLACEHOLDER_ICONS[icon] ?? Settings;
   return (
     <div className="workstation-placeholder">
       <div className="placeholder-icon-box">
-        <span className="material-symbols-outlined">{icon}</span>
+        <Icon size={26} />
       </div>
       <h2>{title}</h2>
       <p>{description}</p>
       <div className="placeholder-meta">
         <span className="placeholder-badge">
-          <span className="material-symbols-outlined">schedule</span>
+          <Clock size={14} />
           Coming in {phase}
         </span>
         <span className="placeholder-badge">
-          <span className="material-symbols-outlined">terminal</span>
+          <Terminal size={14} />
           Terminal Horizon Workstation
         </span>
       </div>
@@ -391,7 +418,7 @@ function Dashboard() {
               {/* Top Hero Section */}
               <div className="overview-hero">
                 <span className="overview-eyebrow">
-                  <span className="material-symbols-outlined">terminal</span>
+                  <Terminal size={14} />
                   Repository Intelligence
                 </span>
                 <h1 className="overview-title">Understand your codebase.</h1>
@@ -406,7 +433,7 @@ function Dashboard() {
                     className="ws-btn ws-btn-primary"
                     onClick={() => setView("repos")}
                   >
-                    <span className="material-symbols-outlined">add_circle</span>
+                    <CirclePlus size={16} />
                     Connect Repository
                   </button>
 
@@ -415,7 +442,7 @@ function Dashboard() {
                     className="ws-btn ws-btn-secondary"
                     onClick={() => setView("analysis")}
                   >
-                    <span className="material-symbols-outlined">auto_awesome</span>
+                    <Sparkles size={16} />
                     Ask AI
                   </button>
                 </div>
@@ -456,7 +483,7 @@ function Dashboard() {
                 {repos.length === 0 ? (
                   <div className="overview-empty-repo">
                     <div className="overview-empty-icon">
-                      <span className="material-symbols-outlined">folder_open</span>
+                      <FolderOpen size={22} />
                     </div>
                     <h3>No repositories connected</h3>
                     <p>
@@ -468,7 +495,7 @@ function Dashboard() {
                       className="ws-btn ws-btn-primary"
                       onClick={() => setView("repos")}
                     >
-                      <span className="material-symbols-outlined">add</span>
+                      <CirclePlus size={16} />
                       Connect Repository
                     </button>
                   </div>
@@ -497,9 +524,7 @@ function Dashboard() {
                           <div className="overview-repo-header">
                             <div className="overview-repo-info">
                               <div className="overview-repo-icon">
-                                <span className="material-symbols-outlined">
-                                  deployed_code
-                                </span>
+                                <Boxes size={16} />
                               </div>
                               <div className="overview-repo-text">
                                 <span className="overview-repo-name">
@@ -563,17 +588,14 @@ function Dashboard() {
                               onClick={() => handleSyncRepo(repo.id)}
                               disabled={isSyncing}
                             >
-                              <span
-                                className="material-symbols-outlined"
+                              <RefreshCw
+                                size={14}
                                 style={{
-                                  fontSize: 14,
                                   animation: isSyncing
                                     ? "spin 1s linear infinite"
                                     : "none",
                                 }}
-                              >
-                                sync
-                              </span>
+                              />
                               {isSyncing ? "Syncing..." : "Sync"}
                             </button>
                           </div>
@@ -604,8 +626,8 @@ function Dashboard() {
                     className="quick-action-card"
                     onClick={() => setView("repos")}
                   >
-                    <span className="material-symbols-outlined quick-action-icon">
-                      folder_open
+                    <span className="quick-action-icon">
+                      <FolderOpen size={20} />
                     </span>
                     <div className="quick-action-text">
                       <span className="quick-action-label">Connect Repository</span>
@@ -618,8 +640,8 @@ function Dashboard() {
                     className="quick-action-card"
                     onClick={() => setView("analysis")}
                   >
-                    <span className="material-symbols-outlined quick-action-icon">
-                      troubleshoot
+                    <span className="quick-action-icon">
+                      <Wrench size={20} />
                     </span>
                     <div className="quick-action-text">
                       <span className="quick-action-label">Analyze Snapshot</span>
@@ -632,8 +654,8 @@ function Dashboard() {
                     className="quick-action-card"
                     onClick={() => setView("graph")}
                   >
-                    <span className="material-symbols-outlined quick-action-icon">
-                      hub
+                    <span className="quick-action-icon">
+                      <Workflow size={20} />
                     </span>
                     <div className="quick-action-text">
                       <span className="quick-action-label">Explore CodeGraph</span>
@@ -646,8 +668,8 @@ function Dashboard() {
                     className="quick-action-card"
                     onClick={() => setView("assistant")}
                   >
-                    <span className="material-symbols-outlined quick-action-icon">
-                      auto_awesome
+                    <span className="quick-action-icon">
+                      <Sparkles size={20} />
                     </span>
                     <div className="quick-action-text">
                       <span className="quick-action-label">Ask AI</span>
@@ -660,8 +682,8 @@ function Dashboard() {
                     className="quick-action-card"
                     onClick={() => setView("review")}
                   >
-                    <span className="material-symbols-outlined quick-action-icon">
-                      rate_review
+                    <span className="quick-action-icon">
+                      <GitPullRequest size={20} />
                     </span>
                     <div className="quick-action-text">
                       <span className="quick-action-label">Code Review</span>
@@ -716,7 +738,7 @@ function Dashboard() {
                 <div className="intel-hero-top">
                   <div className="intel-hero-title-group">
                     <span className="intel-hero-eyebrow">
-                      <span className="material-symbols-outlined">terminal</span>
+                      <Terminal size={14} />
                       Repository Intelligence
                     </span>
                     <h1 className="intel-hero-title">Repository Intelligence</h1>
@@ -731,7 +753,7 @@ function Dashboard() {
                       className="ws-btn ws-btn-secondary"
                       onClick={() => setView("analysis")}
                     >
-                      <span className="material-symbols-outlined">auto_awesome</span>
+                      <Sparkles size={16} />
                       Ask AI
                     </button>
 
@@ -740,7 +762,7 @@ function Dashboard() {
                       className="ws-btn ws-btn-secondary"
                       onClick={() => setView("graph")}
                     >
-                      <span className="material-symbols-outlined">hub</span>
+                      <Workflow size={16} />
                       Explore CodeGraph
                     </button>
 
@@ -749,7 +771,7 @@ function Dashboard() {
                       className="ws-btn ws-btn-secondary"
                       onClick={() => setView("repos")}
                     >
-                      <span className="material-symbols-outlined">difference</span>
+                      <GitCompare size={16} />
                       Analyze Changes
                     </button>
                   </div>
@@ -758,23 +780,17 @@ function Dashboard() {
                 {/* Repository Context Cluster */}
                 <div className="intel-meta-cluster">
                   <div className="intel-meta-tag">
-                    <span className="material-symbols-outlined" style={{ fontSize: 13 }}>
-                      folder_open
-                    </span>
+                    <FolderOpen size={13} />
                     <span>Repository: <strong>{selectedRepo ? `${selectedRepo.owner}/${selectedRepo.name}` : "—"}</strong></span>
                   </div>
 
                   <div className="intel-meta-tag">
-                    <span className="material-symbols-outlined" style={{ fontSize: 13 }}>
-                      call_split
-                    </span>
+                    <GitFork size={13} />
                     <span>Branch: <strong>{repoBranch || "—"}</strong></span>
                   </div>
 
                   <div className="intel-meta-tag">
-                    <span className="material-symbols-outlined" style={{ fontSize: 13 }}>
-                      commit
-                    </span>
+                    <CircleDot size={13} />
                     <span>Commit: <strong>{latestSelectedSnapshot?.commitSha ? latestSelectedSnapshot.commitSha.slice(0, 7) : "—"}</strong></span>
                   </div>
 
@@ -794,7 +810,7 @@ function Dashboard() {
               {!selectedRepo ? (
                 <div className="intel-notice-card">
                   <div className="intel-notice-icon">
-                    <span className="material-symbols-outlined">folder_off</span>
+                    <FolderX size={24} />
                   </div>
                   <h3>No repository selected</h3>
                   <p>Select or connect a repository to inspect its architectural intelligence.</p>
@@ -809,12 +825,10 @@ function Dashboard() {
               ) : graphLoading ? (
                 <div className="intel-notice-card">
                   <div className="intel-notice-icon">
-                    <span
-                      className="material-symbols-outlined"
+                    <RefreshCw
+                      size={24}
                       style={{ animation: "spin 1.2s linear infinite" }}
-                    >
-                      sync
-                    </span>
+                    />
                   </div>
                   <h3>Loading repository intelligence...</h3>
                   <p>Fetching canonical Graph IR 1.0 AST nodes and relationships.</p>
@@ -822,7 +836,7 @@ function Dashboard() {
               ) : graphError ? (
                 <div className="intel-notice-card">
                   <div className="intel-notice-icon" style={{ color: "var(--status-error)" }}>
-                    <span className="material-symbols-outlined">error</span>
+                    <CircleX size={24} />
                   </div>
                   <h3>Repository intelligence could not be loaded</h3>
                   <p>{graphError}</p>
@@ -837,7 +851,7 @@ function Dashboard() {
               ) : !activeGraph ? (
                 <div className="intel-notice-card">
                   <div className="intel-notice-icon">
-                    <span className="material-symbols-outlined">troubleshoot</span>
+                    <Wrench size={24} />
                   </div>
                   <h3>Repository analysis required</h3>
                   <p>Run repository analysis to generate structural intelligence and CodeGraph IR 1.0.</p>
