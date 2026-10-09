@@ -89,6 +89,7 @@
   --text-primary: #ffffff;
   --text-secondary: #d4d4d8;
   --text-muted: #a1a1aa;
+  --text-disabled: #52525b;
   --text-inverse: #000000;
 
   /* Shadows (Neutral black, soft depth) */
@@ -186,6 +187,7 @@
   --text-primary: #1d1d1f;
   --text-secondary: #45454a;
   --text-muted: #6e6e73;
+  --text-disabled: #a1a1aa;
   --text-inverse: #f8f7f4;
 
   /* Shadows (Soft, layered, neutral) */
