@@ -132,68 +132,70 @@
 }
 
 /* =========================================================
-   GOLDEN SUMMER FIELDS DESIGN TOKENS (LIGHT)
+   USAGEATLAS PAPER DESIGN TOKENS (LIGHT)
+   Warm paper surfaces, ink text, blue-ink accents.
+   Inspired by https://usageatlas.com
    ========================================================= */
 [data-theme="light"],
 :root[data-theme="light"] {
   /* Canvas & Background */
-  --bg-canvas: #E9EDC9;             /* Secondary Background: page backdrop */
-  --bg-surface-lowest: #CCD5AE;     /* Primary Background: sidebar, base canvas */
-  --bg-surface-low: #FEFAE0;        /* Main Surface / Cards: warm cream card color */
-  --bg-surface-container: #FAEDCD;  /* Elevated Surface: inputs, sub-containers, code */
-  --bg-surface-high: #F5E3B8;       /* Interactive hover / elevated cards */
-  --bg-surface-highest: #ECD19F;    /* Badges, pill counters, secondary buttons */
-  --bg-surface-bright: #FFFDF0;     /* Highlighted popovers */
+  --bg-canvas: #f8f7f4;               /* paper: page backdrop */
+  --bg-surface-lowest: #f2f0ec;       /* paper-alt: sidebar, base canvas */
+  --bg-surface-low: #ffffff;          /* card: main surfaces */
+  --bg-surface-container: #f2f0ec;    /* inset wells: inputs, code */
+  --bg-surface-high: #eceae6;         /* hover / elevated */
+  --bg-surface-highest: #e2e0da;      /* badges, pills, secondary buttons */
+  --bg-surface-bright: #ffffff;       /* popovers */
 
-  /* Primary Accent: Rich Warm Cognac / Terracotta */
-  --primary: #BC6C25;
-  --primary-light: #D4A373;
-  --primary-container: #9B4811;
-  --primary-dim: rgba(188, 108, 37, 0.12);
-  --on-primary: #ffffff;
+  /* Primary Accent: Ink (ink bg / paper text actions) */
+  --primary: #1d1d1f;
+  --primary-light: #45454a;
+  --primary-container: #000000;
+  --primary-dim: rgba(29, 29, 31, 0.08);
+  --on-primary: #f8f7f4;
 
-  /* Secondary Data Accent: Deep Forest Pine */
-  --secondary: #386641;
-  --secondary-light: #588157;
-  --secondary-container: #1B4332;
-  --secondary-dim: rgba(56, 102, 65, 0.12);
+  /* Secondary Data Accent: Atlas Blue */
+  --secondary: #0462d3;
+  --secondary-light: #2d93fc;
+  --secondary-container: #0462d3;
+  --secondary-dim: rgba(45, 147, 252, 0.12);
   --on-secondary: #ffffff;
 
-  /* AI Accent: Warm Terracotta / Amber */
-  --tertiary: #BC6C25;
-  --tertiary-light: #D4A373;
-  --tertiary-container: #8C400F;
-  --tertiary-dim: rgba(188, 108, 37, 0.15);
+  /* AI Accent: Atlas Violet */
+  --tertiary: #7728d7;
+  --tertiary-light: #975afd;
+  --tertiary-container: #7728d7;
+  --tertiary-dim: rgba(151, 90, 253, 0.12);
   --on-tertiary: #ffffff;
 
   /* Semantic Status */
-  --status-success: #2D6A4F;
-  --status-success-dim: rgba(45, 106, 79, 0.14);
-  --status-warning: #C27803;
-  --status-warning-dim: rgba(194, 120, 3, 0.14);
-  --status-error: #BA2D0B;
-  --status-error-dim: rgba(186, 45, 11, 0.14);
+  --status-success: #00884b;
+  --status-success-dim: rgba(0, 136, 75, 0.12);
+  --status-warning: #b45309;
+  --status-warning-dim: rgba(180, 83, 9, 0.12);
+  --status-error: #be123c;
+  --status-error-dim: rgba(190, 18, 60, 0.12);
 
   /* Borders & Hairlines */
-  --border-subtle: rgba(212, 163, 115, 0.45);  /* #D4A373 with gentle opacity */
-  --border-hairline: rgba(212, 163, 115, 0.25);
-  --border-active: #D4A373;
-  --border-focus: #BC6C25;
+  --border-subtle: rgba(0, 0, 0, 0.09);
+  --border-hairline: rgba(0, 0, 0, 0.06);
+  --border-active: rgba(0, 0, 0, 0.16);
+  --border-focus: #0462d3;
 
   /* Typography Colors */
-  --text-primary: #283618;          /* Primary Text: deep forest olive */
-  --text-secondary: #606C38;        /* Secondary Text: warm sage olive */
-  --text-muted: #7E8B54;            /* Muted Text: subtle olive */
-  --text-inverse: #FEFAE0;          /* Inverse: warm cream */
+  --text-primary: #1d1d1f;
+  --text-secondary: #45454a;
+  --text-muted: #6e6e73;
+  --text-inverse: #f8f7f4;
 
-  /* Shadows (Subtle, warm, natural) */
-  --shadow-sm: 0 1px 3px rgba(40, 54, 24, 0.08);
-  --shadow-md: 0 4px 14px rgba(40, 54, 24, 0.10);
-  --shadow-lg: 0 12px 32px rgba(40, 54, 24, 0.14);
+  /* Shadows (Soft, layered, neutral) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05), 0 3px 8px -4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.05), 0 8px 20px -8px rgba(0, 0, 0, 0.12), 0 24px 48px -24px rgba(0, 0, 0, 0.14);
+  --shadow-lg: 0 1px 2px rgba(0, 0, 0, 0.08), 0 12px 28px -12px rgba(0, 0, 0, 0.18), 0 48px 90px -40px rgba(0, 0, 0, 0.34);
 
   /* Navigation & Chrome */
-  --header-bg: rgba(254, 250, 224, 0.90);
-  --nav-active-text: #283618;
+  --header-bg: rgba(251, 252, 253, 0.72);
+  --nav-active-text: #1d1d1f;
 
   /* Backward Compatibility Mappings */
   --text: var(--text-secondary);
@@ -300,6 +302,12 @@ code {
 [data-theme="dark"] ::selection {
   color: #000;
   background: #fff;
+}
+
+/* UsageAtlas-style selection (light only) */
+[data-theme="light"] ::selection {
+  color: #1d1d1f;
+  background: rgba(45, 147, 252, 0.22);
 }
 
 [data-theme="dark"] body::after {
