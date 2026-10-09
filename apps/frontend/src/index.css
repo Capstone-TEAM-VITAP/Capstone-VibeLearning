@@ -36,66 +36,68 @@
 :root,
 [data-theme="dark"] {
   /* =========================================================
-     GOOGLE STITCH: TERMINAL HORIZON DESIGN TOKENS (DARK)
+     DEVLOGUE MONOCHROME DESIGN TOKENS (DARK)
+     Near-black zinc surfaces, white primary actions.
+     Inspired by https://devlogue.pages.dev
      ========================================================= */
 
   /* Canvas & Background */
-  --bg-canvas: #0f131b;
-  --bg-surface-lowest: #0a0e15;
-  --bg-surface-low: #181c23;
-  --bg-surface-container: #1c2027;
-  --bg-surface-high: #262a32;
-  --bg-surface-highest: #31353d;
-  --bg-surface-bright: #353941;
+  --bg-canvas: #050505;
+  --bg-surface-lowest: #0a0a0a;
+  --bg-surface-low: #101012;
+  --bg-surface-container: #1a1a1e;
+  --bg-surface-high: #1c1c1f;
+  --bg-surface-highest: #27272a;
+  --bg-surface-bright: #3f3f46;
 
-  /* Primary Accent: Electric Indigo */
-  --primary: #6366f1;
-  --primary-light: #c0c1ff;
-  --primary-container: #4338ca;
-  --primary-dim: rgba(99, 102, 241, 0.12);
-  --on-primary: #ffffff;
+  /* Primary Accent: Monochrome White (bg-white / text-black actions) */
+  --primary: #ffffff;
+  --primary-light: #e4e4e7;
+  --primary-container: #d4d4d8;
+  --primary-dim: rgba(255, 255, 255, 0.08);
+  --on-primary: #000000;
 
-  /* Secondary Data Accent: Data Cyan */
-  --secondary: #38bdf8;
-  --secondary-light: #7bd0ff;
-  --secondary-container: #0369a1;
-  --secondary-dim: rgba(56, 189, 248, 0.12);
-  --on-secondary: #0f172a;
+  /* Secondary Data Accent: Zinc */
+  --secondary: #a1a1aa;
+  --secondary-light: #d4d4d8;
+  --secondary-container: #3f3f46;
+  --secondary-dim: rgba(161, 161, 170, 0.12);
+  --on-secondary: #ffffff;
 
-  /* AI Accent: Neural Purple */
-  --tertiary: #a855f7;
-  --tertiary-light: #ddb7ff;
-  --tertiary-container: #6b21a8;
-  --tertiary-dim: rgba(168, 85, 247, 0.12);
-  --on-tertiary: #ffffff;
+  /* AI Accent: Light Zinc */
+  --tertiary: #e4e4e7;
+  --tertiary-light: #ffffff;
+  --tertiary-container: #52525b;
+  --tertiary-dim: rgba(255, 255, 255, 0.08);
+  --on-tertiary: #0a0a0a;
 
   /* Semantic Status */
-  --status-success: #10b981;
-  --status-success-dim: rgba(16, 185, 129, 0.12);
+  --status-success: #00c758;
+  --status-success-dim: rgba(0, 199, 88, 0.12);
   --status-warning: #f59e0b;
   --status-warning-dim: rgba(245, 158, 11, 0.12);
   --status-error: #ef4444;
   --status-error-dim: rgba(239, 68, 68, 0.12);
 
   /* Borders & Hairlines */
-  --border-subtle: #1e2638;
+  --border-subtle: #27272a;
   --border-hairline: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(99, 102, 241, 0.4);
-  --border-focus: #6366f1;
+  --border-active: rgba(255, 255, 255, 0.2);
+  --border-focus: #ffffff;
 
   /* Typography Colors */
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-inverse: #0f172a;
+  --text-primary: #ffffff;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --text-inverse: #000000;
 
-  /* Shadows (Subtle, crisp) */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+  /* Shadows (Neutral black, soft depth) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 28px 80px -28px rgba(0, 0, 0, 0.55);
 
   /* Navigation & Chrome */
-  --header-bg: rgba(10, 14, 21, 0.85);
+  --header-bg: rgba(5, 5, 5, 0.8);
   --nav-active-text: #ffffff;
 
   /* Font Families */
@@ -292,6 +294,43 @@ code {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+/* Devlogue-style selection + film grain (dark only) */
+[data-theme="dark"] ::selection {
+  color: #000;
+  background: #fff;
+}
+
+[data-theme="dark"] body::after {
+  content: "";
+  position: fixed;
+  inset: -200%;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  animation: devlogue-grain 8s steps(10, end) infinite;
+}
+
+@keyframes devlogue-grain {
+  0%, 100% { transform: translate(0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0); }
+  70% { transform: translate(0, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="dark"] body::after {
+    animation: none;
+  }
 }
 
 @layer base {

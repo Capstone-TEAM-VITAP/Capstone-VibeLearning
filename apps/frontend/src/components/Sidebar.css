@@ -40,12 +40,12 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+  color: #000000;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.15);
   flex-shrink: 0;
 }
