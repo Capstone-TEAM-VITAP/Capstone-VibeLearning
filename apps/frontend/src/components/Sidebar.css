@@ -12,22 +12,52 @@
   /* Liquid Glass: refractive layers over a frosted base */
   background-color: var(--bg-surface-lowest);
   background-image:
-    radial-gradient(120% 42% at 18% 0%, rgba(255, 255, 255, 0.10), transparent 60%),
-    linear-gradient(165deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015) 32%, transparent 62%);
-  background-color: color-mix(in srgb, var(--bg-surface-lowest) 68%, transparent);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  backdrop-filter: blur(24px) saturate(180%);
+    radial-gradient(130% 46% at 16% 0%, rgba(255, 255, 255, 0.14), transparent 60%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02) 32%, transparent 62%);
+  background-color: color-mix(in srgb, var(--bg-surface-lowest) 62%, transparent);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  backdrop-filter: blur(28px) saturate(200%);
   border-right: 1px solid var(--border-subtle);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    inset -1px 0 0 rgba(255, 255, 255, 0.09),
-    8px 0 40px rgba(0, 0, 0, 0.35);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    8px 0 48px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   z-index: 40;
   box-sizing: border-box;
   user-select: none;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.25s ease;
+}
+
+/* Liquid edge light: gradient strip catching light down the sidebar edge */
+.codeai-sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45),
+    rgba(255, 255, 255, 0.1) 28%,
+    rgba(255, 255, 255, 0.03) 62%,
+    rgba(255, 255, 255, 0.24)
+  );
+  pointer-events: none;
+}
+
+/* Liquid specular: soft static light mass behind the content */
+.codeai-sidebar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 46%;
+  background:
+    radial-gradient(70% 90% at 30% 0%, rgba(255, 255, 255, 0.07), transparent 70%);
+  pointer-events: none;
 }
 
 /* --- Brand Header --- */
@@ -38,6 +68,7 @@
   justify-content: space-between;
   padding: 0 16px;
   border-bottom: 1px solid var(--border-hairline);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.06);
   box-sizing: border-box;
 }
 
@@ -214,18 +245,20 @@
 
 .sidebar-nav-item.active {
   background-color: var(--primary-dim);
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03));
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
   border-color: var(--border-active);
   border-left: 2px solid var(--primary);
   color: var(--nav-active-text, #ffffff);
   font-weight: 600;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.3);
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 0 24px rgba(255, 255, 255, 0.07);
 }
 
 .sidebar-nav-item.active .sidebar-nav-icon {
   color: var(--primary-light);
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.45));
 }
 
 .sidebar-nav-icon {
