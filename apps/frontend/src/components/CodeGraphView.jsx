@@ -598,27 +598,27 @@ function CodeGraphContent({
       const typeUpper = (e.type || "DEPENDS_ON").toUpperCase();
 
       // Semantic highlight colors (vibrant and prominent only when focused)
-      let highlightColor = isLight ? "#BC6C25" : "#38bdf8";
+      let highlightColor = isLight ? "#0462d3" : "#38bdf8";
       let strokeDash = undefined;
 
       if (typeUpper === "IMPORTS") {
-        highlightColor = isLight ? "#BC6C25" : "#818cf8";
+        highlightColor = isLight ? "#7728d7" : "#818cf8";
       } else if (typeUpper === "CALLS") {
-        highlightColor = isLight ? "#386641" : "#38bdf8";
+        highlightColor = isLight ? "#2d93fc" : "#38bdf8";
         strokeDash = "5,5";
       } else if (typeUpper === "DEPENDS_ON") {
-        highlightColor = isLight ? "#283618" : "#2dd4bf";
+        highlightColor = isLight ? "#00884b" : "#2dd4bf";
         strokeDash = "4,4";
       } else if (typeUpper === "CONTAINS") {
-        highlightColor = isLight ? "#7E8B54" : "#94a3b8";
+        highlightColor = isLight ? "#6e6e73" : "#94a3b8";
         strokeDash = "2,3";
       } else if (typeUpper === "CLASSIFIED_AS") {
-        highlightColor = isLight ? "#9B4811" : "#c084fc";
+        highlightColor = isLight ? "#975afd" : "#c084fc";
       }
 
       // Default neutral low-opacity trace (reduces visual noise)
       const neutralColor = isLight
-        ? "rgba(126, 139, 84, 0.28)"
+        ? "rgba(0, 0, 0, 0.14)"
         : "rgba(148, 163, 184, 0.20)";
 
       let strokeColor = neutralColor;
@@ -649,7 +649,7 @@ function CodeGraphContent({
         };
       } else if (isDimmed) {
         strokeColor = isLight
-          ? "rgba(212, 163, 115, 0.12)"
+          ? "rgba(0, 0, 0, 0.1)"
           : "rgba(100, 116, 139, 0.08)";
         strokeWidth = 0.75;
         opacity = 0.05;
@@ -1084,13 +1084,13 @@ function CodeGraphContent({
             defaultViewport={{ x: 50, y: 50, zoom: 0.9 }}
             proOptions={{ hideAttribution: true }}
           >
-            <Background color={isLight ? "rgba(212, 163, 115, 0.45)" : "#27272a"} gap={24} size={1} />
+            <Background color={isLight ? "rgba(0, 0, 0, 0.12)" : "#27272a"} gap={24} size={1} />
             <Controls showInteractive={false} className="codegraph-controls" />
             <MiniMap
               className="codegraph-minimap"
               position="bottom-right"
-              nodeStrokeColor={isLight ? "#BC6C25" : "#38bdf8"}
-              nodeColor={isLight ? "#FAEDCD" : "#1e293b"}
+              nodeStrokeColor={isLight ? "#0462d3" : "#38bdf8"}
+              nodeColor={isLight ? "#ffffff" : "#1e293b"}
               maskColor={isLight ? "rgba(233, 237, 201, 0.75)" : "rgba(9, 9, 11, 0.75)"}
             />
           </ReactFlow>
