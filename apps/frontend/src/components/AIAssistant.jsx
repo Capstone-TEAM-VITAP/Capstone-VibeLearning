@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import {
   Bot,
+  BotMessageSquare,
   Brain,
   Check,
   CircleX,
@@ -463,7 +464,7 @@ function AIAssistant({
       <header className="ai-assistant-header">
         <div className="ai-header-left">
           <div className="ai-avatar-icon">
-            <Sparkles size={18} />
+            <BotMessageSquare size={18} />
           </div>
           <div className="ai-header-title-group">
             <h2>
@@ -544,7 +545,7 @@ function AIAssistant({
           messages.map((msg) => (
             <div key={msg.id} className={`ai-message-row ${msg.role}`}>
               <div className="ai-message-avatar">
-                {msg.role === "user" ? <User size={16} /> : <Sparkles size={16} />}
+                {msg.role === "user" ? <User size={16} /> : <BotMessageSquare size={16} />}
               </div>
               <div className="ai-message-bubble">
                 {msg.role === "user" ? (
@@ -581,7 +582,7 @@ function AIAssistant({
         {isLoading && (
           <div className="ai-message-row assistant">
             <div className="ai-message-avatar">
-              <Sparkles size={16} />
+              <BotMessageSquare size={16} />
             </div>
             <div className="ai-message-bubble">
               <div className="ai-thinking-indicator">
