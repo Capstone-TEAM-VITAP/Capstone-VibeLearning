@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  generateDiffLearningSet,
   generateLearningSet,
+  getChangedFiles,
   getLearningSet,
   listLearningSets,
+  listSnapshots,
   submitLearningAnswers,
   getLearningProgress,
 } from "../services/api.js";
@@ -14,6 +17,7 @@ import {
   CircleX,
   FileText,
   FolderX,
+  GitCompare,
   GraduationCap,
   Info,
   Lightbulb,
@@ -61,6 +65,13 @@ function LearningView({ getToken, selectedRepo, setView }) {
   const [generating, setGenerating] = useState(false);
   const [loadingSet, setLoadingSet] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [diffSnapshots, setDiffSnapshots] = useState([]);
+  const [diffBase, setDiffBase] = useState("");
+  const [diffHead, setDiffHead] = useState("");
+  const [diffFileCount, setDiffFileCount] = useState(null);
+  const [diffDifficulty, setDiffDifficulty] = useState("beginner");
+  const [diffCount, setDiffCount] = useState(5);
+  const [generatingDiff, setGeneratingDiff] = useState(false);
 
   const repoId = selectedRepo?.id || null;
   const repoName = selectedRepo ? `${selectedRepo.owner}/${selectedRepo.name}` : null;
@@ -82,6 +93,45 @@ function LearningView({ getToken, selectedRepo, setView }) {
       setError(err.message);
     }
   }, [getToken, repoId]);
+
+  // Diff-quiz range: default to latest snapshot vs its base
+  useEffect(() => {
+    if (!repoId) return;
+    let cancelled = false;
+    listSnapshots(getToken, repoId).then(
+      (snaps) => {
+        if (cancelled || !Array.isArray(snaps) || !snaps.length) return;
+        const head = snaps[0];
+        setDiffSnapshots(snaps);
+        setDiffHead(head.commitSha);
+        setDiffBase(head.baseSha || snaps[1]?.commitSha || "");
+        setDiffFileCount(null);
+      },
+      (err) => {
+        if (!cancelled) setError(err.message);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [getToken, repoId]);
+
+  // Changed-file preview for the selected range
+  useEffect(() => {
+    if (!repoId || !diffBase || !diffHead || diffBase === diffHead) return;
+    let cancelled = false;
+    getChangedFiles(getToken, repoId, diffHead, diffBase).then(
+      (res) => {
+        if (!cancelled) setDiffFileCount(res?.fileCount ?? res?.files?.length ?? 0);
+      },
+      () => {
+        if (!cancelled) setDiffFileCount(null);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [getToken, repoId, diffBase, diffHead]);
 
   useEffect(() => {
     setActiveSetId(null);
@@ -152,6 +202,43 @@ function LearningView({ getToken, selectedRepo, setView }) {
       setError(err.message);
     } finally {
       setGenerating(false);
+    }
+  }
+
+  async function handleGenerateDiff(e) {
+    e?.preventDefault();
+    if (!repoId) {
+      setError("Please connect or select a repository first.");
+      return;
+    }
+    if (!diffBase || !diffHead) {
+      setError("Pick a base and head snapshot to diff.");
+      return;
+    }
+    if (diffBase === diffHead) {
+      setError("Base and head are the same — nothing changed to quiz on.");
+      return;
+    }
+    setGeneratingDiff(true);
+    setError(null);
+    setResult(null);
+    try {
+      const created = await generateDiffLearningSet(getToken, repoId, {
+        baseSha: diffBase,
+        headSha: diffHead,
+        difficulty: diffDifficulty,
+        count: Number(diffCount),
+      });
+      await refreshLists();
+      if (created?.id) {
+        setActiveSetId(created.id);
+        setActiveSet(created);
+        setPicks({});
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setGeneratingDiff(false);
     }
   }
 
@@ -308,6 +395,109 @@ function LearningView({ getToken, selectedRepo, setView }) {
               )}
             </Button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <GitCompare size={16} />
+            What&apos;s changed
+          </CardTitle>
+          <CardDescription>
+            Generate MCQs from the diff between two states — review what actually changed, not the whole repo.
+            {diffFileCount != null && diffBase && diffHead && diffBase !== diffHead && (
+              <> <Badge variant="secondary">{diffFileCount} files changed</Badge></>
+            )}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {diffSnapshots.length === 0 ? (
+            <p className="learning-diff-empty" data-testid="learning-diff-empty">
+              Sync the repository to record snapshots, then quiz on the range between them.
+            </p>
+          ) : (
+            <form className="learning-generator learning-generator--diff" onSubmit={handleGenerateDiff}>
+              <label className="learning-field">
+                <span className="learning-label">Base</span>
+                <Select
+                  data-testid="learning-diff-base"
+                  value={diffBase}
+                  onChange={(e) => {
+                    setDiffFileCount(null);
+                    setDiffBase(e.target.value);
+                  }}
+                >
+                  <option value="">Select base…</option>
+                  {diffSnapshots.map((s) => (
+                    <option key={s.commitSha} value={s.commitSha}>
+                      {s.commitSha.slice(0, 7)} · {s.branch || "?"}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+              <label className="learning-field">
+                <span className="learning-label">Head</span>
+                <Select
+                  data-testid="learning-diff-head"
+                  value={diffHead}
+                  onChange={(e) => {
+                    setDiffFileCount(null);
+                    setDiffHead(e.target.value);
+                  }}
+                >
+                  <option value="">Select head…</option>
+                  {diffSnapshots.map((s) => (
+                    <option key={s.commitSha} value={s.commitSha}>
+                      {s.commitSha.slice(0, 7)} · {s.branch || "?"}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+              <label className="learning-field">
+                <span className="learning-label">Difficulty</span>
+                <Select
+                  data-testid="learning-diff-difficulty"
+                  value={diffDifficulty}
+                  onChange={(e) => setDiffDifficulty(e.target.value)}
+                >
+                  {DIFFICULTIES.map((d) => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </Select>
+              </label>
+              <label className="learning-field learning-field-narrow">
+                <span className="learning-label">Questions</span>
+                <Select
+                  data-testid="learning-diff-count"
+                  value={diffCount}
+                  onChange={(e) => setDiffCount(Number(e.target.value))}
+                >
+                  {[3, 5, 8, 10].map((n) => (
+                    <option key={n} value={n}>{n}</option>
+                  ))}
+                </Select>
+              </label>
+              <Button
+                type="submit"
+                data-testid="learning-diff-generate"
+                disabled={generatingDiff || !diffBase || !diffHead}
+                className="learning-generate-btn"
+              >
+                {generatingDiff ? (
+                  <>
+                    <Blocks size={16} />
+                    Generating…
+                  </>
+                ) : (
+                  <>
+                    <GitCompare size={16} />
+                    Quiz the diff
+                  </>
+                )}
+              </Button>
+            </form>
+          )}
         </CardContent>
       </Card>
 
