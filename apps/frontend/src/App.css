@@ -2120,4 +2120,13 @@ body {
 
 [data-theme="light"] .repo-error { color: var(--status-error); }
 [data-theme="light"] .btn-danger { color: var(--status-error); }
-[data-theme="light"] .btn-danger:hover { border-color: var(--status-error); }
+[data-theme="light"] .btn-danger:hover { border-color: var(--status-error); }
+
+[data-theme="light"] .profile-dashboard-card { background: var(--bg-surface-low); border-color: var(--border-subtle); }
+[data-theme="light"] .profile-card-header { border-bottom-color: var(--border-subtle); }
+[data-theme="light"] .profile-card-header h2 { color: var(--text-primary); }
+[data-theme="light"] .profile-card-header p { color: var(--text-muted); }
+[data-theme="light"] .profile-row { border-bottom-color: var(--border-subtle); }
+[data-theme="light"] .profile-row span { color: var(--text-muted); }
+[data-theme="light"] .profile-row code { background: var(--bg-surface-container); color: var(--secondary); }
+[data-theme="light"] .profile-authenticated { color: var(--status-success); }
