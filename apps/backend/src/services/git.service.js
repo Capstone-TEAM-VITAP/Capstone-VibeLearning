@@ -173,8 +173,77 @@ export async function getCommitMeta(repositoryId, sha) {
 }
 
 /**
- * List files changed between two commits (three-dot range with two-dot fallback).
+ * Parse `git log` history output (one commit per line, NUL-separated
+ * fields) into rows with first-parent links. Pure function.
  */
+export function parseCommitList(output) {
+  return String(output || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [commitSha, parents, message, authorName, committedAt] = line.split("\0");
+      if (!SHA_RE.test((commitSha || "").trim())) return null;
+      const parentSha =
+        String(parents || "")
+          .trim()
+          .split(/\s+/)
+          .find((s) => SHA_RE.test(s)) || null;
+      return {
+        commitSha: commitSha.trim(),
+        parentSha,
+        message: (message || "").trim() || null,
+        authorName: (authorName || "").trim() || null,
+        committedAt: (committedAt || "").trim() || null,
+      };
+    })
+    .filter(Boolean);
+}
+
+/**
+ * Recent commit history (newest first) with first-parent links.
+ * %s is single-line by definition, so line-splitting is safe.
+ */
+export async function listRecentCommits(repositoryId, { ref = null, limit = 10 } = {}) {
+  const dir = getMirrorDir(repositoryId);
+  const n = Math.min(Math.max(Number(limit) || 10, 1), 30);
+  try {
+    const { stdout } = await runGit([
+      "--git-dir",
+      dir,
+      "log",
+      `--max-count=${n}`,
+      "--format=%H%x00%P%x00%s%x00%an%x00%cI",
+      ref || "HEAD",
+    ]);
+    return parseCommitList(stdout);
+  } catch (err) {
+    throw toGitError(err, "Unable to read commit history");
+  }
+}
+
+/**
+ * Select snapshot rows to backfill from history: skip the current head
+ * and anything already recorded, link each row to its first parent.
+ * Pure function.
+ */
+export function planHistoryBackfill(commits, existingShas, headSha) {
+  const seen = new Set(existingShas || []);
+  if (headSha) seen.add(headSha);
+  const rows = [];
+  for (const c of commits || []) {
+    if (!c?.commitSha || seen.has(c.commitSha)) continue;
+    seen.add(c.commitSha);
+    rows.push({
+      commitSha: c.commitSha,
+      baseSha: c.parentSha || null,
+      message: c.message || null,
+      authorName: c.authorName || null,
+      committedAt: c.committedAt || null,
+    });
+  }
+  return rows;
+}
 export async function getChangedFiles(repositoryId, baseSha, headSha) {
   const dir = getMirrorDir(repositoryId);
   if (!baseSha) {
@@ -278,6 +347,9 @@ export default {
   ensureMirror,
   resolveSha,
   getCommitMeta,
+  parseCommitList,
+  listRecentCommits,
+  planHistoryBackfill,
   getChangedFiles,
   getSnapshotDiff,
   ensureSnapshotTree,
