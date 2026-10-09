@@ -717,7 +717,7 @@
   padding: 9px 18px;
   border-radius: 6px;
   background: var(--primary);
-  color: #ffffff;
+  color: var(--on-primary);
   font-size: 13px;
   font-weight: 600;
   border: none;
@@ -726,8 +726,8 @@
 }
 
 .codegraph-primary-btn:hover {
-  background: #4f46e5;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  background: var(--primary-container);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .codegraph-primary-btn .material-symbols-outlined {
