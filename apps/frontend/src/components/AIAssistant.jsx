@@ -1,6 +1,33 @@
 import { useState, useRef, useEffect } from "react";
+import {
+  Bot,
+  Brain,
+  Check,
+  CircleX,
+  Copy,
+  Database,
+  FileText,
+  FolderOpen,
+  Layers,
+  Lock,
+  CirclePlus,
+  Send,
+  Sparkles,
+  Trash2,
+  User,
+  Webhook,
+  Wrench,
+} from "lucide-react";
 import { askRepoQuestion } from "../services/api.js";
 import "./AIAssistant.css";
+
+const PROMPT_ICONS = {
+  architecture: Layers,
+  api: Webhook,
+  lock: Lock,
+  database: Database,
+  add_circle: CirclePlus,
+};
 
 const DEFAULT_PROMPTS = [
   {
@@ -242,9 +269,7 @@ function MarkdownRenderer({ content, onCopyCode, copiedCodeId }) {
                   onClick={() => onCopyCode(rawCode, blockId)}
                   title="Copy code"
                 >
-                  <span className="material-symbols-outlined">
-                    {isCopied ? "check" : "content_copy"}
-                  </span>
+                  {isCopied ? <Check size={13} /> : <Copy size={13} />}
                   <span>{isCopied ? "Copied!" : "Copy"}</span>
                 </button>
               </div>
@@ -416,7 +441,7 @@ function AIAssistant({
       <div className="ai-assistant-container">
         <div className="ai-welcome-card" style={{ margin: "auto" }}>
           <div className="ai-welcome-icon-box">
-            <span className="material-symbols-outlined">folder_open</span>
+            <FolderOpen size={28} />
           </div>
           <h3>No Repository Connected</h3>
           <p>Connect a GitHub repository to ask questions about its code, routes, and architecture.</p>
@@ -438,7 +463,7 @@ function AIAssistant({
       <header className="ai-assistant-header">
         <div className="ai-header-left">
           <div className="ai-avatar-icon">
-            <span className="material-symbols-outlined">auto_awesome</span>
+            <Sparkles size={18} />
           </div>
           <div className="ai-header-title-group">
             <h2>
@@ -463,9 +488,7 @@ function AIAssistant({
               onClick={handleClearChat}
               title="Clear chat history"
             >
-              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
-                delete_sweep
-              </span>
+              <Trash2 size={14} />
               Clear Chat
             </button>
           )}
@@ -477,9 +500,7 @@ function AIAssistant({
               style={{ fontSize: 12, padding: "4px 10px" }}
               onClick={() => setView && setView("analysis")}
             >
-              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>
-                troubleshoot
-              </span>
+              <Wrench size={14} />
               Analyze Repo
             </button>
           )}
@@ -491,7 +512,7 @@ function AIAssistant({
         {messages.length === 0 ? (
           <div className="ai-welcome-card">
             <div className="ai-welcome-icon-box">
-              <span className="material-symbols-outlined">psychology</span>
+              <Brain size={28} />
             </div>
             <h3>Ask anything about {repoName}</h3>
             <p>
@@ -500,29 +521,30 @@ function AIAssistant({
             </p>
 
             <div className="ai-prompts-grid">
-              {DEFAULT_PROMPTS.map((prompt, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  className="ai-prompt-chip"
-                  onClick={() => handleSend(prompt.text)}
-                  disabled={isLoading}
-                >
-                  <span className="material-symbols-outlined ai-prompt-chip-icon">
-                    {prompt.icon}
-                  </span>
-                  <span>{prompt.text}</span>
-                </button>
-              ))}
+              {DEFAULT_PROMPTS.map((prompt, idx) => {
+                const PromptIcon = PROMPT_ICONS[prompt.icon] ?? Sparkles;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    className="ai-prompt-chip"
+                    onClick={() => handleSend(prompt.text)}
+                    disabled={isLoading}
+                  >
+                    <span className="ai-prompt-chip-icon">
+                      <PromptIcon size={15} />
+                    </span>
+                    <span>{prompt.text}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         ) : (
           messages.map((msg) => (
             <div key={msg.id} className={`ai-message-row ${msg.role}`}>
               <div className="ai-message-avatar">
-                <span className="material-symbols-outlined">
-                  {msg.role === "user" ? "person" : "auto_awesome"}
-                </span>
+                {msg.role === "user" ? <User size={16} /> : <Sparkles size={16} />}
               </div>
               <div className="ai-message-bubble">
                 {msg.role === "user" ? (
@@ -542,7 +564,7 @@ function AIAssistant({
                         </span>
                         {msg.citations.map((c, cIdx) => (
                           <span key={cIdx} className="ai-citation-pill" title={`Lines ${c.startLine}-${c.endLine}`}>
-                            <span className="material-symbols-outlined">description</span>
+                            <FileText size={13} />
                             {c.path}:{c.startLine}
                           </span>
                         ))}
@@ -559,7 +581,7 @@ function AIAssistant({
         {isLoading && (
           <div className="ai-message-row assistant">
             <div className="ai-message-avatar">
-              <span className="material-symbols-outlined">auto_awesome</span>
+              <Sparkles size={16} />
             </div>
             <div className="ai-message-bubble">
               <div className="ai-thinking-indicator">
@@ -578,7 +600,7 @@ function AIAssistant({
         {error && (
           <div className="intel-notice-card" style={{ margin: "10px 0", borderColor: "var(--status-error)" }}>
             <div className="intel-notice-icon" style={{ color: "var(--status-error)" }}>
-              <span className="material-symbols-outlined">error</span>
+              <CircleX size={24} />
             </div>
             <p style={{ margin: 0, color: "var(--text-primary)" }}>{error}</p>
           </div>
@@ -610,15 +632,15 @@ function AIAssistant({
             disabled={!input.trim() || isLoading}
             title="Send message (Enter)"
           >
-            <span className="material-symbols-outlined">send</span>
+            <Send size={16} />
           </button>
         </form>
 
         <div className="ai-input-footer">
           <span>Press <strong>Enter</strong> to send, <strong>Shift + Enter</strong> for new lines</span>
           <span className="ai-model-tag">
-            <span className="material-symbols-outlined" style={{ fontSize: 13, color: "var(--tertiary-light)" }}>
-              model_training
+            <span style={{ color: "var(--tertiary-light)", display: "inline-flex" }}>
+              <Bot size={13} />
             </span>
             {activeModel}
           </span>
