@@ -9,16 +9,19 @@
   left: 0;
   bottom: 0;
   width: 288px;
-  /* Glassmorphism: frosted-glass panel over page canvas */
+  /* Liquid Glass: refractive layers over a frosted base */
   background-color: var(--bg-surface-lowest);
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 24%);
-  background-color: color-mix(in srgb, var(--bg-surface-lowest) 72%, transparent);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  backdrop-filter: blur(20px) saturate(140%);
+  background-image:
+    radial-gradient(120% 42% at 18% 0%, rgba(255, 255, 255, 0.10), transparent 60%),
+    linear-gradient(165deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015) 32%, transparent 62%);
+  background-color: color-mix(in srgb, var(--bg-surface-lowest) 68%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
   border-right: 1px solid var(--border-subtle);
   box-shadow:
-    inset -1px 0 0 rgba(255, 255, 255, 0.06),
-    8px 0 32px rgba(0, 0, 0, 0.25);
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset -1px 0 0 rgba(255, 255, 255, 0.09),
+    8px 0 40px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   z-index: 40;
@@ -112,12 +115,16 @@
   align-items: center;
   justify-content: space-between;
   background-color: var(--bg-surface-low);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 55%);
   border: 1px solid var(--border-hairline);
   border-radius: 6px;
   padding: 8px 10px;
   color: var(--text-primary);
   cursor: pointer;
   box-sizing: border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.25);
   transition: all 0.15s ease;
 }
 
@@ -197,6 +204,7 @@
 
 .sidebar-nav-item:hover {
   background-color: var(--bg-surface-high);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 60%);
   color: var(--text-primary);
 }
 
@@ -206,10 +214,14 @@
 
 .sidebar-nav-item.active {
   background-color: var(--primary-dim);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.03));
   border-color: var(--border-active);
   border-left: 2px solid var(--primary);
   color: var(--nav-active-text, #ffffff);
   font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar-nav-item.active .sidebar-nav-icon {
@@ -269,9 +281,11 @@
 
 .sidebar-subnav-item.active {
   background-color: var(--primary-dim);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
   border-left: 2px solid var(--secondary);
   color: var(--secondary-light);
   font-weight: 600;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-subnav-item .sidebar-nav-icon {
@@ -284,6 +298,7 @@
   padding: 14px 14px 16px;
   border-top: 1px solid var(--border-subtle);
   background-color: transparent;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   display: flex;
   flex-direction: column;
   gap: 10px;
