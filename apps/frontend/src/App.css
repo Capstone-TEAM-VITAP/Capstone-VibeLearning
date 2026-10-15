@@ -70,7 +70,7 @@
 
 .ws-btn-primary {
   background-color: var(--primary);
-  color: #ffffff;
+  color: var(--on-primary);
   border: 1px solid transparent;
 }
 .ws-btn-primary:hover {
@@ -394,16 +394,16 @@
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #9333ea 0%, #aa3bff 100%);
+  color: #000;
+  background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 100%);
   border: 1px solid transparent;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(170, 59, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
   transition: all 0.2s ease;
 }
 
 .btn-sign-up:hover {
-  box-shadow: 0 6px 16px rgba(170, 59, 255, 0.45);
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.45);
   transform: translateY(-1px);
 }
 
@@ -868,17 +868,17 @@
 
   background: linear-gradient(
     135deg,
-    #9333ea,
-    #aa3bff
+    #ffffff,
+    #d4d4d8
   );
 
-  color: white;
+  color: #000;
 
   font-size: 17px;
   font-weight: 800;
 
   box-shadow:
-    0 6px 20px rgba(147, 51, 234, 0.25);
+    0 6px 20px rgba(255, 255, 255, 0.25);
 }
 
 .sidebar-brand h2 {
@@ -962,19 +962,19 @@
 }
 
 .dashboard-nav button:hover span {
-  color: #b477ff;
+  color: #e4e4e7;
 }
 
 .dashboard-nav button.active {
-  background: rgba(147, 51, 234, 0.12);
+  background: rgba(255, 255, 255, 0.12);
 
-  border-color: rgba(170, 59, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.35);
 
-  color: #c995ff;
+  color: #ffffff;
 }
 
 .dashboard-nav button.active span {
-  color: #c995ff;
+  color: #ffffff;
 }
 
 
@@ -1224,7 +1224,7 @@
 
   border-radius: 50%;
 
-  background: rgba(147, 51, 234, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .stat-card:hover {
@@ -1243,12 +1243,12 @@
 
   margin-bottom: 13px;
 
-  border: 1px solid rgba(170, 59, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
 
-  background: rgba(147, 51, 234, 0.09);
+  background: rgba(255, 255, 255, 0.09);
 
-  color: #b477ff;
+  color: #e4e4e7;
 
   font-size: 14px;
 }
@@ -1314,7 +1314,7 @@
 .section-label {
   margin-bottom: 5px;
 
-  color: #a25aff;
+  color: #a1a1aa;
 
   font-size: 9px;
   font-weight: 700;
@@ -1350,9 +1350,9 @@
   border: 1px solid #68418b;
   border-radius: 8px;
 
-  background: rgba(147, 51, 234, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 
-  color: #c995ff;
+  color: #ffffff;
 
   font-size: 11px;
   font-weight: 600;
@@ -1366,7 +1366,7 @@
 }
 
 .dashboard-action:hover {
-  background: rgba(147, 51, 234, 0.16);
+  background: rgba(255, 255, 255, 0.16);
 
   border-color: #8a55b7;
 }
@@ -1375,23 +1375,23 @@
   background:
     linear-gradient(
       135deg,
-      #9333ea,
-      #aa3bff
+      #ffffff,
+      #d4d4d8
     );
 
   border-color: transparent;
 
-  color: #ffffff;
+  color: #000000;
 
   box-shadow:
-    0 5px 15px rgba(147, 51, 234, 0.2);
+    0 5px 15px rgba(255, 255, 255, 0.2);
 }
 
 .dashboard-action.primary:hover {
   transform: translateY(-1px);
 
   box-shadow:
-    0 7px 20px rgba(147, 51, 234, 0.3);
+    0 7px 20px rgba(255, 255, 255, 0.3);
 }
 
 
@@ -1630,9 +1630,9 @@
 
   border-radius: 10px;
 
-  background: rgba(147, 51, 234, 0.08);
+  background: rgba(255, 255, 255, 0.08);
 
-  color: #a25aff;
+  color: #a1a1aa;
 
   font-size: 17px;
 }
@@ -1770,7 +1770,7 @@
 
   background: #101116;
 
-  color: #b477ff;
+  color: #e4e4e7;
 
   font-size: 10px;
 }
@@ -2016,7 +2016,7 @@ body {
   margin: 0 auto 20px;
 }
 
-.placeholder-icon-box .material-symbols-outlined {
+.placeholder-icon-box svg {
   font-size: 26px;
 }
 
@@ -2062,7 +2062,7 @@ body {
   color: var(--text-muted);
 }
 
-.placeholder-badge .material-symbols-outlined {
+.placeholder-badge svg {
   font-size: 14px;
 }
 
@@ -2085,4 +2085,59 @@ body {
   .codeai-page-content {
     padding: 16px 14px 40px;
   }
-}
+}
+
+/* =========================================================
+   LIGHT THEME CONTRAST REPAIRS
+   Dark-calibrated pills and status colors become unreadable
+   on paper surfaces; remap them to atlas ink variants.
+   ========================================================= */
+[data-theme="light"] .role-badge-component { background: rgba(4, 98, 211, 0.1); color: #0462d3; border-color: rgba(4, 98, 211, 0.3); }
+[data-theme="light"] .role-badge-hook { background: rgba(119, 40, 215, 0.1); color: #7728d7; border-color: rgba(119, 40, 215, 0.3); }
+[data-theme="light"] .role-badge-route { background: rgba(180, 83, 9, 0.12); color: #b45309; border-color: rgba(180, 83, 9, 0.35); }
+[data-theme="light"] .role-badge-controller { background: rgba(29, 29, 31, 0.07); color: #1d1d1f; border-color: rgba(29, 29, 31, 0.25); }
+[data-theme="light"] .role-badge-service { background: rgba(0, 136, 75, 0.1); color: #00884b; border-color: rgba(0, 136, 75, 0.3); }
+[data-theme="light"] .role-badge-repository { background: rgba(190, 18, 60, 0.08); color: #be123c; border-color: rgba(190, 18, 60, 0.3); }
+[data-theme="light"] .role-badge-model { background: rgba(15, 118, 110, 0.1); color: #0f766e; border-color: rgba(15, 118, 110, 0.3); }
+[data-theme="light"] .role-badge-middleware { background: rgba(194, 65, 12, 0.1); color: #c2410c; border-color: rgba(194, 65, 12, 0.3); }
+[data-theme="light"] .role-badge-utility { background: rgba(110, 110, 115, 0.12); color: #6e6e73; border-color: rgba(110, 110, 115, 0.3); }
+[data-theme="light"] .role-badge-entrypoint { background: rgba(153, 27, 27, 0.08); color: #991b1b; border-color: rgba(153, 27, 27, 0.3); }
+[data-theme="light"] .role-badge-test { background: rgba(77, 124, 15, 0.1); color: #4d7c0f; border-color: rgba(77, 124, 15, 0.3); }
+
+[data-theme="light"] .file-status-M { color: #b45309; border-color: rgba(180, 83, 9, 0.4); }
+[data-theme="light"] .file-status-A { color: var(--status-success); border-color: var(--status-success); }
+[data-theme="light"] .file-status-D { color: var(--status-error); border-color: var(--status-error); }
+[data-theme="light"] .file-status-R, [data-theme="light"] .file-status-C { color: var(--secondary); border-color: var(--secondary); }
+
+[data-theme="light"] .impact-high { color: var(--status-error); border-color: var(--status-error); }
+[data-theme="light"] .impact-medium { color: var(--status-warning); border-color: var(--status-warning); }
+[data-theme="light"] .impact-low { color: var(--status-success); border-color: var(--status-success); }
+
+[data-theme="light"] .engine-badge { background: var(--status-warning-dim); color: var(--status-warning); border-color: var(--status-warning); }
+
+[data-theme="light"] .addition { color: var(--status-success); }
+[data-theme="light"] .deletion { color: var(--status-error); }
+
+[data-theme="light"] .repo-error { color: var(--status-error); }
+[data-theme="light"] .btn-danger { color: var(--status-error); }
+[data-theme="light"] .btn-danger:hover { border-color: var(--status-error); }
+
+[data-theme="light"] .btn-sign-up {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme="light"] .btn-sign-up:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .profile-dashboard-card { background: var(--bg-surface-low); border-color: var(--border-subtle); }
+[data-theme="light"] .profile-card-header { border-bottom-color: var(--border-subtle); }
+[data-theme="light"] .profile-card-header h2 { color: var(--text-primary); }
+[data-theme="light"] .profile-card-header p { color: var(--text-muted); }
+[data-theme="light"] .profile-row { border-bottom-color: var(--border-subtle); }
+[data-theme="light"] .profile-row span { color: var(--text-muted); }
+[data-theme="light"] .profile-row code { background: var(--bg-surface-container); color: var(--secondary); }
+[data-theme="light"] .profile-authenticated { color: var(--status-success); }

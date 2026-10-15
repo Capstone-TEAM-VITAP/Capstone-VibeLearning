@@ -3,8 +3,18 @@ import {
   SignUpButton,
   Show,
 } from "@clerk/react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Dashboard from "./pages/Dashboard.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
+import { Button } from "./components/ui/button.jsx";
+import { Badge } from "./components/ui/badge.jsx";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./components/ui/card.jsx";
 import "./App.css";
 
 function App() {
@@ -14,30 +24,41 @@ function App() {
         <header className="app-header">
           <div className="brand-container">
             <h1 className="brand-title" data-testid="brand-title">CodeAI</h1>
-            <span className="brand-badge">Dashboard</span>
+            <Badge variant="secondary">Dashboard</Badge>
           </div>
 
           <div className="auth-nav">
             <ThemeToggle />
             <SignInButton mode="modal">
-              <button className="btn-sign-in" data-testid="sign-in-btn">Sign In</button>
+              <Button variant="outline" data-testid="sign-in-btn">Sign In</Button>
             </SignInButton>
             <SignUpButton mode="modal">
-              <button className="btn-sign-up" data-testid="sign-up-btn">Sign Up</button>
+              <Button data-testid="sign-up-btn">Sign Up</Button>
             </SignUpButton>
           </div>
         </header>
 
         <main className="app-main">
-          <div className="hero-card" data-testid="hero-card">
-            <h2>Welcome to CodeAI</h2>
-            <p>AI-powered coding learning platform that connects GitHub repositories with personalized code analysis, learning paths, and developer insights.</p>
-            <div style={{ marginTop: "24px" }}>
+          <Card className="mx-auto w-full max-w-xl text-center" data-testid="hero-card">
+            <CardHeader className="items-center text-center">
+              <Badge>
+                <Sparkles />
+                Repository Intelligence
+              </Badge>
+              <CardTitle className="text-3xl">Welcome to CodeAI</CardTitle>
+              <CardDescription className="max-w-md">
+                AI-powered coding learning platform that connects GitHub repositories with personalized code analysis, learning paths, and developer insights.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-center pb-8">
               <SignInButton mode="modal">
-                <button className="btn-sign-up" data-testid="hero-get-started-btn">Get Started</button>
+                <Button size="lg" data-testid="hero-get-started-btn">
+                  Get Started
+                  <ArrowRight />
+                </Button>
               </SignInButton>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </main>
       </Show>
 
@@ -48,4 +69,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;

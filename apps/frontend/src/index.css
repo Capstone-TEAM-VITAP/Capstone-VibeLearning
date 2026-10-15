@@ -1,66 +1,104 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
+@theme inline {
+  --color-background: var(--bg-canvas);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--bg-surface-low);
+  --color-card-foreground: var(--text-primary);
+  --color-popover: var(--bg-surface-low);
+  --color-popover-foreground: var(--text-primary);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--on-primary);
+  --color-secondary: var(--bg-surface-high);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted: var(--bg-surface-container);
+  --color-muted-foreground: var(--text-muted);
+  --color-accent: var(--bg-surface-high);
+  --color-accent-foreground: var(--text-primary);
+  --color-destructive: var(--status-error);
+  --color-destructive-foreground: #ffffff;
+  --color-success: var(--status-success);
+  --color-warning: var(--status-warning);
+  --color-border: var(--border-subtle);
+  --color-input: var(--border-subtle);
+  --color-ring: var(--border-focus);
+  --color-data: var(--secondary);
+  --color-neural: var(--tertiary);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --radius-lg: 0.875rem;
+  --radius-md: 0.625rem;
+  --radius-sm: 0.375rem;
+}
+
 :root,
 [data-theme="dark"] {
   /* =========================================================
-     GOOGLE STITCH: TERMINAL HORIZON DESIGN TOKENS (DARK)
+     DEVLOGUE MONOCHROME DESIGN TOKENS (DARK)
+     Near-black zinc surfaces, white primary actions.
+     Inspired by https://devlogue.pages.dev
      ========================================================= */
 
   /* Canvas & Background */
-  --bg-canvas: #0f131b;
-  --bg-surface-lowest: #0a0e15;
-  --bg-surface-low: #181c23;
-  --bg-surface-container: #1c2027;
-  --bg-surface-high: #262a32;
-  --bg-surface-highest: #31353d;
-  --bg-surface-bright: #353941;
+  --bg-canvas: #050505;
+  --bg-surface-lowest: #0a0a0a;
+  --bg-surface-low: #101012;
+  --bg-surface-container: #1a1a1e;
+  --bg-surface-high: #1c1c1f;
+  --bg-surface-highest: #27272a;
+  --bg-surface-bright: #3f3f46;
 
-  /* Primary Accent: Electric Indigo */
-  --primary: #6366f1;
-  --primary-light: #c0c1ff;
-  --primary-container: #4338ca;
-  --primary-dim: rgba(99, 102, 241, 0.12);
-  --on-primary: #ffffff;
+  /* Primary Accent: Monochrome White (bg-white / text-black actions) */
+  --primary: #ffffff;
+  --primary-light: #e4e4e7;
+  --primary-container: #d4d4d8;
+  --primary-dim: rgba(255, 255, 255, 0.08);
+  --on-primary: #000000;
 
-  /* Secondary Data Accent: Data Cyan */
-  --secondary: #38bdf8;
-  --secondary-light: #7bd0ff;
-  --secondary-container: #0369a1;
-  --secondary-dim: rgba(56, 189, 248, 0.12);
-  --on-secondary: #0f172a;
+  /* Secondary Data Accent: Zinc */
+  --secondary: #a1a1aa;
+  --secondary-light: #d4d4d8;
+  --secondary-container: #3f3f46;
+  --secondary-dim: rgba(161, 161, 170, 0.12);
+  --on-secondary: #ffffff;
 
-  /* AI Accent: Neural Purple */
-  --tertiary: #a855f7;
-  --tertiary-light: #ddb7ff;
-  --tertiary-container: #6b21a8;
-  --tertiary-dim: rgba(168, 85, 247, 0.12);
-  --on-tertiary: #ffffff;
+  /* AI Accent: Light Zinc */
+  --tertiary: #e4e4e7;
+  --tertiary-light: #ffffff;
+  --tertiary-container: #52525b;
+  --tertiary-dim: rgba(255, 255, 255, 0.08);
+  --on-tertiary: #0a0a0a;
 
   /* Semantic Status */
-  --status-success: #10b981;
-  --status-success-dim: rgba(16, 185, 129, 0.12);
+  --status-success: #00c758;
+  --status-success-dim: rgba(0, 199, 88, 0.12);
   --status-warning: #f59e0b;
   --status-warning-dim: rgba(245, 158, 11, 0.12);
   --status-error: #ef4444;
   --status-error-dim: rgba(239, 68, 68, 0.12);
 
   /* Borders & Hairlines */
-  --border-subtle: #1e2638;
+  --border-subtle: #27272a;
   --border-hairline: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(99, 102, 241, 0.4);
-  --border-focus: #6366f1;
+  --border-active: rgba(255, 255, 255, 0.2);
+  --border-focus: #ffffff;
 
   /* Typography Colors */
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-inverse: #0f172a;
+  --text-primary: #ffffff;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --text-disabled: #52525b;
+  --text-inverse: #000000;
 
-  /* Shadows (Subtle, crisp) */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+  /* Shadows (Neutral black, soft depth) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 28px 80px -28px rgba(0, 0, 0, 0.55);
 
   /* Navigation & Chrome */
-  --header-bg: rgba(10, 14, 21, 0.85);
+  --header-bg: rgba(5, 5, 5, 0.8);
   --nav-active-text: #ffffff;
 
   /* Font Families */
@@ -95,68 +133,71 @@
 }
 
 /* =========================================================
-   GOLDEN SUMMER FIELDS DESIGN TOKENS (LIGHT)
+   USAGEATLAS PAPER DESIGN TOKENS (LIGHT)
+   Warm paper surfaces, ink text, blue-ink accents.
+   Inspired by https://usageatlas.com
    ========================================================= */
 [data-theme="light"],
 :root[data-theme="light"] {
   /* Canvas & Background */
-  --bg-canvas: #E9EDC9;             /* Secondary Background: page backdrop */
-  --bg-surface-lowest: #CCD5AE;     /* Primary Background: sidebar, base canvas */
-  --bg-surface-low: #FEFAE0;        /* Main Surface / Cards: warm cream card color */
-  --bg-surface-container: #FAEDCD;  /* Elevated Surface: inputs, sub-containers, code */
-  --bg-surface-high: #F5E3B8;       /* Interactive hover / elevated cards */
-  --bg-surface-highest: #ECD19F;    /* Badges, pill counters, secondary buttons */
-  --bg-surface-bright: #FFFDF0;     /* Highlighted popovers */
+  --bg-canvas: #f8f7f4;               /* paper: page backdrop */
+  --bg-surface-lowest: #f2f0ec;       /* paper-alt: sidebar, base canvas */
+  --bg-surface-low: #ffffff;          /* card: main surfaces */
+  --bg-surface-container: #f2f0ec;    /* inset wells: inputs, code */
+  --bg-surface-high: #eceae6;         /* hover / elevated */
+  --bg-surface-highest: #e2e0da;      /* badges, pills, secondary buttons */
+  --bg-surface-bright: #ffffff;       /* popovers */
 
-  /* Primary Accent: Rich Warm Cognac / Terracotta */
-  --primary: #BC6C25;
-  --primary-light: #D4A373;
-  --primary-container: #9B4811;
-  --primary-dim: rgba(188, 108, 37, 0.12);
-  --on-primary: #ffffff;
+  /* Primary Accent: Ink (ink bg / paper text actions) */
+  --primary: #1d1d1f;
+  --primary-light: #45454a;
+  --primary-container: #000000;
+  --primary-dim: rgba(29, 29, 31, 0.08);
+  --on-primary: #f8f7f4;
 
-  /* Secondary Data Accent: Deep Forest Pine */
-  --secondary: #386641;
-  --secondary-light: #588157;
-  --secondary-container: #1B4332;
-  --secondary-dim: rgba(56, 102, 65, 0.12);
+  /* Secondary Data Accent: Atlas Blue */
+  --secondary: #0462d3;
+  --secondary-light: #2d93fc;
+  --secondary-container: #0462d3;
+  --secondary-dim: rgba(45, 147, 252, 0.12);
   --on-secondary: #ffffff;
 
-  /* AI Accent: Warm Terracotta / Amber */
-  --tertiary: #BC6C25;
-  --tertiary-light: #D4A373;
-  --tertiary-container: #8C400F;
-  --tertiary-dim: rgba(188, 108, 37, 0.15);
+  /* AI Accent: Atlas Violet */
+  --tertiary: #7728d7;
+  --tertiary-light: #975afd;
+  --tertiary-container: #7728d7;
+  --tertiary-dim: rgba(151, 90, 253, 0.12);
   --on-tertiary: #ffffff;
 
   /* Semantic Status */
-  --status-success: #2D6A4F;
-  --status-success-dim: rgba(45, 106, 79, 0.14);
-  --status-warning: #C27803;
-  --status-warning-dim: rgba(194, 120, 3, 0.14);
-  --status-error: #BA2D0B;
-  --status-error-dim: rgba(186, 45, 11, 0.14);
+  --status-success: #00884b;
+  --status-success-dim: rgba(0, 136, 75, 0.12);
+  --status-warning: #b45309;
+  --status-warning-dim: rgba(180, 83, 9, 0.12);
+  --status-error: #be123c;
+  --status-error-dim: rgba(190, 18, 60, 0.12);
 
   /* Borders & Hairlines */
-  --border-subtle: rgba(212, 163, 115, 0.45);  /* #D4A373 with gentle opacity */
-  --border-hairline: rgba(212, 163, 115, 0.25);
-  --border-active: #D4A373;
-  --border-focus: #BC6C25;
+  --border-subtle: rgba(0, 0, 0, 0.09);
+  --border-hairline: rgba(0, 0, 0, 0.06);
+  --border-active: rgba(0, 0, 0, 0.16);
+  --border-focus: #0462d3;
 
   /* Typography Colors */
-  --text-primary: #283618;          /* Primary Text: deep forest olive */
-  --text-secondary: #606C38;        /* Secondary Text: warm sage olive */
-  --text-muted: #7E8B54;            /* Muted Text: subtle olive */
-  --text-inverse: #FEFAE0;          /* Inverse: warm cream */
+  --text-primary: #1d1d1f;
+  --text-secondary: #45454a;
+  --text-muted: #6e6e73;
+  --text-disabled: #a1a1aa;
+  --text-inverse: #f8f7f4;
 
-  /* Shadows (Subtle, warm, natural) */
-  --shadow-sm: 0 1px 3px rgba(40, 54, 24, 0.08);
-  --shadow-md: 0 4px 14px rgba(40, 54, 24, 0.10);
-  --shadow-lg: 0 12px 32px rgba(40, 54, 24, 0.14);
+  /* Shadows (Soft, layered, neutral) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05), 0 3px 8px -4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.05), 0 8px 20px -8px rgba(0, 0, 0, 0.12), 0 24px 48px -24px rgba(0, 0, 0, 0.14);
+  --shadow-lg: 0 1px 2px rgba(0, 0, 0, 0.08), 0 12px 28px -12px rgba(0, 0, 0, 0.18), 0 48px 90px -40px rgba(0, 0, 0, 0.34);
 
   /* Navigation & Chrome */
-  --header-bg: rgba(254, 250, 224, 0.90);
-  --nav-active-text: #283618;
+  --header-bg: rgba(251, 252, 253, 0.72);
+  --nav-active-text: #1d1d1f;
 
   /* Backward Compatibility Mappings */
   --text: var(--text-secondary);
@@ -257,5 +298,57 @@ code {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+/* Devlogue-style selection + film grain (dark only) */
+[data-theme="dark"] ::selection {
+  color: #000;
+  background: #fff;
+}
+
+/* UsageAtlas-style selection (light only) */
+[data-theme="light"] ::selection {
+  color: #1d1d1f;
+  background: rgba(45, 147, 252, 0.22);
+}
+
+[data-theme="dark"] body::after {
+  content: "";
+  position: fixed;
+  inset: -200%;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  animation: devlogue-grain 8s steps(10, end) infinite;
+}
+
+@keyframes devlogue-grain {
+  0%, 100% { transform: translate(0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0); }
+  70% { transform: translate(0, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="dark"] body::after {
+    animation: none;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 

@@ -102,7 +102,7 @@
 
 .arch-role-pill-btn.active .role-pill-count {
   background-color: var(--primary);
-  color: #ffffff;
+  color: var(--on-primary);
 }
 
 /* --- Layers Grid --- */

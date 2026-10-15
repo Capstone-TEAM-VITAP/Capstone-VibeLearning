@@ -523,31 +523,31 @@
 [data-theme="light"] .codegraph-node {
   background: var(--bg-surface-low);
   border: 1px solid var(--border-subtle);
-  box-shadow: 0 2px 8px rgba(40, 54, 24, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 [data-theme="light"] .codegraph-node:hover {
   background: var(--bg-surface-container);
   border-color: var(--border-focus);
-  box-shadow: 0 6px 18px rgba(40, 54, 24, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="light"] .codegraph-node--selected {
   border-color: var(--primary) !important;
-  box-shadow: 0 0 0 2.5px rgba(188, 108, 37, 0.45), 0 6px 20px rgba(40, 54, 24, 0.15) !important;
+  box-shadow: 0 0 0 2.5px rgba(29, 29, 31, 0.3), 0 6px 20px rgba(0, 0, 0, 0.15) !important;
   background: var(--bg-surface-container) !important;
 }
 
 [data-theme="light"] .codegraph-node--highlighted {
   border-color: var(--secondary) !important;
-  box-shadow: 0 0 0 2px rgba(56, 102, 65, 0.40), 0 4px 14px rgba(40, 54, 24, 0.12) !important;
+  box-shadow: 0 0 0 2px rgba(4, 98, 211, 0.35), 0 4px 14px rgba(0, 0, 0, 0.12) !important;
   background: var(--bg-surface-container) !important;
 }
 
 [data-theme="light"] .codegraph-role-tag {
-  background: rgba(56, 102, 65, 0.14);
-  color: #283618;
-  border: 1px solid rgba(56, 102, 65, 0.35);
+  background: rgba(4, 98, 211, 0.1);
+  color: #0462d3;
+  border: 1px solid rgba(4, 98, 211, 0.3);
 }
 
 [data-theme="light"] .codegraph-type-tag {
@@ -717,7 +717,7 @@
   padding: 9px 18px;
   border-radius: 6px;
   background: var(--primary);
-  color: #ffffff;
+  color: var(--on-primary);
   font-size: 13px;
   font-weight: 600;
   border: none;
@@ -726,8 +726,8 @@
 }
 
 .codegraph-primary-btn:hover {
-  background: #4f46e5;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  background: var(--primary-container);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .codegraph-primary-btn .material-symbols-outlined {
@@ -744,19 +744,8 @@
   background: var(--bg-canvas);
 }
 
-.codegraph-loading-spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid var(--border-subtle);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: codegraph-spin 0.8s linear infinite;
-}
-
-@keyframes codegraph-spin {
-  to {
-    transform: rotate(360deg);
-  }
+.codegraph-loading-blocks {
+  color: var(--primary);
 }
 
 .codegraph-loading-title {

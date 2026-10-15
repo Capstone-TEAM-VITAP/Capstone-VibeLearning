@@ -44,8 +44,8 @@
   box-shadow: 0 0 16px var(--tertiary-dim);
 }
 
-.ai-avatar-icon .material-symbols-outlined {
-  font-size: 20px;
+.ai-avatar-icon svg {
+  display: block;
 }
 
 .ai-header-title-group h2 {
@@ -130,8 +130,8 @@
   margin-bottom: 16px;
 }
 
-.ai-welcome-icon-box .material-symbols-outlined {
-  font-size: 30px;
+.ai-welcome-icon-box svg {
+  display: block;
 }
 
 .ai-welcome-card h3 {
@@ -182,6 +182,13 @@
 .ai-prompt-chip-icon {
   font-size: 18px;
   color: var(--tertiary-light);
+  display: inline-flex;
+}
+
+.ai-prompt-chip-icon svg,
+.ai-message-avatar svg,
+.ai-send-btn svg {
+  display: block;
 }
 
 /* Chat Message Rows */
@@ -266,8 +273,9 @@
   color: var(--secondary-light);
 }
 
-.ai-citation-pill .material-symbols-outlined {
-  font-size: 13px;
+.ai-citation-pill svg {
+  display: block;
+  flex-shrink: 0;
 }
 
 /* Markdown Formatting */
@@ -447,8 +455,8 @@
   color: var(--text-primary);
 }
 
-.ai-code-copy-btn .material-symbols-outlined {
-  font-size: 13px;
+.ai-code-copy-btn svg {
+  display: block;
 }
 
 .ai-code-pre {

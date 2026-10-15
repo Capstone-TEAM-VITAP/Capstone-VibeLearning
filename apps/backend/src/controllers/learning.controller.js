@@ -12,6 +12,16 @@ export const learningController = {
     }
   },
 
+  async generateDiff(req, res, next) {
+    try {
+      const { id: repositoryId } = req.params;
+      const data = await learningService.generateDiff(req.userId, repositoryId, req.body);
+      return successResponse(res, data, 201);
+    } catch (err) {
+      return next(err);
+    }
+  },
+
   async listSets(req, res, next) {
     try {
       const { id: repositoryId } = req.params;
