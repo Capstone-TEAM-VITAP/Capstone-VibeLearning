@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CodeAI — Semantic Code Search</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon">⌘</span><div><strong>CodeAI</strong><small>Semantic Code Search &amp; RAG</small></div></div>
+    <span class="status"><i></i> API workspace</span>
+  </header>
+  <main class="layout">
+    <aside class="sidebar">
+      <h2>Repository</h2>
+      <label for="repoId">Indexed repository ID</label>
+      <input id="repoId" value="demo" placeholder="demo or github:owner/repo">
+      <p class="hint">Use <code>demo</code> for local data, or analyze a public GitHub repository below.</p>
+      <div class="divider"></div>
+      <h2>GitHub public repos</h2>
+      <label for="username">GitHub username</label>
+      <input id="username" placeholder="octocat">
+      <button id="loadRepos" class="secondary">Load public repositories</button>
+      <label for="repositorySelect">Repository</label>
+      <select id="repositorySelect"><option value="">Load repositories first</option></select>
+      <label for="branch">Branch</label>
+      <input id="branch" placeholder="main">
+      <button id="analyzeRepo">Analyze repository</button>
+      <div id="repoStatus" class="message" role="status"></div>
+      <div class="divider"></div>
+      <h2>Search tips</h2>
+      <p class="hint">Ask for behavior, symbols, file roles, authentication, data flow, or error handling.</p>
+    </aside>
+    <section class="workspace">
+      <div class="hero">
+        <span class="eyebrow">CODE UNDERSTANDING</span>
+        <h1>Ask your codebase.</h1>
+        <p>Search across functions, classes, and relationships using semantic retrieval.</p>
+      </div>
+      <div class="suggestions">
+        <button class="suggestion">How does authentication work?</button>
+        <button class="suggestion">Find database access functions</button>
+        <button class="suggestion">Where are errors handled?</button>
+      </div>
+      <div id="results" class="results"><div class="empty"><span>⌕</span><h3>Ready to search</h3><p>Choose a repository and enter a question below.</p></div></div>
+      <form id="searchForm" class="searchbar">
+        <textarea id="query" rows="1" placeholder="Ask a question about your code..." required></textarea>
+        <button type="submit" id="searchButton">Search ↗</button>
+      </form>
+      <p class="footnote">CodeAI uses local embeddings and Qdrant. First use may take time while the model downloads.</p>
+    </section>
+  </main>
+  <script src="/static/script.js"></script>
+</body>
+</html>
