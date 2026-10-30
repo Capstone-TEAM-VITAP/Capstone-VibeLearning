@@ -5,8 +5,9 @@
 .ai-assistant-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 120px);
-  min-height: 580px;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
   background: var(--bg-surface-low);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg, 12px);
@@ -98,12 +99,32 @@
 /* Chat Scroll Feed */
 .ai-chat-feed {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 24px;
+  overflow-x: hidden;
+  padding: 24px 24px 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   scroll-behavior: smooth;
+}
+
+/* Custom sleek scrollbar for chat feed */
+.ai-chat-feed::-webkit-scrollbar {
+  width: 7px;
+}
+
+.ai-chat-feed::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ai-chat-feed::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+
+.ai-chat-feed::-webkit-scrollbar-thumb:hover {
+  background: var(--border-active);
 }
 
 /* Welcome Empty State */
