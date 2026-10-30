@@ -234,9 +234,10 @@ Your job is to answer the user's questions about this repository accurately, con
 GUIDELINES:
 1. Ground your answers strictly in the repository's architecture and source code provided below.
 2. When mentioning files, always use markdown backticks with full relative paths (e.g. \`src/routes/auth.routes.js\`) and include line numbers if available.
-3. If explaining code, provide clean code snippets illustrating how functions, routes, or services are defined.
+3. CODE COMPLETENESS: When showing code, provide full, runnable, and syntactically complete code blocks. Never truncate functions, schemas, or exports mid-way. Always properly close all parentheses, brackets, and code block fences (\`\`\`).
 4. If a feature or file is not present in the repository, honestly state that it was not found rather than inventing it.
 5. Offer practical tips or examples if the user asks how to modify, extend, or add features to the codebase.
+6. COMPLETENESS & CLARITY: Ensure every step, file example, and explanation is 100% finished and complete. Do not leave any step or code block cut off or hanging. Keep explanations focused and clean.
 
 === REPOSITORY ARCHITECTURAL ROLES ===
 `;
@@ -282,7 +283,8 @@ function synthesizeOfflineAnswer({ repo, query, context }) {
   if (context.excerpts && context.excerpts.length > 0) {
     answer += `#### Relevant Code Snippet:\n`;
     const ex = context.excerpts[0];
-    answer += `\`\`\`javascript\n// ${ex.path} (lines ${ex.startLine}-${ex.endLine})\n${ex.content.slice(0, 1000)}\n\`\`\`\n\n`;
+    const snippetLines = ex.content.split(/\r?\n/).slice(0, 25).join("\n");
+    answer += `\`\`\`javascript\n// ${ex.path} (lines ${ex.startLine}-${ex.endLine})\n${snippetLines}\n\`\`\`\n\n`;
   }
 
   // Architecture summary
@@ -303,7 +305,7 @@ function synthesizeOfflineAnswer({ repo, query, context }) {
 /**
  * Call an OpenAI-compatible API (Grok, OpenAI, Ollama, LM Studio).
  */
-async function callOpenAiCompatible({ baseUrl, apiKey, model, systemPrompt, history = [], message, max_tokens = 1000 }) {
+async function callOpenAiCompatible({ baseUrl, apiKey, model, systemPrompt, history = [], message, max_tokens = 2500 }) {
   // Keep last 4 history messages to prevent token blowup in multi-turn chats
   const safeHistory = (history || []).slice(-4);
   const messages = [
@@ -337,10 +339,41 @@ async function callOpenAiCompatible({ baseUrl, apiKey, model, systemPrompt, hist
   }
 
   const json = await res.json();
-  const text = json?.choices?.[0]?.message?.content;
+  const choice = json?.choices?.[0];
+  let text = choice?.message?.content;
   if (!text) {
     throw new Error("No response returned from LLM provider");
   }
+
+  // If the model reached max_tokens before completing (finish_reason === "length"), automatically fetch the remainder so code is never cut off
+  if (choice.finish_reason === "length") {
+    try {
+      const contRes = await fetch(endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          model,
+          messages: [
+            ...messages,
+            { role: "assistant", content: text },
+            { role: "user", content: "Continue generating the rest of the code and explanation from where you stopped. Do not repeat previous text." },
+          ],
+          temperature: 0.2,
+          max_tokens: Math.min(max_tokens, 1500),
+        }),
+      });
+      if (contRes.ok) {
+        const contJson = await contRes.json();
+        const contText = contJson?.choices?.[0]?.message?.content;
+        if (contText) {
+          text = text + contText;
+        }
+      }
+    } catch (contErr) {
+      console.warn("Auto-continuation call failed:", contErr.message);
+    }
+  }
+
   return text;
 }
 
@@ -469,7 +502,7 @@ export const chatService = {
         for (const candidate of candidateModels) {
           try {
             activeModel = candidate;
-            const maxTokensForModel = candidate.includes("qwen") ? 700 : 1000;
+            const maxTokensForModel = candidate.includes("qwen") ? 900 : 2500;
             answer = await callOpenAiCompatible({
               baseUrl: process.env.GROQ_BASE_URL || "https://api.groq.com/openai/v1",
               apiKey: groqKey,

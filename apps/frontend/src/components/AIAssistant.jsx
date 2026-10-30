@@ -242,8 +242,15 @@ function renderBlock(block, bIdx) {
 function MarkdownRenderer({ content, onCopyCode, copiedCodeId }) {
   if (!content) return null;
 
+  // Ensure any unclosed code block is safely closed so it renders fully
+  let safeContent = content;
+  const backtickMatches = content.match(/```/g);
+  if (backtickMatches && backtickMatches.length % 2 !== 0) {
+    safeContent = content + "\n```";
+  }
+
   // Split by code blocks ```...```
-  const parts = content.split(/(```[\s\S]*?```)/g);
+  const parts = safeContent.split(/(```[\s\S]*?```)/g);
 
   return (
     <div className="ai-markdown-body">
@@ -345,11 +352,20 @@ function AIAssistant({
   const chatFeedRef = useRef(null);
   const textareaRef = useRef(null);
 
-  // Auto-scroll chat to bottom when new messages arrive
+  // Auto-scroll chat to bottom when new messages arrive or loading state changes
   useEffect(() => {
-    if (chatFeedRef.current) {
-      chatFeedRef.current.scrollTop = chatFeedRef.current.scrollHeight;
-    }
+    const scrollToBottom = () => {
+      if (chatFeedRef.current) {
+        chatFeedRef.current.scrollTo({
+          top: chatFeedRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    scrollToBottom();
+    const timer = setTimeout(scrollToBottom, 60);
+    return () => clearTimeout(timer);
   }, [messages, isLoading]);
 
   const repoName = selectedRepo
