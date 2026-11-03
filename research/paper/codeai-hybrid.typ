@@ -9,8 +9,10 @@
 #show heading.where(level: 1): set text(size: 14pt)
 #show heading.where(level: 2): set text(size: 11.5pt)
 #show table.cell: set text(size: 8.4pt)
+#show table: set par(justify: false)
 #show raw: set text(font: "DejaVu Sans Mono", size: 8.4pt)
 
+#import "tables.typ": retrieval-heldout, retrieval-other, flows-held-out, accuracy
 #let tbl(caption, body) = figure(body, caption: caption, kind: table, supplement: [Table])
 #let tc = (left, center, center, center, center, center)
 
@@ -71,41 +73,71 @@ The named file is removed from every ranking. Locate and dependency use Hit\@k a
 
 = 5. Results
 
-== 5.1 Hybrid retrieval (RQ1)
+== How to read the results
 
-#tbl([Retrieval on five held-out JavaScript repositories. Locate and dependency: Hit\@1 / MRR. Impact: Recall\@10 / nDCG\@10.])[
+*Methods compared for retrieval.* Each method takes a question and returns a ranked list of repository files.
+
+#table(
+  columns: (1.5fr, 4fr),
+  align: (left, left),
+  stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),
+  table.header[*Method*][*In one sentence*],
+  [BM25 text search], [Classic keyword ranking: a file scores high if it contains the question's rarer words often.],
+  [Vector (LSA)], [Each file becomes a list of numbers that captures which words tend to appear together; files whose numbers resemble the question's rank high. Not a neural model.],
+  [Graph], [Uses the dependency graph. For "who imports X" it walks backwards from X; otherwise it matches the names of files and functions and favours their neighbours.],
+  [Hybrid (vector + graph)], [Merges the Vector and Graph rankings with Reciprocal Rank Fusion (RRF), a method that rewards files ranked well in either list.],
+  [Hybrid + BM25], [The same merge with BM25 added as a third ranking.],
+)
+
+*The three kinds of question.* The correct answer always comes from a tool that does not use our graph, so the system cannot mark its own homework.
+
+#table(
+  columns: (1.3fr, 2.6fr, 2.4fr),
+  align: (left, left, left),
+  stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),
+  table.header[*Question type*][*Example*][*Correct answer taken from*],
+  [Where is it implemented?], ["Convert a data object to FormData" (a code comment, with the function name removed)], [The file that contains that comment.],
+  [Who imports file X?], ["Which files import lib/request.js?"], [A scan of the source for import and require statements (JavaScript) or Python's `ast` parser (Python).],
+  [What is affected if X changes?], ["Which files are affected if lib/utils.js changes?"], [Every file that depends on X directly or through up to four steps of imports.],
+)
+
+*What the scores mean.* Higher is better for every score. In each column the best value is bold on a green background.
+
+#table(
+  columns: (1.4fr, 4fr),
+  align: (left, left),
+  stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),
+  table.header[*Score*][*Plain meaning*],
+  [Ranked 1st], [Share of questions where a correct file is the very first result.],
+  [MRR (mean reciprocal rank)], [Average of 1 divided by the position of the first correct file. 1.00 means always first; 0.50 means about second; 0.10 means about tenth.],
+  [Found in top 10], [Of all the files that were correct, the share that appear among the first ten results.],
+  [nDCG\@10], [Like "found in top 10" but also rewards putting correct files nearer the top. 1.00 is a perfect ordering.],
+  [Precision, recall, F1], [Used for flows. Precision: of the edges we return, the share that are correct. Recall: of the correct edges, the share we return. F1 combines the two into one balanced score (0 to 1).],
+  [95% interval], [A range around an average. If we repeated the experiment on similar questions, the true average would fall inside it about 95 times in 100. A wide range means few questions or noisy results.],
+)
+
+#tbl([Main findings at a glance. "Held-out" means repositories that were not used while designing the methods.])[
   #table(
-    columns: (1.4fr, 1fr, 1fr, 1fr),
-    align: (left, center, center, center),
-    stroke: 0.4pt + luma(170),
-    table.header[System][Locate (n = 79)][Dependency (n = 48)][Impact (n = 37)],
-    [BM25], [0.848 / 0.902], [0.521 / 0.640], [0.602 / 0.557],
-    [Vector (LSA)], [0.468 / 0.602], [0.333 / 0.474], [0.478 / 0.404],
-    [Graph], [0.367 / 0.447], [0.958 / 0.974], [0.654 / 0.744],
-    [Hybrid (RRF vector + graph)], [0.481 / 0.622], [0.854 / 0.915], [0.794 / 0.849],
-    [Hybrid + BM25], [0.620 / 0.734], [0.896 / 0.936], [0.824 / 0.878],
+    columns: (1.8fr, 1.6fr, 2.6fr, 3fr),
+    align: (left, left, left, left),
+    stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),
+    table.header[*Question*][*Best method*][*Headline number (held-out JavaScript)*][*Caveat*],
+    [Where is it implemented?], [BM25 text search], [MRR 0.90, against 0.62 for the hybrid], [Questions are code comments, which reward matching words.],
+    [Who imports file X?], [Graph], [MRR 0.97, against 0.64 for BM25], [The answer key and the graph both come from import relations, so this mostly measures parsing accuracy.],
+    [What is affected if X changes?], [Graph or fusion], [nDCG\@10 0.74 (graph), 0.85 (hybrid), 0.56 (BM25)], [Fusion is not clearly better than the graph alone on the other repository sets.],
+    [Which dependency edges form a flow?], [No clear winner], [Pruning returns 88% fewer edges (1.9 vs 15.7) but F1 is 0.20, below a simple baseline at 0.30], [Only 25 questions; the best variant (F1 0.35) was chosen after seeing results.],
+    [Does the analyzer read Python correctly?], [Yes], [100.0% of 4,596 definitions and 96.8% of 633 import links match], [An import-resolution fix was added after a first comparison.],
   )
 ]
 
-#tbl([The same on the ten post-hoc JavaScript repositories (locate 145, dependency 85, impact 78) and four Python repositories (120, 59, 60).])[
-  #table(
-    columns: (1.4fr, 1fr, 1fr, 1fr),
-    align: (left, center, center, center),
-    stroke: 0.4pt + luma(170),
-    table.header[System][Locate][Dependency][Impact],
-    table.cell(colspan: 4)[*JavaScript, post-hoc*],
-    [BM25], [0.862 / 0.923], [0.565 / 0.686], [0.493 / 0.416],
-    [Vector (LSA)], [0.497 / 0.628], [0.259 / 0.395], [0.325 / 0.301],
-    [Graph], [0.517 / 0.626], [1.000 / 1.000], [0.882 / 0.907],
-    [Hybrid], [0.579 / 0.706], [0.776 / 0.872], [0.897 / 0.887],
-    [Hybrid + BM25], [0.697 / 0.799], [0.882 / 0.931], [0.877 / 0.874],
-    table.cell(colspan: 4)[*Python*],
-    [BM25], [0.758 / 0.851], [0.695 / 0.814], [0.303 / 0.431],
-    [Vector (LSA)], [0.450 / 0.580], [0.458 / 0.586], [0.240 / 0.365],
-    [Graph], [0.300 / 0.500], [0.949 / 0.949], [0.606 / 0.938],
-    [Hybrid], [0.558 / 0.683], [0.881 / 0.919], [0.609 / 0.927],
-    [Hybrid + BM25], [0.683 / 0.793], [0.898 / 0.940], [0.605 / 0.923],
-  )
+== 5.1 Hybrid retrieval (RQ1)
+
+#tbl([Retrieval on the five held-out JavaScript repositories. Reading across: for implementation questions BM25 is best, for "who imports" the graph, and for "what is affected" the fused rankings. Percentages and scores are averages over the questions.])[
+  #retrieval-heldout
+]
+
+#tbl([The same comparison on JavaScript repositories used earlier in the study and on four Python repositories. The pattern is the same: BM25 wins on implementation questions and the graph ranker wins on import questions.])[
+  #retrieval-other
 ]
 
 #figure(image("figures/retrieval_js.png", width: 100%), caption: [Retrieval on five held-out JavaScript repositories (mean with 95% bootstrap interval; higher is better). BM25 wins on locate; the graph ranker wins on dependency; fusion helps on impact but not beyond the graph ranker.])
@@ -122,21 +154,8 @@ The named file is removed from every ranking. Locate and dependency use Hit\@k a
 
 == 5.2 Graph Path Pruning (RQ2)
 
-#tbl([Execution-flow reconstruction on the 25 held-out flows. Mean F1 with 95% bootstrap interval. The primary variant was declared before the held-out run; pruner-hybrid is a post-hoc variant.])[
-  #table(
-    columns: (2fr, 0.8fr, 0.8fr, 1.5fr, 1fr),
-    align: (left, center, center, center, center),
-    stroke: 0.4pt + luma(170),
-    table.header[System][Precision][Recall][F1][Edges returned],
-    [Unpruned 2-hop BFS], [0.051], [0.380], [0.081 \[0.032, 0.146\]], [15.7],
-    [Top-3 edges by path words], [0.267], [0.360], [0.300 \[0.181, 0.423\]], [2.2],
-    [Top-3 edges by BM25 relevance], [0.227], [0.300], [0.256 \[0.160, 0.355\]], [2.9],
-    [Pruner, path relevance], [0.080], [0.073], [0.072 \[0.013, 0.144\]], [0.5],
-    [*Pruner, BM25 relevance (primary)*], [0.173], [0.240], [0.200 \[0.096, 0.320\]], [1.9],
-    [Pruner, hybrid relevance (post hoc)], [0.307], [0.433], [0.353 \[0.251, 0.463\]], [3.0],
-    [Primary without role hierarchy], [0.173], [0.240], [0.200 \[0.096, 0.320\]], [1.9],
-    [Primary without continuity], [0.227], [0.320], [0.264 \[0.144, 0.392\]], [1.9],
-  )
+#tbl([Execution-flow reconstruction on the 25 held-out flows. A flow question asks which file-to-file dependency edges carry a behaviour. "Edges returned" is the average number of edges a method outputs; the ideal answer has two or three. The best F1 is bold on green.])[
+  #flows-held-out
 ]
 
 #figure(image("figures/flows.png", width: 100%), caption: [Execution-flow reconstruction on the 25 held-out flows. Left: F1 with 95% bootstrap interval. Right: edges returned per question. Pruning shrinks the output by about 88%, but only the post-hoc hybrid variant (hatched) is above the simple top-3 baselines, and not significantly.])
@@ -151,16 +170,8 @@ The named file is removed from every ranking. Locate and dependency use Hit\@k a
 
 == 5.3 Multi-language analysis (RQ3)
 
-#tbl([Analyzer accuracy against independent oracles. Imports: file-to-file pairs. Symbols: Python function, method and class definitions found by `ast`.])[
-  #table(
-    columns: (1.6fr, 1fr, 1fr, 1fr),
-    align: (left, center, center, center),
-    stroke: 0.4pt + luma(170),
-    table.header[Measure][Oracle items][Recall][Precision],
-    [Python definitions (4 repos)], [4,596], [1.000], [1.000],
-    [Python imports (4 repos)], [633], [0.968], [0.995],
-    [JavaScript imports (15 repos)], [1,516], [0.985], [0.999],
-  )
+#tbl([How well the analyzer reproduces independent reference tools. "Found" is the share of the reference items the analyzer also reports; "correct when reported" is the share of what it reports that the reference confirms.])[
+  #accuracy
 ]
 
 #figure(image("figures/accuracy.png", width: 100%), caption: [Import-edge recall per repository against the independent oracles. The vertical axis starts at 0.85 to make differences visible.])
@@ -212,6 +223,7 @@ python run_retrieval.py                                             # out/hybrid
 python run_flows.py                                                 # out/flows_tables.md
 python run_accuracy.py                                              # out/accuracy_tables.md
 python make_figures.py                                              # paper/figures/*.png (needs matplotlib)
+python make_tables.py                                               # paper/tables.typ
 ```
 
 Component locations: `apps/ai-service/src/repository/python_lang.py` (Python extractors), `resolver.py` (import resolution), `src/retrieval/filegraph.py`, `hybrid.py`, `lsa.py`, `pruner.py`; tests in `apps/ai-service/tests/test_python_lang.py` and `test_flow_retrieval.py`.
