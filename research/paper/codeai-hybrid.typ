@@ -108,6 +108,10 @@ The named file is removed from every ranking. Locate and dependency use Hit\@k a
   )
 ]
 
+#figure(image("figures/retrieval_js.png", width: 100%), caption: [Retrieval on five held-out JavaScript repositories (mean with 95% bootstrap interval; higher is better). BM25 wins on locate; the graph ranker wins on dependency; fusion helps on impact but not beyond the graph ranker.])
+
+#figure(image("figures/retrieval_py.png", width: 100%), caption: [The same comparison on four Python repositories. The pattern matches JavaScript.])
+
 *Locate.* BM25 is the best ranker on all three groups. On the held-out JavaScript repositories the hybrid's MRR is 0.280 below BM25's (95% CI \[−0.373, −0.188\], p < 0.0001); on Python it is 0.167 below (\[−0.232, −0.103\]). Fusing BM25 into the hybrid recovers part of the gap but not all of it (held-out −0.168, p = 0.0003). The hybrid beats the vector ranker alone on the post-hoc JavaScript (+0.078, p = 0.009) and Python sets (+0.104, p = 0.003) but not on the held-out set (+0.020, \[−0.082, 0.120\], p = 0.71).
 
 *Dependency.* The structural ranker is best: on held-out repositories MRR is 0.974 against 0.640 for BM25 (+0.333, p < 0.0001). The hybrid beats BM25 and the vector ranker by wide margins but is not better than the graph ranker it contains (−0.059, \[−0.134, 0.010\], p = 0.14). This category is nearly a lookup in the import graph, and the oracle derives importers from the same relation, so the graph ranker's score largely measures analyzer accuracy (Section 5.3), not retrieval skill.
@@ -135,6 +139,8 @@ The named file is removed from every ranking. Locate and dependency use Hit\@k a
   )
 ]
 
+#figure(image("figures/flows.png", width: 100%), caption: [Execution-flow reconstruction on the 25 held-out flows. Left: F1 with 95% bootstrap interval. Right: edges returned per question. Pruning shrinks the output by about 88%, but only the post-hoc hybrid variant (hatched) is above the simple top-3 baselines, and not significantly.])
+
 *Fan-out.* The primary pruner returns 87.8% fewer edges than unpruned BFS (1.9 against 15.7 per question). Its F1 is higher than BFS (+0.119, \[−0.009, 0.259\], p = 0.097) but the difference is not significant at the 0.05 level.
 
 *Against simple baselines.* The primary pruner is below the top-3-by-path-words baseline (−0.100, \[−0.280, 0.079\], p = 0.30) and below the top-3-by-BM25 baseline (−0.056, p = 0.31); neither difference is significant, and neither comparison supports the pruner. On the four JavaScript library questions the primary variant returned no edge at all, because reciprocal-rank relevance is smaller than path-word overlap and few edges reach the fixed threshold; this is a defect of the scoring scale, left unfixed so the held-out result stays untouched.
@@ -156,6 +162,8 @@ The named file is removed from every ranking. Locate and dependency use Hit\@k a
     [JavaScript imports (15 repos)], [1,516], [0.985], [0.999],
   )
 ]
+
+#figure(image("figures/accuracy.png", width: 100%), caption: [Import-edge recall per repository against the independent oracles. The vertical axis starts at 0.85 to make differences visible.])
 
 Per Python repository, import recall is 0.922 (`requests`), 0.983 (`click`), 0.963 (`flask`) and 1.000 (`httpx`). The analyzer's first Python resolver searched only ancestor directories for package roots and recovered 0.637 of the pairs; it missed imports of a package that lives in a sibling source tree, such as `import click` in `examples/` when the package is at `src/click`. We added a dotted-path suffix fallback after seeing this comparison, so the 0.968 figure is not a blind result. Remaining JavaScript misses are mostly `export … from` re-exports, which the graph records as exports. Analysis took 0.1 s to 5.4 s per repository, and no repository failed.
 
@@ -203,6 +211,7 @@ python build_questions_v3.py                                        # data/quest
 python run_retrieval.py                                             # out/hybrid_tables.md
 python run_flows.py                                                 # out/flows_tables.md
 python run_accuracy.py                                              # out/accuracy_tables.md
+python make_figures.py                                              # paper/figures/*.png (needs matplotlib)
 ```
 
 Component locations: `apps/ai-service/src/repository/python_lang.py` (Python extractors), `resolver.py` (import resolution), `src/retrieval/filegraph.py`, `hybrid.py`, `lsa.py`, `pruner.py`; tests in `apps/ai-service/tests/test_python_lang.py` and `test_flow_retrieval.py`.
