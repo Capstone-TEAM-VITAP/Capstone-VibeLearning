@@ -1,0 +1,652 @@
+{
+ "id": "self:B1",
+ "query": "Trace what happens when a user connects a GitHub repository by URL.",
+ "gold": [
+  [
+   "apps/backend/src/routes/repo.routes.js",
+   "apps/backend/src/controllers/repo.controller.js"
+  ],
+  [
+   "apps/backend/src/controllers/repo.controller.js",
+   "apps/backend/src/services/repo.service.js"
+  ],
+  [
+   "apps/backend/src/services/repo.service.js",
+   "apps/backend/src/services/git.service.js"
+  ]
+ ],
+ "bfs": [
+  [
+   "apps/ai-service/src/repository/__init__.py",
+   "apps/ai-service/src/repository/pipeline.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/architecture.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/graph.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/graph_ir.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/models.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/parser.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/relationships.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/resolver.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/scanner.py"
+  ],
+  [
+   "apps/ai-service/src/repository/pipeline.py",
+   "apps/ai-service/src/repository/symbols.py"
+  ],
+  [
+   "apps/backend/src/repositories/user.repository.js",
+   "apps/backend/src/config/db.js"
+  ]
+ ],
+ "pruned_hybrid": [
+  [
+   "apps/backend/src/controllers/repo.controller.js",
+   "apps/backend/src/services/repo.service.js"
+  ],
+  [
+   "apps/backend/src/services/repo.service.js",
+   "apps/backend/src/repositories/repository.repository.js"
+  ],
+  [
+   "apps/backend/src/services/repo.service.js",
+   "apps/backend/src/repositories/user.repository.js"
+  ]
+ ],
+ "roles": {
+  ".vscode/tasks.json": [
+   "unknown"
+  ],
+  "README.MD": [
+   "unknown"
+  ],
+  "apps/ai-service/docs/repository-analysis-api.md": [
+   "repository"
+  ],
+  "apps/ai-service/src/__init__.py": [
+   "unknown"
+  ],
+  "apps/ai-service/src/main.py": [
+   "entrypoint",
+   "route"
+  ],
+  "apps/ai-service/src/repository/__init__.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/architecture.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/graph.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/graph_ir.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/ignore.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/models.py": [
+   "model",
+   "repository"
+  ],
+  "apps/ai-service/src/repository/parser.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/pipeline.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/relationships.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/resolver.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/scanner.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/repository/symbols.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/retrieval/__init__.py": [
+   "unknown"
+  ],
+  "apps/ai-service/src/retrieval/chunker.py": [
+   "repository"
+  ],
+  "apps/ai-service/src/retrieval/context.py": [
+   "unknown"
+  ],
+  "apps/ai-service/src/retrieval/embeddings.py": [
+   "unknown"
+  ],
+  "apps/ai-service/src/retrieval/index.py": [
+   "entrypoint"
+  ],
+  "apps/ai-service/src/retrieval/pipeline.py": [
+   "repository"
+  ],
+  "apps/ai-service/tests/__init__.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/retrieval/__init__.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/retrieval/test_chunker.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/retrieval/test_context.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/retrieval/test_embeddings.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/retrieval/test_index.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/retrieval/test_pipeline.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/test_api.py": [
+   "repository",
+   "test"
+  ],
+  "apps/ai-service/tests/test_architecture.py": [
+   "model",
+   "repository",
+   "test"
+  ],
+  "apps/ai-service/tests/test_graph.py": [
+   "repository",
+   "test"
+  ],
+  "apps/ai-service/tests/test_graph_ir.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/test_health.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/test_parser.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/test_pipeline.py": [
+   "repository",
+   "test"
+  ],
+  "apps/ai-service/tests/test_relationships.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/test_resolver.py": [
+   "repository",
+   "test"
+  ],
+  "apps/ai-service/tests/test_scanner.py": [
+   "test"
+  ],
+  "apps/ai-service/tests/test_symbols.py": [
+   "test"
+  ],
+  "apps/backend/index.js": [
+   "entrypoint"
+  ],
+  "apps/backend/migrations/app/refs/db.json": [
+   "unknown"
+  ],
+  "apps/backend/migrations/snapshots/2a2d0d1936ea4bfb13a044c0b8d5b41b82e5cfadb232659fa48c297e35d75fd5/contract.d.ts": [
+   "unknown"
+  ],
+  "apps/backend/migrations/snapshots/2a2d0d1936ea4bfb13a044c0b8d5b41b82e5cfadb232659fa48c297e35d75fd5/contract.json": [
+   "unknown"
+  ],
+  "apps/backend/migrations/snapshots/524108cf8bf03b9b5aaf13a96137e5b610355e1e7f0cca00668f9cc793876d21/contract.d.ts": [
+   "unknown"
+  ],
+  "apps/backend/migrations/snapshots/524108cf8bf03b9b5aaf13a96137e5b610355e1e7f0cca00668f9cc793876d21/contract.json": [
+   "unknown"
+  ],
+  "apps/backend/migrations/snapshots/6fa4ead28dd627366156e4e3480b9fda30a3225289bcc4c8a104da5a4e9d56bd/contract.d.ts": [
+   "unknown"
+  ],
+  "apps/backend/migrations/snapshots/6fa4ead28dd627366156e4e3480b9fda30a3225289bcc4c8a104da5a4e9d56bd/contract.json": [
+   "unknown"
+  ],
+  "apps/backend/migrations/snapshots/ecba3b173c5a62430c5df0397e8f5f5a85f8c2743d2412d0fd414bfb34e00f13/contract.d.ts": [
+   "unknown"
+  ],
+  "apps/backend/migrations/snapshots/ecba3b173c5a62430c5df0397e8f5f5a85f8c2743d2412d0fd414bfb34e00f13/contract.json": [
+   "unknown"
+  ],
+  "apps/backend/package.json": [
+   "unknown"
+  ],
+  "apps/backend/prisma.config.ts": [
+   "config"
+  ],
+  "apps/backend/prisma/contract.d.ts": [
+   "unknown"
+  ],
+  "apps/backend/prisma/contract.json": [
+   "unknown"
+  ],
+  "apps/backend/scratch_analysis.js": [
+   "repository"
+  ],
+  "apps/backend/src/app.js": [
+   "entrypoint",
+   "route"
+  ],
+  "apps/backend/src/config/db.js": [
+   "config"
+  ],
+  "apps/backend/src/controllers/analysis.controller.js": [
+   "controller"
+  ],
+  "apps/backend/src/controllers/chat.controller.js": [
+   "controller"
+  ],
+  "apps/backend/src/controllers/learning.controller.js": [
+   "controller"
+  ],
+  "apps/backend/src/controllers/project.controller.js": [
+   "controller"
+  ],
+  "apps/backend/src/controllers/repo.controller.js": [
+   "controller",
+   "repository"
+  ],
+  "apps/backend/src/controllers/webhook.controller.js": [
+   "controller"
+  ],
+  "apps/backend/src/middleware/auth.middleware.js": [
+   "middleware"
+  ],
+  "apps/backend/src/middleware/error.middleware.js": [
+   "middleware"
+  ],
+  "apps/backend/src/middleware/validate.middleware.js": [
+   "middleware"
+  ],
+  "apps/backend/src/repositories/job.repository.js": [
+   "repository"
+  ],
+  "apps/backend/src/repositories/learning.repository.js": [
+   "repository"
+  ],
+  "apps/backend/src/repositories/project.repository.js": [
+   "repository"
+  ],
+  "apps/backend/src/repositories/repository.repository.js": [
+   "repository"
+  ],
+  "apps/backend/src/repositories/snapshot.repository.js": [
+   "repository"
+  ],
+  "apps/backend/src/repositories/user.repository.js": [
+   "repository"
+  ],
+  "apps/backend/src/routes/auth.routes.js": [
+   "route"
+  ],
+  "apps/backend/src/routes/project.routes.js": [
+   "route"
+  ],
+  "apps/backend/src/routes/repo.routes.js": [
+   "repository",
+   "route"
+  ],
+  "apps/backend/src/routes/webhook.routes.js": [
+   "route"
+  ],
+  "apps/backend/src/services/ai.service.js": [
+   "service"
+  ],
+  "apps/backend/src/services/analysis.service.js": [
+   "service"
+  ],
+  "apps/backend/src/services/chat.service.js": [
+   "service"
+  ],
+  "apps/backend/src/services/git.service.js": [
+   "service"
+  ],
+  "apps/backend/src/services/learning.service.js": [
+   "service"
+  ],
+  "apps/backend/src/services/project.service.js": [
+   "service"
+  ],
+  "apps/backend/src/services/repo.service.js": [
+   "repository",
+   "service"
+  ],
+  "apps/backend/src/services/retrieval.service.js": [
+   "service"
+  ],
+  "apps/backend/src/utils/diff.js": [
+   "utility"
+  ],
+  "apps/backend/src/utils/errors.js": [
+   "utility"
+  ],
+  "apps/backend/src/utils/github.js": [
+   "utility"
+  ],
+  "apps/backend/src/utils/response.js": [
+   "utility"
+  ],
+  "apps/backend/src/utils/time.js": [
+   "utility"
+  ],
+  "apps/backend/src/validators/chat.validator.js": [
+   "unknown"
+  ],
+  "apps/backend/src/validators/learning.validator.js": [
+   "unknown"
+  ],
+  "apps/backend/src/validators/project.validator.js": [
+   "unknown"
+  ],
+  "apps/backend/src/validators/repo.validator.js": [
+   "repository"
+  ],
+  "apps/backend/tests/chat.test.js": [
+   "test"
+  ],
+  "apps/backend/tests/diff.test.js": [
+   "test"
+  ],
+  "apps/backend/tests/git-resolve.test.js": [
+   "test"
+  ],
+  "apps/backend/tests/github.test.js": [
+   "test"
+  ],
+  "apps/backend/tests/graph-integration.test.js": [
+   "test"
+  ],
+  "apps/backend/tests/learning.test.js": [
+   "test"
+  ],
+  "apps/backend/tests/retrieval.test.js": [
+   "test"
+  ],
+  "apps/backend/tests/time.test.js": [
+   "test"
+  ],
+  "apps/backend/tests/validate.test.js": [
+   "test"
+  ],
+  "apps/frontend/README.md": [
+   "unknown"
+  ],
+  "apps/frontend/components.json": [
+   "component"
+  ],
+  "apps/frontend/eslint.config.js": [
+   "config"
+  ],
+  "apps/frontend/index.html": [
+   "unknown"
+  ],
+  "apps/frontend/jsconfig.json": [
+   "config"
+  ],
+  "apps/frontend/package.json": [
+   "unknown"
+  ],
+  "apps/frontend/src/App.css": [
+   "unknown"
+  ],
+  "apps/frontend/src/App.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/AIAssistant.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/AIAssistant.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/AnalysisDemo.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ArchitectureOverview.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/ArchitectureOverview.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/Blocks.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/Blocks.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/CodeGraphNode.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/CodeGraphView.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/CodeGraphView.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/DependencyHealth.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/DependencyHealth.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/GraphNodeInspector.css": [
+   "component",
+   "test"
+  ],
+  "apps/frontend/src/components/GraphNodeInspector.jsx": [
+   "component",
+   "test"
+  ],
+  "apps/frontend/src/components/Header.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/Header.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/IntelligenceSummary.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/IntelligenceSummary.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/LearningView.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/LearningView.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/MetricStrip.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/MetricStrip.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/RecentActivity.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/RecentActivity.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/RepoConnectForm.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/RepoList.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ReposSection.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/RepositoryOverviewCard.css": [
+   "component",
+   "repository"
+  ],
+  "apps/frontend/src/components/RepositoryOverviewCard.jsx": [
+   "component",
+   "repository"
+  ],
+  "apps/frontend/src/components/RepositorySelectorDropdown.css": [
+   "component",
+   "repository"
+  ],
+  "apps/frontend/src/components/RepositorySelectorDropdown.jsx": [
+   "component",
+   "repository"
+  ],
+  "apps/frontend/src/components/RepositoryTree.css": [
+   "component",
+   "repository"
+  ],
+  "apps/frontend/src/components/RepositoryTree.jsx": [
+   "component",
+   "repository"
+  ],
+  "apps/frontend/src/components/Sidebar.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/Sidebar.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/SnapshotPanel.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ThemeToggle.css": [
+   "component"
+  ],
+  "apps/frontend/src/components/ThemeToggle.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/avatar.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/badge.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/button.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/card.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/input.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/label.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/progress.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/separator.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/skeleton.jsx": [
+   "component"
+  ],
+  "apps/frontend/src/components/ui/utils.js": [
+   "component",
+   "utility"
+  ],
+  "apps/frontend/src/index.css": [
+   "unknown"
+  ],
+  "apps/frontend/src/lib/utils.js": [
+   "utility"
+  ],
+  "apps/frontend/src/main.jsx": [
+   "component",
+   "entrypoint"
+  ],
+  "apps/frontend/src/pages/Dashboard.css": [
+   "component"
+  ],
+  "apps/frontend/src/pages/Dashboard.jsx": [
+   "component",
+   "repository"
+  ],
+  "apps/frontend/src/services/api.js": [
+   "service"
+  ],
+  "apps/frontend/src/services/theme.js": [
+   "service"
+  ],
+  "apps/frontend/vite.config.js": [
+   "config"
+  ],
+  "docs/api-contract.md": [
+   "unknown"
+  ],
+  "docs/architecture.md": [
+   "unknown"
+  ],
+  "infra/scripts/createFileStructure.js": [
+   "unknown"
+  ],
+  "package.json": [
+   "unknown"
+  ],
+  "research/PLAN.md": [
+   "unknown"
+  ],
+  "research/data/questions.json": [
+   "unknown"
+  ],
+  "research/legacy/chat.service.v1.js": [
+   "service"
+  ],
+  "research/out/analysis_stats.json": [
+   "unknown"
+  ],
+  "research/out/rq1_raw.json": [
+   "unknown"
+  ],
+  "research/out/rq1_tables.md": [
+   "unknown"
+  ],
+  "research/out/rq3_offline.md": [
+   "unknown"
+  ],
+  "research/out/rq4_import_accuracy.md": [
+   "unknown"
+  ],
+  "research/out/rq4_raw.json": [
+   "unknown"
+  ],
+  "research/out/v1/analysis_stats.json": [
+   "unknown"
+  ],
+  "research/repos.json": [
+   "unknown"
+  ],
+  "research/scripts/analyze_repos.py": [
+   "unknown"
+  ]
+ }
+}
