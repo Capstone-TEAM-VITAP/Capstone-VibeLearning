@@ -521,6 +521,24 @@ def _walk_for_calls_and_refs(
         # --- Emit a CALLS relationship for the callee ---
         if callee is not None:
             callee_name = _callee_name(callee)
+            if callee_name == "require":
+                # CommonJS: ``require("./mod")`` is recorded as a module-level
+                # import (no symbol binding, like a side-effect import) so the
+                # resolver can link the two files.
+                req_path = _require_module_path(args)
+                if req_path is not None:
+                    results.append(
+                        Relationship(
+                            kind=RelationshipKind.IMPORTS,
+                            source_path=path,
+                            source_position=_pos(node.start_point),  # type: ignore[attr-defined]
+                            target_name="",
+                            module_path=req_path,
+                            alias=None,
+                            is_default=False,
+                            is_namespace=False,
+                        )
+                    )
             if callee_name:
                 results.append(
                     Relationship(
@@ -609,6 +627,21 @@ def _walk_for_calls_and_refs(
             _walk_for_calls_and_refs(child, path, inside_declaration=inside_declaration)
         )
     return results
+
+
+def _require_module_path(args: object | None) -> str | None:
+    """Return the string literal passed to ``require(...)``, or ``None``.
+
+    Only a single plain string argument counts; dynamic expressions such as
+    ``require(name)`` or template strings are not statically resolvable.
+    """
+    if args is None:
+        return None
+    named = [c for c in args.children if c.is_named]  # type: ignore[attr-defined]
+    if len(named) != 1 or named[0].type != "string":  # type: ignore[attr-defined]
+        return None
+    module_path = _module_path_from_string_node(named[0])
+    return module_path or None
 
 
 def _callee_name(callee: object) -> str | None:

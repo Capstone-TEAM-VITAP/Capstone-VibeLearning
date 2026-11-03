@@ -20,3 +20,8 @@ apps/ai-service/.venv/
 apps/ai-service/__pycache__/
 apps/ai-service/**/__pycache__/
 .pytest_cache/
+
+# research data (re-fetch with research/scripts)
+research/data/repos/
+research/out/graphs/
+research/out/v1/graphs/

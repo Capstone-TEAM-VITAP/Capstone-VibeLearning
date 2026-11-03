@@ -162,6 +162,37 @@ describe("Offline question fallback", () => {
   });
 });
 
+describe("Offline question fallback (quality rules)", () => {
+  const files = ["a", "b", "c", "d", "e", "f"].map((n) => ({
+    id: `file:src/${n}.js`, type: "file", label: `${n}.js`, metadata: { path: `src/${n}.js` },
+  }));
+  const fn = (name, file, line) => ({
+    id: `symbol:${file}:${name}:${line}:0`, type: "function", label: name,
+    metadata: { name, path: file, start_line: line, end_line: line + 2 },
+  });
+
+  it("skips names defined in more than one file", () => {
+    const graph = { nodes: [...files, fn("shared", "src/a.js", 1), fn("shared", "src/b.js", 1), fn("unique", "src/c.js", 1)] };
+    const out = buildOfflineQuestions(graph, 5);
+    assert.equal(out.length, 1);
+    assert.match(out[0].prompt, /unique/);
+  });
+
+  it("skips names shorter than three characters and never repeats a name", () => {
+    const graph = { nodes: [...files, fn("ab", "src/a.js", 1), fn("alpha", "src/a.js", 5), fn("alpha", "src/a.js", 9)] };
+    const out = buildOfflineQuestions(graph, 5);
+    assert.equal(out.length, 1);
+    assert.match(out[0].prompt, /alpha/);
+  });
+
+  it("cycles the correct-answer position across A-D", () => {
+    const graph = { nodes: [...files, ...["one", "two", "three", "four", "five"].map((n, i) => fn(n, `src/${"abcdef"[i]}.js`, 1))] };
+    const out = buildOfflineQuestions(graph, 4);
+    assert.deepEqual(out.map((q) => q.answerIndex).sort(), [0, 1, 2, 3]);
+    for (const q of out) assert.equal(new Set(q.options).size, 4);
+  });
+});
+
 describe("Answer grading", () => {
   const questions = [
     { id: "q1", answerIndex: 2 },

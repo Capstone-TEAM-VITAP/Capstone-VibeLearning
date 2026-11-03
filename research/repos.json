@@ -1,0 +1,57 @@
+{
+  "dev": [
+    "hackathon-starter",
+    "koa",
+    "react-redux-realworld-example-app"
+  ],
+  "test": [
+    "express",
+    "hapi",
+    "axios",
+    "react-boilerplate",
+    "node-fetch",
+    "passport",
+    "connect"
+  ],
+  "urls": {
+    "express": "https://github.com/expressjs/express",
+    "koa": "https://github.com/koajs/koa",
+    "hapi": "https://github.com/hapijs/hapi",
+    "axios": "https://github.com/axios/axios",
+    "hackathon-starter": "https://github.com/sahat/hackathon-starter",
+    "react-redux-realworld-example-app": "https://github.com/gothinkster/react-redux-realworld-example-app",
+    "react-boilerplate": "https://github.com/react-boilerplate/react-boilerplate",
+    "node-fetch": "https://github.com/node-fetch/node-fetch",
+    "passport": "https://github.com/jaredhanson/passport",
+    "connect": "https://github.com/senchalabs/connect",
+    "request": "https://github.com/request/request",
+    "winston": "https://github.com/winstonjs/winston",
+    "mocha": "https://github.com/mochajs/mocha",
+    "redux-saga": "https://github.com/redux-saga/redux-saga",
+    "body-parser": "https://github.com/expressjs/body-parser"
+  },
+  "shas": {
+    "express": "43fca52d28a422c8be48fd489cbd4f2d6152bab6",
+    "koa": "b7ead6f7a2bb56e2948b1c5e1cca77483e89c885",
+    "hapi": "9358b480889c2c858aa7ca276125977ce62e22c1",
+    "axios": "7324e94d8a7b5156a4baf3c86c8b5daa242daee3",
+    "hackathon-starter": "fb53b17c28c99e6fbcd78106930c6e9b403eb9ec",
+    "react-redux-realworld-example-app": "ee72eba4056392c95a27bc48d385d3f54ba38a18",
+    "react-boilerplate": "d19099afeff64ecfb09133c06c1cb18c0d40887e",
+    "node-fetch": "8b3320d2a7c07bce4afc6b2bf6c3bbddda85b01f",
+    "passport": "217018dbc46dcd4118dd6f2c60c8d97010c587f8",
+    "connect": "98ab0c435852b311ed57fe48a1846c2dae84e266",
+    "request": "3c0cddc7c8eb60b470e9519da85896ed7ee0081e",
+    "winston": "ff0b79de8562bb322c390fbc82fe71c11f373428",
+    "mocha": "5b5afa7b12e3f76f4e0c6afa12e960c0b378358c",
+    "redux-saga": "85d12182b0aad927ae5fc26f0640be0839b2221c",
+    "body-parser": "67d27df4986c068e9ee051efa94c216062c5cdb8"
+  },
+  "test2": [
+    "request",
+    "winston",
+    "mocha",
+    "redux-saga",
+    "body-parser"
+  ]
+}
