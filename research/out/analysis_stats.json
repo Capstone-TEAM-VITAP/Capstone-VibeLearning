@@ -1,7 +1,7 @@
 {
   "hackathon-starter": {
     "ok": true,
-    "seconds": 2.209,
+    "seconds": 2.318,
     "nodes": 1182,
     "edges": 4479,
     "node_types": {
@@ -31,7 +31,7 @@
   },
   "koa": {
     "ok": true,
-    "seconds": 1.066,
+    "seconds": 1.028,
     "nodes": 536,
     "edges": 2428,
     "node_types": {
@@ -60,7 +60,7 @@
   },
   "react-redux-realworld-example-app": {
     "ok": true,
-    "seconds": 0.279,
+    "seconds": 0.314,
     "nodes": 284,
     "edges": 808,
     "node_types": {
@@ -89,7 +89,7 @@
   },
   "express": {
     "ok": true,
-    "seconds": 2.468,
+    "seconds": 2.747,
     "nodes": 1070,
     "edges": 5579,
     "node_types": {
@@ -122,7 +122,7 @@
   },
   "hapi": {
     "ok": true,
-    "seconds": 3.978,
+    "seconds": 5.497,
     "nodes": 587,
     "edges": 6005,
     "node_types": {
@@ -151,7 +151,7 @@
   },
   "axios": {
     "ok": true,
-    "seconds": 5.41,
+    "seconds": 6.998,
     "nodes": 2486,
     "edges": 9365,
     "node_types": {
@@ -184,7 +184,7 @@
   },
   "react-boilerplate": {
     "ok": true,
-    "seconds": 1.169,
+    "seconds": 1.577,
     "nodes": 1131,
     "edges": 2987,
     "node_types": {
@@ -217,7 +217,7 @@
   },
   "node-fetch": {
     "ok": true,
-    "seconds": 0.941,
+    "seconds": 0.967,
     "nodes": 339,
     "edges": 1026,
     "node_types": {
@@ -246,7 +246,7 @@
   },
   "passport": {
     "ok": true,
-    "seconds": 1.12,
+    "seconds": 1.392,
     "nodes": 198,
     "edges": 804,
     "node_types": {
@@ -272,7 +272,7 @@
   },
   "connect": {
     "ok": true,
-    "seconds": 0.115,
+    "seconds": 0.143,
     "nodes": 77,
     "edges": 221,
     "node_types": {
@@ -296,7 +296,7 @@
   },
   "request": {
     "ok": true,
-    "seconds": 1.398,
+    "seconds": 1.651,
     "nodes": 906,
     "edges": 4512,
     "node_types": {
@@ -323,7 +323,7 @@
   },
   "winston": {
     "ok": true,
-    "seconds": 0.904,
+    "seconds": 1.067,
     "nodes": 607,
     "edges": 2339,
     "node_types": {
@@ -353,7 +353,7 @@
   },
   "mocha": {
     "ok": true,
-    "seconds": 1.581,
+    "seconds": 1.96,
     "nodes": 1577,
     "edges": 4203,
     "node_types": {
@@ -385,7 +385,7 @@
   },
   "redux-saga": {
     "ok": true,
-    "seconds": 2.065,
+    "seconds": 2.425,
     "nodes": 1705,
     "edges": 4925,
     "node_types": {
@@ -420,7 +420,7 @@
   },
   "body-parser": {
     "ok": true,
-    "seconds": 0.568,
+    "seconds": 0.694,
     "nodes": 192,
     "edges": 975,
     "node_types": {
@@ -442,6 +442,154 @@
       "imports": 65,
       "references": 278,
       "calls": 460
+    }
+  },
+  "requests": {
+    "ok": true,
+    "seconds": 1.513,
+    "nodes": 1139,
+    "edges": 2163,
+    "node_types": {
+      "unknown": 30,
+      "utility": 4,
+      "model": 2,
+      "test": 18,
+      "entrypoint": 1,
+      "external": 71,
+      "file": 52,
+      "repository": 1,
+      "class": 96,
+      "variable": 117,
+      "function": 187,
+      "constant": 36,
+      "method": 524
+    },
+    "edge_types": {
+      "classified_as": 55,
+      "contains": 1012,
+      "imports": 661,
+      "calls": 435
+    }
+  },
+  "click": {
+    "ok": true,
+    "seconds": 3.807,
+    "nodes": 2565,
+    "edges": 4109,
+    "node_types": {
+      "unknown": 68,
+      "test": 61,
+      "utility": 3,
+      "repository_role": 3,
+      "external": 68,
+      "file": 134,
+      "repository": 1,
+      "variable": 80,
+      "class": 181,
+      "method": 489,
+      "function": 1408,
+      "constant": 69
+    },
+    "edge_types": {
+      "classified_as": 135,
+      "contains": 2361,
+      "imports": 783,
+      "calls": 830
+    }
+  },
+  "flask": {
+    "ok": true,
+    "seconds": 2.118,
+    "nodes": 2092,
+    "edges": 3081,
+    "node_types": {
+      "unknown": 44,
+      "test": 60,
+      "repository_role": 18,
+      "entrypoint": 3,
+      "config": 4,
+      "utility": 3,
+      "route": 7,
+      "external": 81,
+      "file": 113,
+      "repository": 1,
+      "variable": 127,
+      "function": 1060,
+      "class": 160,
+      "method": 402,
+      "constant": 9
+    },
+    "edge_types": {
+      "classified_as": 139,
+      "contains": 1871,
+      "imports": 779,
+      "calls": 292
+    }
+  },
+  "httpx": {
+    "ok": true,
+    "seconds": 2.163,
+    "nodes": 1617,
+    "edges": 2549,
+    "node_types": {
+      "unknown": 49,
+      "repository_role": 15,
+      "config": 2,
+      "model": 11,
+      "utility": 2,
+      "test": 38,
+      "external": 67,
+      "file": 92,
+      "repository": 1,
+      "variable": 60,
+      "function": 712,
+      "class": 107,
+      "method": 422,
+      "constant": 39
+    },
+    "edge_types": {
+      "depends_on": 4,
+      "classified_as": 117,
+      "contains": 1432,
+      "imports": 562,
+      "calls": 434
+    }
+  },
+  "capstone-self": {
+    "ok": true,
+    "seconds": 3.778,
+    "nodes": 2518,
+    "edges": 8625,
+    "node_types": {
+      "unknown": 41,
+      "repository_role": 38,
+      "entrypoint": 5,
+      "route": 6,
+      "model": 2,
+      "test": 29,
+      "config": 5,
+      "controller": 6,
+      "middleware": 3,
+      "service": 11,
+      "utility": 7,
+      "component": 53,
+      "external": 63,
+      "file": 183,
+      "repository": 1,
+      "class": 246,
+      "function": 341,
+      "variable": 55,
+      "constant": 616,
+      "method": 807
+    },
+    "edge_types": {
+      "depends_on": 104,
+      "classified_as": 206,
+      "contains": 2248,
+      "imports": 1170,
+      "references": 1578,
+      "calls": 3145,
+      "exports": 174
     }
   }
 }

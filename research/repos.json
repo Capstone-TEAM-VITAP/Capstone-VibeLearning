@@ -28,7 +28,12 @@
     "winston": "https://github.com/winstonjs/winston",
     "mocha": "https://github.com/mochajs/mocha",
     "redux-saga": "https://github.com/redux-saga/redux-saga",
-    "body-parser": "https://github.com/expressjs/body-parser"
+    "body-parser": "https://github.com/expressjs/body-parser",
+    "requests": "https://github.com/psf/requests",
+    "click": "https://github.com/pallets/click",
+    "flask": "https://github.com/pallets/flask",
+    "httpx": "https://github.com/encode/httpx",
+    "capstone-self": "local: this repository at the commit below"
   },
   "shas": {
     "express": "43fca52d28a422c8be48fd489cbd4f2d6152bab6",
@@ -45,7 +50,12 @@
     "winston": "ff0b79de8562bb322c390fbc82fe71c11f373428",
     "mocha": "5b5afa7b12e3f76f4e0c6afa12e960c0b378358c",
     "redux-saga": "85d12182b0aad927ae5fc26f0640be0839b2221c",
-    "body-parser": "67d27df4986c068e9ee051efa94c216062c5cdb8"
+    "body-parser": "67d27df4986c068e9ee051efa94c216062c5cdb8",
+    "requests": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+    "click": "2247b35ea1c47c727d7a06e51fa280e12a863ff6",
+    "flask": "49943b5a94413a530761350f04e896f76e8d620e",
+    "httpx": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+    "capstone-self": "678c912de71fcd189c0b07a88f05bcbe3a5c62fb"
   },
   "test2": [
     "request",
@@ -53,5 +63,15 @@
     "mocha",
     "redux-saga",
     "body-parser"
+  ],
+  "python": [
+    "requests",
+    "click",
+    "flask",
+    "httpx"
+  ],
+  "flow": [
+    "capstone-self",
+    "hackathon-starter"
   ]
 }

@@ -1,0 +1,3858 @@
+{
+ "dev": [
+  {
+   "id": "self:B1",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 11
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.3333333333333333,
+     "f1": 0.4,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.3333333333333333,
+     "f1": 0.25,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/repo.controller.js",
+     "apps/backend/src/services/repo.service.js"
+    ],
+    [
+     "apps/backend/src/controllers/webhook.controller.js",
+     "apps/backend/src/services/repo.service.js"
+    ],
+    [
+     "apps/backend/src/services/repo.service.js",
+     "apps/backend/src/repositories/job.repository.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:B2",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 19
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/analysis.controller.js",
+     "apps/backend/src/services/analysis.service.js"
+    ],
+    [
+     "apps/backend/src/controllers/chat.controller.js",
+     "apps/backend/src/services/chat.service.js"
+    ],
+    [
+     "apps/backend/src/controllers/repo.controller.js",
+     "apps/backend/src/services/repo.service.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:B3",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 11
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 1.0,
+     "recall": 0.6666666666666666,
+     "f1": 0.8,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.4,
+     "recall": 0.6666666666666666,
+     "f1": 0.5,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/learning.controller.js",
+     "apps/backend/src/services/learning.service.js"
+    ],
+    [
+     "apps/backend/src/services/learning.service.js",
+     "apps/backend/src/repositories/job.repository.js"
+    ],
+    [
+     "apps/backend/src/services/learning.service.js",
+     "apps/backend/src/repositories/learning.repository.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:B4",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.1111111111111111,
+     "recall": 0.6666666666666666,
+     "f1": 0.1904761904761905,
+     "n_pred": 18
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.3333333333333333,
+     "f1": 0.25,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "research/legacy/chat.service.v1.js",
+     "apps/backend/src/repositories/job.repository.js"
+    ],
+    [
+     "research/legacy/chat.service.v1.js",
+     "apps/backend/src/repositories/repository.repository.js"
+    ],
+    [
+     "research/legacy/chat.service.v1.js",
+     "apps/backend/src/repositories/snapshot.repository.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:B5",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 20
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 1.0,
+     "recall": 0.6666666666666666,
+     "f1": 0.8,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.4,
+     "recall": 0.6666666666666666,
+     "f1": 0.5,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/webhook.controller.js",
+     "apps/backend/src/services/repo.service.js"
+    ],
+    [
+     "apps/backend/src/routes/webhook.routes.js",
+     "apps/backend/src/controllers/webhook.controller.js"
+    ],
+    [
+     "apps/backend/src/services/repo.service.js",
+     "apps/backend/src/repositories/job.repository.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:B6",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.2857142857142857,
+     "recall": 0.6666666666666666,
+     "f1": 0.4,
+     "n_pred": 7
+    },
+    "overlap-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.3333333333333333,
+     "f1": 0.4,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/services/project.service.js",
+     "apps/backend/src/repositories/project.repository.js"
+    ],
+    [
+     "apps/backend/src/services/repo.service.js",
+     "apps/backend/src/repositories/project.repository.js"
+    ],
+    [
+     "apps/frontend/src/pages/Dashboard.jsx",
+     "apps/frontend/src/services/api.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:B7",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.3,
+     "recall": 1.0,
+     "f1": 0.4615384615384615,
+     "n_pred": 10
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/project.controller.js",
+     "apps/backend/src/services/project.service.js"
+    ],
+    [
+     "apps/backend/src/routes/project.routes.js",
+     "apps/backend/src/controllers/project.controller.js"
+    ],
+    [
+     "apps/backend/src/routes/repo.routes.js",
+     "apps/backend/src/controllers/analysis.controller.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:B8",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 1.0,
+     "recall": 0.5,
+     "f1": 0.6666666666666666,
+     "n_pred": 1
+    },
+    "overlap-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/ai-service/src/repository/architecture.py",
+     "apps/ai-service/src/repository/models.py"
+    ]
+   ]
+  },
+  {
+   "id": "self:B9",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 20
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.3333333333333333,
+     "f1": 0.4,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.3333333333333333,
+     "f1": 0.25,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/analysis.controller.js",
+     "apps/backend/src/services/analysis.service.js"
+    ],
+    [
+     "apps/backend/src/controllers/repo.controller.js",
+     "apps/backend/src/services/repo.service.js"
+    ],
+    [
+     "apps/backend/src/services/analysis.service.js",
+     "apps/backend/src/repositories/job.repository.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:B10",
+   "repo": "capstone-self",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.3333333333333333,
+     "f1": 0.4,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.3333333333333333,
+     "f1": 0.25,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/analysis.controller.js",
+     "apps/backend/src/services/analysis.service.js"
+    ],
+    [
+     "apps/backend/src/controllers/learning.controller.js",
+     "apps/backend/src/services/learning.service.js"
+    ],
+    [
+     "apps/backend/src/controllers/repo.controller.js",
+     "apps/backend/src/services/repo.service.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:P1",
+   "repo": "capstone-self",
+   "lang": "py",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.10714285714285714,
+     "recall": 1.0,
+     "f1": 0.19354838709677416,
+     "n_pred": 28
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.3333333333333333,
+     "f1": 0.25,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/ai-service/src/repository/pipeline.py",
+     "apps/ai-service/src/repository/models.py"
+    ],
+    [
+     "apps/ai-service/src/repository/pipeline.py",
+     "apps/ai-service/src/repository/symbols.py"
+    ],
+    [
+     "research/scripts/analyze_repos.py",
+     "apps/ai-service/src/repository/pipeline.py"
+    ]
+   ]
+  },
+  {
+   "id": "self:P2",
+   "repo": "capstone-self",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.1,
+     "recall": 1.0,
+     "f1": 0.18181818181818182,
+     "n_pred": 20
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/ai-service/src/repository/pipeline.py",
+     "apps/ai-service/src/repository/models.py"
+    ],
+    [
+     "apps/ai-service/src/repository/pipeline.py",
+     "apps/ai-service/src/repository/resolver.py"
+    ],
+    [
+     "research/scripts/analyze_repos.py",
+     "apps/ai-service/src/repository/pipeline.py"
+    ]
+   ]
+  },
+  {
+   "id": "self:P3",
+   "repo": "capstone-self",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "research/legacy/chat.service.v1.js",
+     "apps/backend/src/repositories/job.repository.js"
+    ],
+    [
+     "research/legacy/chat.service.v1.js",
+     "apps/backend/src/repositories/repository.repository.js"
+    ],
+    [
+     "research/legacy/chat.service.v1.js",
+     "apps/backend/src/repositories/snapshot.repository.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:P4",
+   "repo": "capstone-self",
+   "lang": "py",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 7
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.5,
+     "recall": 0.3333333333333333,
+     "f1": 0.4,
+     "n_pred": 2
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/learning.controller.js",
+     "apps/backend/src/services/learning.service.js"
+    ],
+    [
+     "apps/backend/src/services/learning.service.js",
+     "apps/backend/src/repositories/job.repository.js"
+    ],
+    [
+     "apps/backend/src/services/learning.service.js",
+     "apps/backend/src/repositories/learning.repository.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:P5",
+   "repo": "capstone-self",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.05,
+     "recall": 0.5,
+     "f1": 0.09090909090909091,
+     "n_pred": 20
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/backend/src/controllers/analysis.controller.js",
+     "apps/backend/src/services/analysis.service.js"
+    ],
+    [
+     "apps/backend/src/routes/repo.routes.js",
+     "apps/backend/src/controllers/analysis.controller.js"
+    ],
+    [
+     "apps/backend/src/services/analysis.service.js",
+     "apps/backend/src/repositories/job.repository.js"
+    ]
+   ]
+  },
+  {
+   "id": "self:P6",
+   "repo": "capstone-self",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.1,
+     "recall": 0.5,
+     "f1": 0.16666666666666669,
+     "n_pred": 10
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    }
+   },
+   "pruner_edges": [
+    [
+     "apps/ai-service/src/repository/resolver.py",
+     "apps/ai-service/src/repository/models.py"
+    ]
+   ]
+  },
+  {
+   "id": "hs:H1",
+   "repo": "hackathon-starter",
+   "lang": "js",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.16666666666666666,
+     "recall": 0.5,
+     "f1": 0.25,
+     "n_pred": 6
+    },
+    "overlap-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "app.js",
+     "controllers/ai-agent.js"
+    ],
+    [
+     "app.js",
+     "controllers/ai.js"
+    ],
+    [
+     "app.js",
+     "controllers/user.js"
+    ]
+   ]
+  },
+  {
+   "id": "hs:H2",
+   "repo": "hackathon-starter",
+   "lang": "js",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "app.js",
+     "controllers/ai-agent.js"
+    ],
+    [
+     "app.js",
+     "controllers/ai.js"
+    ],
+    [
+     "app.js",
+     "controllers/user.js"
+    ]
+   ]
+  },
+  {
+   "id": "hs:H3",
+   "repo": "hackathon-starter",
+   "lang": "js",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 1.0,
+     "recall": 0.5,
+     "f1": 0.6666666666666666,
+     "n_pred": 1
+    },
+    "overlap-top3": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 1.0,
+     "recall": 0.5,
+     "f1": 0.6666666666666666,
+     "n_pred": 1
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "app.js",
+     "controllers/ai-agent.js"
+    ],
+    [
+     "app.js",
+     "controllers/contact.js"
+    ],
+    [
+     "app.js",
+     "controllers/user.js"
+    ]
+   ]
+  },
+  {
+   "id": "hs:H4",
+   "repo": "hackathon-starter",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.2857142857142857,
+     "recall": 0.6666666666666666,
+     "f1": 0.4,
+     "n_pred": 7
+    },
+    "overlap-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.5,
+     "recall": 0.3333333333333333,
+     "f1": 0.4,
+     "n_pred": 2
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.3333333333333333,
+     "f1": 0.4,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.3333333333333333,
+     "f1": 0.25,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "app.js",
+     "controllers/ai-agent.js"
+    ],
+    [
+     "app.js",
+     "controllers/ai.js"
+    ],
+    [
+     "app.js",
+     "controllers/user.js"
+    ]
+   ]
+  },
+  {
+   "id": "hs:H5",
+   "repo": "hackathon-starter",
+   "lang": "js",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 1.0,
+     "recall": 0.5,
+     "f1": 0.6666666666666666,
+     "n_pred": 1
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "app.js",
+     "controllers/ai-agent.js"
+    ],
+    [
+     "app.js",
+     "controllers/ai.js"
+    ],
+    [
+     "app.js",
+     "controllers/user.js"
+    ]
+   ]
+  },
+  {
+   "id": "hs:H6",
+   "repo": "hackathon-starter",
+   "lang": "js",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 6
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "n_pred": 4
+    }
+   },
+   "pruner_edges": [
+    [
+     "app.js",
+     "controllers/api.js"
+    ],
+    [
+     "app.js",
+     "controllers/webauthn.js"
+    ],
+    [
+     "controllers/webauthn.js",
+     "models/User.js"
+    ]
+   ]
+  },
+  {
+   "id": "hs:H7",
+   "repo": "hackathon-starter",
+   "lang": "js",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 6
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "app.js",
+     "controllers/ai-agent.js"
+    ],
+    [
+     "app.js",
+     "controllers/ai.js"
+    ],
+    [
+     "app.js",
+     "controllers/api.js"
+    ]
+   ]
+  }
+ ],
+ "heldout": [
+  {
+   "id": "requests:F1",
+   "repo": "requests",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0425531914893617,
+     "recall": 1.0,
+     "f1": 0.08163265306122448,
+     "n_pred": 47
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/requests/adapters.py",
+     "src/requests/auth.py"
+    ],
+    [
+     "src/requests/auth.py",
+     "src/requests/utils.py"
+    ],
+    [
+     "src/requests/models.py",
+     "src/requests/auth.py"
+    ]
+   ]
+  },
+  {
+   "id": "requests:F2",
+   "repo": "requests",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.03333333333333333,
+     "recall": 1.0,
+     "f1": 0.06451612903225806,
+     "n_pred": 60
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/requests/adapters.py",
+     "src/requests/cookies.py"
+    ],
+    [
+     "src/requests/adapters.py",
+     "src/requests/models.py"
+    ],
+    [
+     "src/requests/sessions.py",
+     "src/requests/adapters.py"
+    ]
+   ]
+  },
+  {
+   "id": "requests:F3",
+   "repo": "requests",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.07692307692307693,
+     "recall": 0.5,
+     "f1": 0.13333333333333336,
+     "n_pred": 13
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/requests/adapters.py",
+     "src/requests/models.py"
+    ],
+    [
+     "src/requests/models.py",
+     "src/requests/exceptions.py"
+    ],
+    [
+     "src/requests/sessions.py",
+     "src/requests/models.py"
+    ]
+   ]
+  },
+  {
+   "id": "requests:F4",
+   "repo": "requests",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0425531914893617,
+     "recall": 1.0,
+     "f1": 0.08163265306122448,
+     "n_pred": 47
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.4,
+     "recall": 1.0,
+     "f1": 0.5714285714285715,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/requests/adapters.py",
+     "src/requests/auth.py"
+    ],
+    [
+     "src/requests/auth.py",
+     "src/requests/utils.py"
+    ],
+    [
+     "src/requests/sessions.py",
+     "src/requests/auth.py"
+    ]
+   ]
+  },
+  {
+   "id": "requests:F5",
+   "repo": "requests",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.058823529411764705,
+     "recall": 0.5,
+     "f1": 0.10526315789473684,
+     "n_pred": 17
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/requests/models.py",
+     "src/requests/auth.py"
+    ],
+    [
+     "src/requests/models.py",
+     "src/requests/hooks.py"
+    ],
+    [
+     "src/requests/sessions.py",
+     "src/requests/models.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F1",
+   "repo": "flask",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/flask/__init__.py",
+     "src/flask/json/__init__.py"
+    ],
+    [
+     "src/flask/config.py",
+     "src/flask/json/__init__.py"
+    ],
+    [
+     "src/flask/json/__init__.py",
+     "src/flask/globals.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F2",
+   "repo": "flask",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.08695652173913043,
+     "recall": 1.0,
+     "f1": 0.16,
+     "n_pred": 23
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.4,
+     "recall": 1.0,
+     "f1": 0.5714285714285715,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/flask/app.py",
+     "src/flask/sessions.py"
+    ],
+    [
+     "src/flask/ctx.py",
+     "src/flask/sessions.py"
+    ],
+    [
+     "src/flask/sessions.py",
+     "src/flask/json/tag.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F3",
+   "repo": "flask",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 16
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/flask/app.py",
+     "src/flask/sansio/app.py"
+    ],
+    [
+     "src/flask/sansio/app.py",
+     "src/flask/helpers.py"
+    ],
+    [
+     "src/flask/sansio/app.py",
+     "src/flask/sansio/scaffold.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F4",
+   "repo": "flask",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/flask/__init__.py",
+     "src/flask/ctx.py"
+    ],
+    [
+     "src/flask/app.py",
+     "src/flask/ctx.py"
+    ],
+    [
+     "src/flask/ctx.py",
+     "src/flask/helpers.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F5",
+   "repo": "flask",
+   "lang": "py",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.07142857142857142,
+     "recall": 1.0,
+     "f1": 0.13333333333333333,
+     "n_pred": 42
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 1.0,
+     "recall": 0.6666666666666666,
+     "f1": 0.8,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.6,
+     "recall": 1.0,
+     "f1": 0.7499999999999999,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/flask/blueprints.py",
+     "src/flask/sansio/blueprints.py"
+    ],
+    [
+     "src/flask/sansio/app.py",
+     "src/flask/sansio/blueprints.py"
+    ],
+    [
+     "src/flask/sansio/blueprints.py",
+     "src/flask/sansio/scaffold.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F6",
+   "repo": "flask",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/flask/__main__.py",
+     "src/flask/cli.py"
+    ],
+    [
+     "src/flask/blueprints.py",
+     "src/flask/cli.py"
+    ],
+    [
+     "src/flask/cli.py",
+     "src/flask/globals.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F1",
+   "repo": "httpx",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 1.0,
+     "recall": 0.5,
+     "f1": 0.6666666666666666,
+     "n_pred": 1
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 1
+    }
+   },
+   "pruner_edges": [
+    [
+     "httpx/_client.py",
+     "httpx/_exceptions.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F2",
+   "repo": "httpx",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    }
+   },
+   "pruner_edges": []
+  },
+  {
+   "id": "httpx:F3",
+   "repo": "httpx",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 8
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.4,
+     "recall": 1.0,
+     "f1": 0.5714285714285715,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "httpx/_content.py",
+     "httpx/_exceptions.py"
+    ],
+    [
+     "httpx/_content.py",
+     "httpx/_multipart.py"
+    ],
+    [
+     "httpx/_models.py",
+     "httpx/_content.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F4",
+   "repo": "httpx",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    }
+   },
+   "pruner_edges": [
+    [
+     "httpx/_api.py",
+     "httpx/_models.py"
+    ],
+    [
+     "httpx/_main.py",
+     "httpx/_models.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F5",
+   "repo": "httpx",
+   "lang": "py",
+   "n_gold": 1,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 45
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    }
+   },
+   "pruner_edges": []
+  },
+  {
+   "id": "click:F1",
+   "repo": "click",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "examples/completion/completion.py",
+     "src/click/shell_completion.py"
+    ],
+    [
+     "src/click/core.py",
+     "src/click/shell_completion.py"
+    ],
+    [
+     "src/click/shell_completion.py",
+     "src/click/utils.py"
+    ]
+   ]
+  },
+  {
+   "id": "click:F2",
+   "repo": "click",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.07407407407407407,
+     "recall": 1.0,
+     "f1": 0.13793103448275862,
+     "n_pred": 27
+    },
+    "overlap-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.2,
+     "recall": 0.5,
+     "f1": 0.28571428571428575,
+     "n_pred": 5
+    }
+   },
+   "pruner_edges": [
+    [
+     "examples/completion/completion.py",
+     "src/click/shell_completion.py"
+    ],
+    [
+     "src/click/shell_completion.py",
+     "src/click/utils.py"
+    ],
+    [
+     "src/click/types.py",
+     "src/click/shell_completion.py"
+    ]
+   ]
+  },
+  {
+   "id": "click:F3",
+   "repo": "click",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    }
+   },
+   "pruner_edges": []
+  },
+  {
+   "id": "click:F4",
+   "repo": "click",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-hybrid": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    }
+   },
+   "pruner_edges": []
+  },
+  {
+   "id": "click:F5",
+   "repo": "click",
+   "lang": "py",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.5,
+     "recall": 0.5,
+     "f1": 0.5,
+     "n_pred": 2
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.25,
+     "recall": 0.5,
+     "f1": 0.3333333333333333,
+     "n_pred": 4
+    }
+   },
+   "pruner_edges": [
+    [
+     "src/click/_termui_impl.py",
+     "src/click/_compat.py"
+    ],
+    [
+     "src/click/_termui_impl.py",
+     "src/click/exceptions.py"
+    ],
+    [
+     "src/click/termui.py",
+     "src/click/_termui_impl.py"
+    ]
+   ]
+  },
+  {
+   "id": "koa:F1",
+   "repo": "koa",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "overlap-top3": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    }
+   },
+   "pruner_edges": []
+  },
+  {
+   "id": "express:F1",
+   "repo": "express",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.5,
+     "recall": 1.0,
+     "f1": 0.6666666666666666,
+     "n_pred": 6
+    },
+    "overlap-top3": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    }
+   },
+   "pruner_edges": []
+  },
+  {
+   "id": "hapi:F1",
+   "repo": "hapi",
+   "lang": "js",
+   "n_gold": 3,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.25,
+     "recall": 1.0,
+     "f1": 0.4,
+     "n_pred": 12
+    },
+    "overlap-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-hybrid": {
+     "precision": 0.6666666666666666,
+     "recall": 0.6666666666666666,
+     "f1": 0.6666666666666666,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    }
+   },
+   "pruner_edges": []
+  },
+  {
+   "id": "hapi:F2",
+   "repo": "hapi",
+   "lang": "js",
+   "n_gold": 2,
+   "missing_gold": [],
+   "scores": {
+    "bfs2": {
+     "precision": 0.034482758620689655,
+     "recall": 0.5,
+     "f1": 0.06451612903225806,
+     "n_pred": 29
+    },
+    "overlap-top3": {
+     "precision": 0.6666666666666666,
+     "recall": 1.0,
+     "f1": 0.8,
+     "n_pred": 3
+    },
+    "relevance-top3": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-path": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-hybrid": {
+     "precision": 0.3333333333333333,
+     "recall": 0.5,
+     "f1": 0.4,
+     "n_pred": 3
+    },
+    "pruner-bm25-noroles": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-nocont": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K2": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    },
+    "pruner-bm25-K5": {
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0,
+     "n_pred": 0
+    }
+   },
+   "pruner_edges": []
+  }
+ ]
+}

@@ -13,7 +13,7 @@ OUT_SUBDIR = os.environ.get("OUT_SUBDIR", "")
 from src.repository.pipeline import analyze_repository  # noqa: E402
 
 REPOS = json.loads((ROOT / "research" / "repos.json").read_text())
-names = REPOS["dev"] + REPOS["test"] + REPOS.get("test2", [])
+names = REPOS["dev"] + REPOS["test"] + REPOS.get("test2", []) + REPOS.get("python", []) + [x for x in REPOS.get("flow", []) if x not in REPOS["dev"] + REPOS["test"] + REPOS["test2"]]
 out_dir = ROOT / "research" / "out" / OUT_SUBDIR / "graphs"
 out_dir.mkdir(parents=True, exist_ok=True)
 

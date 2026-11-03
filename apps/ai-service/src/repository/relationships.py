@@ -117,7 +117,7 @@ class Relationship:
 # Supported languages
 # ---------------------------------------------------------------------------
 
-_SUPPORTED_LANGUAGES: frozenset[str] = frozenset({"javascript"})
+_SUPPORTED_LANGUAGES: frozenset[str] = frozenset({"javascript", "python"})
 
 # ---------------------------------------------------------------------------
 # Tree-sitter parser cache (independent of parser.py cache — same grammar)
@@ -704,6 +704,11 @@ def extract_relationships(
 
     if isinstance(source, str):
         source = source.encode("utf-8")
+
+    if language == "python":
+        from .python_lang import extract_python_relationships
+
+        return extract_python_relationships(path, source)
 
     parser = _get_js_parser()
     tree = parser.parse(source)  # type: ignore[attr-defined]

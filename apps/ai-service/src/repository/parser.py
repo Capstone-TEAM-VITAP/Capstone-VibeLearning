@@ -140,8 +140,15 @@ def _load_javascript() -> object:  # returns tree_sitter.Language
     return Language(tsjs.language())
 
 
+def _load_python() -> object:  # returns tree_sitter.Language
+    import tree_sitter_python as tspy
+    from tree_sitter import Language  # type: ignore[import]
+    return Language(tspy.language())
+
+
 _LANGUAGE_LOADERS: dict[str, object] = {
     "javascript": _load_javascript,
+    "python": _load_python,
 }
 
 

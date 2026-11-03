@@ -1,0 +1,417 @@
+{
+ "_note": "Held-out flows; annotated before any relevance-aware pruner variant was run on them.",
+ "questions": [
+  {
+   "id": "requests:F1",
+   "repo": "requests",
+   "lang": "py",
+   "query": "How does a top-level request function end up sending the HTTP request?",
+   "gold": [
+    [
+     "src/requests/api.py",
+     "src/requests/sessions.py"
+    ],
+    [
+     "src/requests/sessions.py",
+     "src/requests/adapters.py"
+    ]
+   ]
+  },
+  {
+   "id": "requests:F2",
+   "repo": "requests",
+   "lang": "py",
+   "query": "How are cookies handled across requests made through a session?",
+   "gold": [
+    [
+     "src/requests/sessions.py",
+     "src/requests/cookies.py"
+    ],
+    [
+     "src/requests/models.py",
+     "src/requests/cookies.py"
+    ]
+   ]
+  },
+  {
+   "id": "requests:F3",
+   "repo": "requests",
+   "lang": "py",
+   "query": "How are failed HTTP responses and connection problems turned into exceptions?",
+   "gold": [
+    [
+     "src/requests/models.py",
+     "src/requests/exceptions.py"
+    ],
+    [
+     "src/requests/adapters.py",
+     "src/requests/exceptions.py"
+    ]
+   ]
+  },
+  {
+   "id": "requests:F4",
+   "repo": "requests",
+   "lang": "py",
+   "query": "How is authentication applied to an outgoing request?",
+   "gold": [
+    [
+     "src/requests/sessions.py",
+     "src/requests/auth.py"
+    ],
+    [
+     "src/requests/models.py",
+     "src/requests/auth.py"
+    ]
+   ]
+  },
+  {
+   "id": "requests:F5",
+   "repo": "requests",
+   "lang": "py",
+   "query": "How are response hooks registered and dispatched?",
+   "gold": [
+    [
+     "src/requests/sessions.py",
+     "src/requests/hooks.py"
+    ],
+    [
+     "src/requests/models.py",
+     "src/requests/hooks.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F1",
+   "repo": "flask",
+   "lang": "py",
+   "query": "How does the application load its configuration?",
+   "gold": [
+    [
+     "src/flask/app.py",
+     "src/flask/sansio/app.py"
+    ],
+    [
+     "src/flask/sansio/app.py",
+     "src/flask/config.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F2",
+   "repo": "flask",
+   "lang": "py",
+   "query": "How are user sessions stored in signed cookies?",
+   "gold": [
+    [
+     "src/flask/app.py",
+     "src/flask/sessions.py"
+    ],
+    [
+     "src/flask/sessions.py",
+     "src/flask/json/tag.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F3",
+   "repo": "flask",
+   "lang": "py",
+   "query": "How is JSON serialised when a view returns data?",
+   "gold": [
+    [
+     "src/flask/sansio/app.py",
+     "src/flask/json/provider.py"
+    ],
+    [
+     "src/flask/json/__init__.py",
+     "src/flask/json/provider.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F4",
+   "repo": "flask",
+   "lang": "py",
+   "query": "How is the request context created and pushed for each request?",
+   "gold": [
+    [
+     "src/flask/app.py",
+     "src/flask/ctx.py"
+    ],
+    [
+     "src/flask/ctx.py",
+     "src/flask/globals.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F5",
+   "repo": "flask",
+   "lang": "py",
+   "query": "How are blueprints registered with the application?",
+   "gold": [
+    [
+     "src/flask/blueprints.py",
+     "src/flask/sansio/blueprints.py"
+    ],
+    [
+     "src/flask/sansio/blueprints.py",
+     "src/flask/sansio/scaffold.py"
+    ],
+    [
+     "src/flask/sansio/app.py",
+     "src/flask/sansio/blueprints.py"
+    ]
+   ]
+  },
+  {
+   "id": "flask:F6",
+   "repo": "flask",
+   "lang": "py",
+   "query": "How are the built-in command line commands such as run and routes defined?",
+   "gold": [
+    [
+     "src/flask/__main__.py",
+     "src/flask/cli.py"
+    ],
+    [
+     "src/flask/app.py",
+     "src/flask/cli.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F1",
+   "repo": "httpx",
+   "lang": "py",
+   "query": "How does a client send a request through its transport?",
+   "gold": [
+    [
+     "httpx/_client.py",
+     "httpx/_transports/default.py"
+    ],
+    [
+     "httpx/_transports/default.py",
+     "httpx/_transports/base.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F2",
+   "repo": "httpx",
+   "lang": "py",
+   "query": "How are authentication flows applied to requests?",
+   "gold": [
+    [
+     "httpx/_client.py",
+     "httpx/_auth.py"
+    ],
+    [
+     "httpx/_auth.py",
+     "httpx/_models.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F3",
+   "repo": "httpx",
+   "lang": "py",
+   "query": "How is a multipart request body encoded?",
+   "gold": [
+    [
+     "httpx/_content.py",
+     "httpx/_multipart.py"
+    ],
+    [
+     "httpx/_models.py",
+     "httpx/_content.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F4",
+   "repo": "httpx",
+   "lang": "py",
+   "query": "How are compressed response bodies decoded?",
+   "gold": [
+    [
+     "httpx/_models.py",
+     "httpx/_decoders.py"
+    ],
+    [
+     "httpx/_client.py",
+     "httpx/_decoders.py"
+    ]
+   ]
+  },
+  {
+   "id": "httpx:F5",
+   "repo": "httpx",
+   "lang": "py",
+   "query": "How do the top-level helper functions use a client?",
+   "gold": [
+    [
+     "httpx/_api.py",
+     "httpx/_client.py"
+    ]
+   ]
+  },
+  {
+   "id": "click:F1",
+   "repo": "click",
+   "lang": "py",
+   "query": "How are command-line arguments parsed into option values?",
+   "gold": [
+    [
+     "src/click/core.py",
+     "src/click/parser.py"
+    ],
+    [
+     "src/click/core.py",
+     "src/click/types.py"
+    ]
+   ]
+  },
+  {
+   "id": "click:F2",
+   "repo": "click",
+   "lang": "py",
+   "query": "How is shell completion implemented?",
+   "gold": [
+    [
+     "src/click/core.py",
+     "src/click/shell_completion.py"
+    ],
+    [
+     "src/click/shell_completion.py",
+     "src/click/core.py"
+    ]
+   ]
+  },
+  {
+   "id": "click:F3",
+   "repo": "click",
+   "lang": "py",
+   "query": "How are usage errors reported to the user?",
+   "gold": [
+    [
+     "src/click/core.py",
+     "src/click/exceptions.py"
+    ],
+    [
+     "src/click/parser.py",
+     "src/click/exceptions.py"
+    ]
+   ]
+  },
+  {
+   "id": "click:F4",
+   "repo": "click",
+   "lang": "py",
+   "query": "How do the decorators create commands and options?",
+   "gold": [
+    [
+     "src/click/decorators.py",
+     "src/click/core.py"
+    ],
+    [
+     "src/click/__init__.py",
+     "src/click/decorators.py"
+    ]
+   ]
+  },
+  {
+   "id": "click:F5",
+   "repo": "click",
+   "lang": "py",
+   "query": "How does the library print prompts and progress bars?",
+   "gold": [
+    [
+     "src/click/termui.py",
+     "src/click/_termui_impl.py"
+    ],
+    [
+     "src/click/__init__.py",
+     "src/click/termui.py"
+    ]
+   ]
+  },
+  {
+   "id": "koa:F1",
+   "repo": "koa",
+   "lang": "js",
+   "query": "How does Koa create the context from the request and response objects?",
+   "gold": [
+    [
+     "lib/application.js",
+     "lib/context.js"
+    ],
+    [
+     "lib/application.js",
+     "lib/request.js"
+    ],
+    [
+     "lib/application.js",
+     "lib/response.js"
+    ]
+   ]
+  },
+  {
+   "id": "express:F1",
+   "repo": "express",
+   "lang": "js",
+   "query": "How does the express factory assemble an application with request and response objects?",
+   "gold": [
+    [
+     "lib/express.js",
+     "lib/application.js"
+    ],
+    [
+     "lib/express.js",
+     "lib/request.js"
+    ],
+    [
+     "lib/express.js",
+     "lib/response.js"
+    ]
+   ]
+  },
+  {
+   "id": "hapi:F1",
+   "repo": "hapi",
+   "lang": "js",
+   "query": "How is a route configured with authentication, validation and a handler?",
+   "gold": [
+    [
+     "lib/route.js",
+     "lib/auth.js"
+    ],
+    [
+     "lib/route.js",
+     "lib/validation.js"
+    ],
+    [
+     "lib/route.js",
+     "lib/handler.js"
+    ]
+   ]
+  },
+  {
+   "id": "hapi:F2",
+   "repo": "hapi",
+   "lang": "js",
+   "query": "How does the server hand requests to its core and route table?",
+   "gold": [
+    [
+     "lib/server.js",
+     "lib/core.js"
+    ],
+    [
+     "lib/core.js",
+     "lib/route.js"
+    ]
+   ]
+  }
+ ]
+}

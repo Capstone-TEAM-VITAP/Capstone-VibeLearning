@@ -108,7 +108,7 @@ class Symbol:
 # Supported languages
 # ---------------------------------------------------------------------------
 
-_SUPPORTED_LANGUAGES: frozenset[str] = frozenset({"javascript"})
+_SUPPORTED_LANGUAGES: frozenset[str] = frozenset({"javascript", "python"})
 
 # ---------------------------------------------------------------------------
 # Tree-sitter parser (independent cache — shares nothing with parser.py
@@ -581,6 +581,11 @@ def extract_symbols(
 
     if isinstance(source, str):
         source = source.encode("utf-8")
+
+    if language == "python":
+        from .python_lang import extract_python_symbols
+
+        return extract_python_symbols(path, source)
 
     parser = _get_js_parser()
     tree = parser.parse(source)  # type: ignore[attr-defined]
