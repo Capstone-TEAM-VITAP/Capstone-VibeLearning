@@ -6,6 +6,8 @@ import { jobRepository } from "../repositories/job.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 import { NotFoundError, BadRequestError } from "../utils/errors.js";
 import gitService from "./git.service.js";
+import { getSearchIndex, rankFilesHybrid } from "./retrieval.service.js";
+import { aiService } from "./ai.service.js";
 
 const TOKEN_PATTERN = /[A-Za-z0-9_]+/g;
 
@@ -38,9 +40,36 @@ function readCodeExcerpt(filePath, startLine = 1, endLine = 150) {
 }
 
 /**
- * Match relevant symbols and files from Graph IR based on query tokens.
+ * Read excerpts (and matching citations) for the chosen files. When a matched
+ * symbol lives in a file, the excerpt is a window around that symbol.
  */
-export function findRelevantContext(graphIr, query, snapshotDir) {
+function buildExcerpts(sortedFiles, matchedSymbols, snapshotDir) {
+  const excerpts = [];
+  const citations = [];
+  for (const relPath of sortedFiles) {
+    if (!snapshotDir) break;
+    const fullPath = path.join(snapshotDir, relPath);
+    const symInFile = matchedSymbols.find((s) => s.metadata?.path === relPath);
+    let startLine = 1;
+    let endLine = 180;
+    if (symInFile && symInFile.metadata?.start_line) {
+      startLine = Math.max(1, Number(symInFile.metadata.start_line) - 5);
+      endLine = Math.min(startLine + 120, Number(symInFile.metadata.end_line || startLine) + 40);
+    }
+    const excerpt = readCodeExcerpt(fullPath, startLine, endLine);
+    if (excerpt) {
+      excerpts.push({ path: relPath, startLine: excerpt.startLine, endLine: excerpt.endLine, content: excerpt.content });
+      citations.push({ path: relPath, startLine: excerpt.startLine, endLine: excerpt.endLine });
+    }
+  }
+  return { excerpts, citations };
+}
+
+/**
+ * Legacy name/path heuristic (v1). Kept so the research benchmark can compare
+ * the earlier behaviour with the content-aware retriever.
+ */
+export function findRelevantContextLegacy(graphIr, query, snapshotDir) {
   const queryTokens = tokenize(query);
   const lowerQuery = query.toLowerCase();
 
@@ -49,8 +78,6 @@ export function findRelevantContext(graphIr, query, snapshotDir) {
   const symbolNodes = nodes.filter((n) => n.type !== "file" && n.type !== "repository");
 
   const matchedSymbols = [];
-  const matchedFiles = new Set();
-  const citations = [];
 
   // Check for architecture intent
   const isArchitectureQuery =
@@ -58,6 +85,9 @@ export function findRelevantContext(graphIr, query, snapshotDir) {
     lowerQuery.includes("overview") ||
     lowerQuery.includes("structure") ||
     lowerQuery.includes("components");
+
+  // Whole-word match: the substring "ai" also occurs in "main", "again", "obtain".
+  const isAiQuery = /\b(ai|gpt|llm|openai)\b/.test(lowerQuery);
 
   const isApiQuery =
     lowerQuery.includes("route") ||
@@ -130,7 +160,7 @@ export function findRelevantContext(graphIr, query, snapshotDir) {
     const role = (f.architecture_role || f.metadata?.role || "").toUpperCase();
 
     // Specific intent scoring
-    if (lowerQuery.includes("ai") && (p.includes("ai") || p.includes("gpt") || p.includes("llm") || p.includes("openai"))) {
+    if (isAiQuery && (p.includes("ai")|| p.includes("gpt") || p.includes("llm") || p.includes("openai"))) {
       scoreFile(rawPath, 15);
     }
     if (isApiQuery && (role === "ROUTE" || role === "CONTROLLER" || p.includes("route") || p.includes("controller"))) {
@@ -166,38 +196,7 @@ export function findRelevantContext(graphIr, query, snapshotDir) {
     .slice(0, 7);
 
   // 3. Read actual excerpts from snapshot directory
-  const excerpts = [];
-
-  for (const relPath of sortedFiles) {
-    if (!snapshotDir) break;
-    const fullPath = path.join(snapshotDir, relPath);
-
-    // Find if a specific symbol in this file was matched
-    const symInFile = matchedSymbols.find((s) => s.metadata?.path === relPath);
-    let startLine = 1;
-    let endLine = 180;
-
-    if (symInFile && symInFile.metadata?.start_line) {
-      startLine = Math.max(1, Number(symInFile.metadata.start_line) - 5);
-      endLine = Math.min(startLine + 120, Number(symInFile.metadata.end_line || startLine) + 40);
-    }
-
-    const excerpt = readCodeExcerpt(fullPath, startLine, endLine);
-    if (excerpt) {
-      excerpts.push({
-        path: relPath,
-        startLine: excerpt.startLine,
-        endLine: excerpt.endLine,
-        content: excerpt.content,
-      });
-
-      citations.push({
-        path: relPath,
-        startLine: excerpt.startLine,
-        endLine: excerpt.endLine,
-      });
-    }
-  }
+  const { excerpts, citations } = buildExcerpts(sortedFiles, matchedSymbols, snapshotDir);
 
   // Also build architectural role summary
   const rolesSummary = {};
@@ -219,6 +218,56 @@ export function findRelevantContext(graphIr, query, snapshotDir) {
     citations,
     rolesSummary,
   };
+}
+
+const TOP_FILES = 7;
+const ARCHITECTURE_QUERY = /\b(architecture|overview|structure|components)\b/;
+
+/**
+ * Select the files and excerpts that ground an answer.
+ *
+ * Files are ranked by `rankFilesHybrid` (`retrieval.service.js`): importer
+ * questions use the dependency graph, every other question fuses the text
+ * ranking (BM25 plus a symbol bonus), the graph ranking and, when supplied,
+ * a neural embedding ranking (`options.denseRanking`, from the AI service).
+ * Without a snapshot directory there is no text to search, so this falls back
+ * to the legacy name/path heuristic. Architecture questions keep the legacy
+ * entrypoint-oriented selection because they ask about overall structure.
+ */
+export function findRelevantContext(graphIr, query, snapshotDir, { denseRanking = null } = {}) {
+  const lowerQuery = String(query || "").toLowerCase();
+  if (!snapshotDir || ARCHITECTURE_QUERY.test(lowerQuery)) {
+    return findRelevantContextLegacy(graphIr, query, snapshotDir);
+  }
+
+  const index = getSearchIndex(graphIr, snapshotDir);
+  const ranked = rankFilesHybrid(index, query, { denseRanking }).paths.slice(0, TOP_FILES);
+  if (ranked.length === 0) return findRelevantContextLegacy(graphIr, query, snapshotDir);
+
+  const symbols = findRelevantContextLegacy(graphIr, query, null);
+  const { excerpts, citations } = buildExcerpts(ranked, symbols.matchedSymbols, snapshotDir);
+  return {
+    matchedSymbols: symbols.matchedSymbols,
+    excerpts,
+    citations,
+    rolesSummary: symbols.rolesSummary,
+  };
+}
+
+/**
+ * `findRelevantContext` plus the AI service's neural ranking when it is available. Neural ranking is
+ * best effort: if it is not installed, not ready or slow, the context is the same as without it.
+ */
+export async function findRelevantContextWithDense(graphIr, query, snapshotDir, { denseRank = aiService.denseRank.bind(aiService) } = {}) {
+  let denseRanking = null;
+  if (snapshotDir && graphIr && !ARCHITECTURE_QUERY.test(String(query || "").toLowerCase())) {
+    const paths = (Array.isArray(graphIr.nodes) ? graphIr.nodes : [])
+      .filter((n) => n.type === "file")
+      .map((n) => n.metadata?.path || n.label)
+      .filter(Boolean);
+    denseRanking = await denseRank(snapshotDir, query, paths);
+  }
+  return findRelevantContext(graphIr, query, snapshotDir, { denseRanking });
 }
 
 /**
@@ -476,7 +525,7 @@ export const chatService = {
     }
 
     // Search and extract grounded context
-    const context = findRelevantContext(graphIr, message, snapshotDir);
+    const context = await findRelevantContextWithDense(graphIr, message, snapshotDir);
     const systemPrompt = buildSystemPrompt({ repo, snapshot: latestSnapshot, context });
 
     let answer = "";

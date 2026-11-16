@@ -177,3 +177,111 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
         repository_name=result.repository_name,
         ir=result.ir,
     )
+
+
+# ---------------------------------------------------------------------------
+# Optional neural dense ranking (used by the backend's chat and quiz retriever)
+# ---------------------------------------------------------------------------
+
+try:
+    from retrieval import dense as dense_retrieval
+except ImportError:
+    from src.retrieval import dense as dense_retrieval
+
+import threading
+from collections import OrderedDict
+
+DENSE_MAX_FILE_BYTES = 500_000
+DENSE_MAX_REPOS = 4
+_dense_lock = threading.Lock()
+_dense_indexes: "OrderedDict[str, Any]" = OrderedDict()  # resolved path -> DenseIndex
+_dense_building: set[str] = set()
+
+
+class DenseIndexRequest(BaseModel):
+    repository_path: str = Field(..., description="Path to a local repository snapshot")
+    paths: list[str] = Field(..., description="Repository-relative file paths to embed")
+
+
+class DenseRankRequest(BaseModel):
+    repository_path: str
+    query: str
+    top_k: int = Field(default=20, ge=1, le=200)
+
+
+def _resolve_repository(repo_path_str: str) -> Path:
+    if not repo_path_str or not repo_path_str.strip():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="repository_path is required")
+    root = get_analysis_root()
+    raw = Path(repo_path_str.strip())
+    resolved = (root / raw).resolve() if not raw.is_absolute() else raw.resolve()
+    if not is_contained_in_root(resolved, root):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Repository path is outside the trusted analysis root")
+    if not resolved.is_dir():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Repository path does not exist")
+    return resolved
+
+
+def _read_docs(root: Path, paths: list[str]) -> dict[str, str]:
+    docs: dict[str, str] = {}
+    for rel in paths:
+        full = (root / rel).resolve()
+        if not is_contained_in_root(full, root):
+            continue
+        try:
+            docs[rel] = full.read_text(encoding="utf-8", errors="ignore") if full.is_file() and full.stat().st_size <= DENSE_MAX_FILE_BYTES else ""
+        except OSError:
+            docs[rel] = ""
+    return docs
+
+
+def _build_dense_index(key: str, root: Path, paths: list[str]) -> None:
+    try:
+        index = dense_retrieval.DenseIndex(_read_docs(root, paths))
+        with _dense_lock:
+            _dense_indexes[key] = index
+            _dense_indexes.move_to_end(key)
+            while len(_dense_indexes) > DENSE_MAX_REPOS:
+                _dense_indexes.popitem(last=False)
+    except Exception as err:  # never crash the service over an optional feature
+        logger.warning("Dense index build failed: %s", sanitize_error_detail(str(err)))
+    finally:
+        with _dense_lock:
+            _dense_building.discard(key)
+
+
+@app.get("/dense/status")
+def dense_status() -> dict[str, Any]:
+    """Whether neural ranking is installed in this deployment."""
+    return {"available": dense_retrieval.available(), "model": dense_retrieval.MODEL_NAME}
+
+
+@app.post("/dense/index", status_code=status.HTTP_202_ACCEPTED)
+def dense_index(request: DenseIndexRequest) -> dict[str, str]:
+    """Start embedding a repository snapshot in the background (idempotent)."""
+    if not dense_retrieval.available():
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Neural ranking is not installed")
+    root = _resolve_repository(request.repository_path)
+    key = str(root)
+    with _dense_lock:
+        if key in _dense_indexes:
+            return {"status": "ready"}
+        if key in _dense_building:
+            return {"status": "building"}
+        _dense_building.add(key)
+    threading.Thread(target=_build_dense_index, args=(key, root, list(request.paths)), daemon=True).start()
+    return {"status": "building"}
+
+
+@app.post("/dense/rank")
+def dense_rank(request: DenseRankRequest) -> dict[str, Any]:
+    """Rank the files of an indexed snapshot for a question; 409 if the snapshot is not indexed yet."""
+    if not dense_retrieval.available():
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Neural ranking is not installed")
+    key = str(_resolve_repository(request.repository_path))
+    with _dense_lock:
+        index = _dense_indexes.get(key)
+        building = key in _dense_building
+    if index is None:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="building" if building else "not_indexed")
+    return {"paths": index.rank(request.query)[: request.top_k]}

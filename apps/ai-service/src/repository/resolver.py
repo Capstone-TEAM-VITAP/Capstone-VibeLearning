@@ -498,6 +498,178 @@ def _resolve_default_export(
 
 
 # ---------------------------------------------------------------------------
+# Python import resolution
+# ---------------------------------------------------------------------------
+
+
+_PY_SUFFIX_CACHE: dict[int, tuple[dict[str, FileInfo], dict[str, list[str]]]] = {}
+
+
+def _python_suffix_index(files_by_path: dict[str, FileInfo]) -> dict[str, list[str]]:
+    """Map every dotted-path suffix of every ``.py`` file to the files it could name."""
+    cached = _PY_SUFFIX_CACHE.get(id(files_by_path))
+    if cached is not None and cached[0] is files_by_path:
+        return cached[1]
+    index: dict[str, list[str]] = {}
+    for path in files_by_path:
+        if not path.endswith(".py"):
+            continue
+        parts = path[:-3].split("/")
+        if parts[-1] == "__init__":
+            parts = parts[:-1]
+        for i in range(len(parts)):
+            index.setdefault(".".join(parts[i:]), []).append(path)
+    if len(_PY_SUFFIX_CACHE) > 8:
+        _PY_SUFFIX_CACHE.clear()
+    _PY_SUFFIX_CACHE[id(files_by_path)] = (files_by_path, index)
+    return index
+
+
+def _shared_dir_depth(a: str, b: str) -> int:
+    n = 0
+    for x, y in zip(a.split("/")[:-1], b.split("/")[:-1]):
+        if x != y:
+            break
+        n += 1
+    return n
+
+
+def _python_suffix_lookup(
+    source_file: str,
+    parts: list[str],
+    files_by_path: dict[str, FileInfo],
+) -> str | None:
+    """
+    Fallback for absolute imports whose package root is not an ancestor of the importer, such as
+    ``import click`` in ``examples/x.py`` when the package lives at ``src/click``. A dotted name
+    matches a file whose path ends with the same components; ties go to the file sharing the most
+    leading directories with the importer. Ambiguity is resolved deterministically by path.
+    """
+    candidates = [
+        c
+        for c in _python_suffix_index(files_by_path).get(".".join(parts), [])
+        if c != source_file
+    ]
+    if not candidates:
+        return None
+    return max(sorted(candidates), key=lambda c: _shared_dir_depth(source_file, c))
+
+
+def _python_module_to_file(
+    source_file: str,
+    module: str,
+    files_by_path: dict[str, FileInfo],
+) -> str | None:
+    """
+    Resolve a Python module specifier to a repository file, or ``None``.
+
+    *module* is the text after ``from`` / ``import`` with leading dots kept
+    (``".scanner"``, ``"..a.b"``, ``"pkg.mod"``). Relative specifiers start at
+    the importing file's directory and go up one level per extra dot. Absolute
+    specifiers are tried against the repository root and every ancestor
+    directory of the importing file, because source roots (``src/``, an app
+    folder) are not declared anywhere we can read.
+    """
+    dots = len(module) - len(module.lstrip("."))
+    rest = module.lstrip(".")
+    parts = [p for p in rest.split(".") if p]
+    src_dir = posixpath.dirname(source_file)
+
+    if dots:
+        base = src_dir
+        for _ in range(dots - 1):
+            base = posixpath.dirname(base)
+        bases = [base]
+    else:
+        bases = []
+        cur = src_dir
+        while True:
+            bases.append(cur)
+            if not cur:
+                break
+            cur = posixpath.dirname(cur)
+
+    if not dots and parts:
+        found = _python_suffix_lookup(source_file, parts, files_by_path)
+        if found is not None:
+            return found
+
+    for base in bases:
+        joined = posixpath.join(base, *parts) if parts else base
+        candidate = posixpath.normpath(joined) if joined else ""
+        if candidate in (".", ""):
+            candidate = ""
+        if not parts:
+            init = posixpath.join(candidate, "__init__.py") if candidate else "__init__.py"
+            if init in files_by_path:
+                return init
+            continue
+        if not _is_safe_path(candidate):
+            continue
+        for option in (candidate + ".py", posixpath.join(candidate, "__init__.py")):
+            if option in files_by_path:
+                return option
+    return None
+
+
+def _resolve_python_import(
+    rel: Relationship,
+    index: RepositoryIndex,
+) -> ResolvedRelationship:
+    """Resolve one Python IMPORTS relationship (see ``_python_module_to_file``)."""
+    module = rel.module_path or ""
+    files = index.files_by_path
+    is_relative = module.startswith(".")
+
+    if rel.is_namespace and rel.target_name != "*":
+        # ``import a.b`` or ``import a.b as c``: the whole module.
+        target = _python_module_to_file(rel.source_path, module, files)
+        status_none = ResolutionStatus.UNRESOLVED if is_relative else ResolutionStatus.EXTERNAL
+    else:
+        # ``from m import name``: ``name`` may be a submodule or an attribute of ``m``.
+        sub = module + ("" if module.endswith(".") else ".") + rel.target_name
+        sub_file = (
+            _python_module_to_file(rel.source_path, sub, files) if rel.target_name != "*" else None
+        )
+        if sub_file is not None:
+            return ResolvedRelationship(
+                source_relationship=rel,
+                status=ResolutionStatus.RESOLVED_FILE,
+                target_path=sub_file,
+                target_symbol_id=None,
+                notes=f"Imported submodule {rel.target_name!r}",
+            )
+        target = _python_module_to_file(rel.source_path, module, files)
+        status_none = ResolutionStatus.UNRESOLVED if is_relative else ResolutionStatus.EXTERNAL
+        if target is not None and rel.target_name != "*":
+            sym = _resolve_named_export(rel.target_name, target, index, frozenset())
+            if sym is not None:
+                return ResolvedRelationship(
+                    source_relationship=rel,
+                    status=ResolutionStatus.RESOLVED,
+                    target_path=target,
+                    target_symbol_id=_symbol_to_id(sym),
+                    notes=f"Resolved via alias {rel.alias!r}" if rel.alias else None,
+                )
+
+    if target is None:
+        return ResolvedRelationship(
+            source_relationship=rel,
+            status=status_none,
+            target_path=None,
+            target_symbol_id=None,
+            notes=f"Python module not found in repository: {module!r}",
+        )
+    return ResolvedRelationship(
+        source_relationship=rel,
+        status=ResolutionStatus.RESOLVED_FILE,
+        target_path=target,
+        target_symbol_id=None,
+        notes="Python module resolved to file",
+    )
+
+
+# ---------------------------------------------------------------------------
 # Single-relationship resolution
 # ---------------------------------------------------------------------------
 
@@ -520,6 +692,10 @@ def _resolve_single_import(
                                else RESOLVED_FILE
     """
     module_path = rel.module_path
+
+    source_info = index.files_by_path.get(rel.source_path)
+    if source_info is not None and source_info.language == "python" and module_path is not None:
+        return _resolve_python_import(rel, index)
 
     # --- Guard: missing module path ---
     if module_path is None:

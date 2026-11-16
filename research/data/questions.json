@@ -1,0 +1,5572 @@
+[
+ {
+  "id": "hackathon-starter:loc:0",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Rate limiting configuration This is a basic rate limiting configuration.",
+  "gold": [
+   "app.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "RATE_LIMIT_GLOBAL"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:1",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Sign in with LinkedIn using OAuth2.",
+  "gold": [
+   "config/passport.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "linkedinStrategyConfig"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:2",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Removes all valid sessions for a given user",
+  "gold": [
+   "models/Session.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "removeSessionByUserId"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:3",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Clean up orphaned temp sessions whose Express sessions have expired.",
+  "gold": [
+   "controllers/ai-agent.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "sendSSE"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:4",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Sign in with Discord using OAuth2Strategy.",
+  "gold": [
+   "config/passport.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "discordStrategyConfig"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:5",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "HTTP statuses that should never be retried.",
+  "gold": [
+   "controllers/ai.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "RETRY_STATUS_NO_RETRY"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:6",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Request logging configuration / const { morganLogger } = require('./config/morgan'); /** Create Express server.",
+  "gold": [
+   "app.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "app"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:7",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Decide whether an error from the HF client should short-circuit retries.",
+  "gold": [
+   "controllers/ai.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isNonRetryableError"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:8",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Common function to handle OAuth2 token processing and saving user data.",
+  "gold": [
+   "config/passport.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "saveOAuth2UserTokens"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:9",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "GET /ai/ai-agent AI Agent Customer Service Demo Loads prior messages from MongoDB checkpoint for both: - Authenticated users: Thread ID = userId (persists across browser sessions) - Unauthenticated users: Thread ID = tem",
+  "gold": [
+   "controllers/ai-agent.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createAIAgent"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:10",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Helper: Extract status from graph node updates",
+  "gold": [
+   "controllers/ai-agent.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "extractStatus"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:11",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Configure or update the vector index dimensions based on our embedding results Do this only once.",
+  "gold": [
+   "controllers/ai.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "configureVectorIndex"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:12",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "GET /ai List of AI examples.",
+  "gold": [
+   "controllers/ai.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "initializeEmbeddingCaches"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:13",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Token Revocation Config Providers with a revocation endpoint.",
+  "gold": [
+   "config/passport.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "providerRevocationConfig"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:14",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Initialize the MongoDB collection for RAG",
+  "gold": [
+   "controllers/ai.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "setupRagCollection"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:15",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Load environment variables from .env file, where API keys and passwords are configured.",
+  "gold": [
+   "app.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "secureTransfer"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:16",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Sign in with Microsoft using OAuth2Strategy.",
+  "gold": [
+   "config/passport.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "microsoftStrategyConfig"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:17",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "POST /signup Create a new local account.",
+  "gold": [
+   "controllers/user.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "sendTwoFactorEmail"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:18",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Helper function to update or set a vector index in MongoDB Atlas with a new index definition",
+  "gold": [
+   "controllers/ai.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "setVectorIndex"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:19",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Sign in using Email and Password.",
+  "gold": [
+   "config/passport.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "handleAuthLogin"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:20",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Helper function to handle OAuth errors with provider-specific messages.",
+  "gold": [
+   "config/passport.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "authError2Flash"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:21",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Helper to send a passwordless signup link for new users.",
+  "gold": [
+   "controllers/user.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "sendPasswordlessSignupLink"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:22",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Helper: Extract AI chat messages from model_request node",
+  "gold": [
+   "controllers/ai-agent.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "extractAIMessages"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:23",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Load a PDF file and return one Document per page using pdfjs-dist directly.",
+  "gold": [
+   "controllers/ai.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "loadPdfDocuments"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:loc:24",
+  "repo": "hackathon-starter",
+  "type": "locate",
+  "query": "Run fn with exponential-backoff retries on transient failures.",
+  "gold": [
+   "controllers/ai.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "withRetry"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:0",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import config/flash.js?",
+  "gold": [
+   "app.js",
+   "test/flash.test.js"
+  ],
+  "exclude": [
+   "config/flash.js"
+  ],
+  "meta": {
+   "target": "config/flash.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:1",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import config/passport.js?",
+  "gold": [
+   "app.js",
+   "config/token-revocation.js",
+   "test/passport.test.js",
+   "test/token-revocation.test.js"
+  ],
+  "exclude": [
+   "config/passport.js"
+  ],
+  "meta": {
+   "target": "config/passport.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:2",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import config/morgan.js?",
+  "gold": [
+   "app.js",
+   "test/morgan.test.js"
+  ],
+  "exclude": [
+   "config/morgan.js"
+  ],
+  "meta": {
+   "target": "config/morgan.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:3",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import test/tools/simple-link-image-check.js?",
+  "gold": [
+   "test/app-links.test.js",
+   "test/docs-links.test.js"
+  ],
+  "exclude": [
+   "test/tools/simple-link-image-check.js"
+  ],
+  "meta": {
+   "target": "test/tools/simple-link-image-check.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:4",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import config/token-revocation.js?",
+  "gold": [
+   "controllers/user.js",
+   "test/token-revocation.test.js"
+  ],
+  "exclude": [
+   "config/token-revocation.js"
+  ],
+  "meta": {
+   "target": "config/token-revocation.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:5",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import config/cacheBust.js?",
+  "gold": [
+   "app.js",
+   "test/cacheBust.test.js"
+  ],
+  "exclude": [
+   "config/cacheBust.js"
+  ],
+  "meta": {
+   "target": "config/cacheBust.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:6",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import models/Session.js?",
+  "gold": [
+   "controllers/user.js",
+   "test/session.test.js"
+  ],
+  "exclude": [
+   "models/Session.js"
+  ],
+  "meta": {
+   "target": "models/Session.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:7",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import config/nodemailer.js?",
+  "gold": [
+   "controllers/contact.js",
+   "controllers/user.js",
+   "test/nodemailer.test.js"
+  ],
+  "exclude": [
+   "config/nodemailer.js"
+  ],
+  "meta": {
+   "target": "config/nodemailer.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:8",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import controllers/webauthn.js?",
+  "gold": [
+   "app.js",
+   "test/webauthn.test.js"
+  ],
+  "exclude": [
+   "controllers/webauthn.js"
+  ],
+  "meta": {
+   "target": "controllers/webauthn.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:9",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import controllers/ai-agent.js?",
+  "gold": [
+   "app.js",
+   "controllers/user.js"
+  ],
+  "exclude": [
+   "controllers/ai-agent.js"
+  ],
+  "meta": {
+   "target": "controllers/ai-agent.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:10",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import models/User.js?",
+  "gold": [
+   "config/passport.js",
+   "controllers/user.js",
+   "controllers/webauthn.js",
+   "test/models.test.js",
+   "test/passport.test.js"
+  ],
+  "exclude": [
+   "models/User.js"
+  ],
+  "meta": {
+   "target": "models/User.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:11",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import controllers/contact.js?",
+  "gold": [
+   "app.js",
+   "test/contact.test.js"
+  ],
+  "exclude": [
+   "controllers/contact.js"
+  ],
+  "meta": {
+   "target": "controllers/contact.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "hackathon-starter:dep:12",
+  "repo": "hackathon-starter",
+  "type": "dependency",
+  "query": "Which files import controllers/user.js?",
+  "gold": [
+   "app.js",
+   "test/user.test.js"
+  ],
+  "exclude": [
+   "controllers/user.js"
+  ],
+  "meta": {
+   "target": "controllers/user.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:0",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Checks if the request is writable.",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "inspect"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:1",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Return accepted encodings or best fit based on encodings.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "acceptsEncodings"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:2",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Split a comma-separated value string into an array of values, with an optional limit.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "splitCommaSeparatedValues"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:3",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Flush any set headers and begin the body",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "flushHeaders"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:4",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Return the request mime type void of parameters such as \"charset\".",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "get"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:5",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Returns true if the header identified by name is currently set in the outgoing headers.",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "has"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:6",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Return accepted charsets or best fit based on charsets.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "acceptsCharsets"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:7",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Custom inspection implementation for node 6+.",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "if"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:8",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Check if the request is fresh, aka Last-Modified and/or the ETag still match.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "accepts"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:9",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Help TS users comply to CommonJS, ESM, bundler mismatch.",
+  "gold": [
+   "lib/application.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "respond"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:10",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Set Content-Type response header with type through mime.lookup() when it does not contain a charset.",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "is"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:11",
+  "repo": "koa",
+  "type": "locate",
+  "query": "return current context from async local storage / get currentContext () { if (this.ctxStorage) return this.ctxStorage.getStore() } /** Handle request in callback.",
+  "gold": [
+   "lib/application.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "handleRequest"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:12",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Return accepted languages or best fit based on langs.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "acceptsLanguages"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:loc:13",
+  "repo": "koa",
+  "type": "locate",
+  "query": "Check if the incoming request contains the \"Content-Type\" header field and if it contains any of the given mime types.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "is"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:dep:0",
+  "repo": "koa",
+  "type": "dependency",
+  "query": "Which files import lib/is-stream.js?",
+  "gold": [
+   "lib/application.js",
+   "lib/response.js"
+  ],
+  "exclude": [
+   "lib/is-stream.js"
+  ],
+  "meta": {
+   "target": "lib/is-stream.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:dep:1",
+  "repo": "koa",
+  "type": "dependency",
+  "query": "Which files import lib/only.js?",
+  "gold": [
+   "lib/application.js",
+   "lib/request.js",
+   "lib/response.js"
+  ],
+  "exclude": [
+   "lib/only.js"
+  ],
+  "meta": {
+   "target": "lib/only.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:dep:2",
+  "repo": "koa",
+  "type": "dependency",
+  "query": "Which files import lib/search-params.js?",
+  "gold": [
+   "__tests__/lib/search-params.test.js",
+   "lib/request.js"
+  ],
+  "exclude": [
+   "lib/search-params.js"
+  ],
+  "meta": {
+   "target": "lib/search-params.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "koa:dep:3",
+  "repo": "koa",
+  "type": "dependency",
+  "query": "Which files import lib/context.js?",
+  "gold": [
+   "__tests__/context/inspect.test.js",
+   "lib/application.js"
+  ],
+  "exclude": [
+   "lib/context.js"
+  ],
+  "meta": {
+   "target": "lib/context.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "react-redux-realworld-example-app:dep:0",
+  "repo": "react-redux-realworld-example-app",
+  "type": "dependency",
+  "query": "Which files import src/components/Profile.js?",
+  "gold": [
+   "src/components/App.js",
+   "src/components/ProfileFavorites.js"
+  ],
+  "exclude": [
+   "src/components/Profile.js"
+  ],
+  "meta": {
+   "target": "src/components/Profile.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "react-redux-realworld-example-app:dep:1",
+  "repo": "react-redux-realworld-example-app",
+  "type": "dependency",
+  "query": "Which files import src/store.js?",
+  "gold": [
+   "src/components/App.js",
+   "src/index.js"
+  ],
+  "exclude": [
+   "src/store.js"
+  ],
+  "meta": {
+   "target": "src/store.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "react-redux-realworld-example-app:dep:2",
+  "repo": "react-redux-realworld-example-app",
+  "type": "dependency",
+  "query": "Which files import src/components/ArticleList.js?",
+  "gold": [
+   "src/components/Home/MainView.js",
+   "src/components/Profile.js"
+  ],
+  "exclude": [
+   "src/components/ArticleList.js"
+  ],
+  "meta": {
+   "target": "src/components/ArticleList.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "react-redux-realworld-example-app:dep:3",
+  "repo": "react-redux-realworld-example-app",
+  "type": "dependency",
+  "query": "Which files import src/components/ListErrors.js?",
+  "gold": [
+   "src/components/Editor.js",
+   "src/components/Login.js",
+   "src/components/Register.js",
+   "src/components/Settings.js"
+  ],
+  "exclude": [
+   "src/components/ListErrors.js"
+  ],
+  "meta": {
+   "target": "src/components/ListErrors.js"
+  },
+  "split": "dev"
+ },
+ {
+  "id": "express:loc:0",
+  "repo": "express",
+  "type": "locate",
+  "query": "Set _Content-Type_ response header with type through mime.contentType() when it does not contain \"/\", or set the Content-Type to type otherwise.",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "res.format"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:1",
+  "repo": "express",
+  "type": "locate",
+  "query": "Parse accept params str returning an object with .value, .quality and .params.",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "acceptParams"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:2",
+  "repo": "express",
+  "type": "locate",
+  "query": "Transfer the file at the given path as an attachment.",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "res.download"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:3",
+  "repo": "express",
+  "type": "locate",
+  "query": "Set the charset in a given Content-Type string.",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "exports.setCharset"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:4",
+  "repo": "express",
+  "type": "locate",
+  "query": "Compile \"proxy trust\" value to function.",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "exports.compileTrust"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:5",
+  "repo": "express",
+  "type": "locate",
+  "query": "Check if the given encodings are accepted.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "req.acceptsEncodings"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:6",
+  "repo": "express",
+  "type": "locate",
+  "query": "Dispatch a req, res pair into the application.",
+  "gold": [
+   "lib/application.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "app.handle"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:7",
+  "repo": "express",
+  "type": "locate",
+  "query": "Create an ETag generator function, generating ETags with the given options.",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createETagGenerator"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:8",
+  "repo": "express",
+  "type": "locate",
+  "query": "Check if the given langs are acceptable, otherwise you should respond with 406 \"Not Acceptable\".",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "req.acceptsLanguages"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:9",
+  "repo": "express",
+  "type": "locate",
+  "query": "Variable for trust proxy inheritance back-compat",
+  "gold": [
+   "lib/application.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "trustProxyDefaultSymbol"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:10",
+  "repo": "express",
+  "type": "locate",
+  "query": "Check if the incoming request contains the \"Content-Type\" header field, and it contains the given mime type.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "req.is"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:11",
+  "repo": "express",
+  "type": "locate",
+  "query": "Compile \"query parser\" value to function.",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "exports.compileQueryParser"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:12",
+  "repo": "express",
+  "type": "locate",
+  "query": "Transfer the file at the given path.",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "res.sendFile"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:13",
+  "repo": "express",
+  "type": "locate",
+  "query": "Normalize types, for example \"html\" becomes \"text/html\".",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "exports.normalizeTypes"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:14",
+  "repo": "express",
+  "type": "locate",
+  "query": "Parse an extended query string with qs.",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "parseExtendedQueryString"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:15",
+  "repo": "express",
+  "type": "locate",
+  "query": "Set header field to val, or pass an object of header fields.",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "res.get"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:16",
+  "repo": "express",
+  "type": "locate",
+  "query": "/ is a specific security mitigation for \"Rosetta Flash JSONP abuse\" // the typeof check is just to reduce client error noise body = '/**/ typeof ' + callback + ' === \\'function\\' && ' + callback + '(' + body + ');'; } re",
+  "gold": [
+   "lib/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "res.sendStatus"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:17",
+  "repo": "express",
+  "type": "locate",
+  "query": "Parse the query string of req.url.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:18",
+  "repo": "express",
+  "type": "locate",
+  "query": "Return the protocol string \"http\" or \"https\" when requested with TLS.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:19",
+  "repo": "express",
+  "type": "locate",
+  "query": "Return the remote address from the trusted proxy.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:20",
+  "repo": "express",
+  "type": "locate",
+  "query": "When \"trust proxy\" is set, trusted proxy addresses + client.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:21",
+  "repo": "express",
+  "type": "locate",
+  "query": "Parse the \"Host\" header field to a host.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:22",
+  "repo": "express",
+  "type": "locate",
+  "query": "Parse the \"Host\" header field to a hostname.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:23",
+  "repo": "express",
+  "type": "locate",
+  "query": "Check if the request is fresh, aka Last-Modified or the ETag still match.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:24",
+  "repo": "express",
+  "type": "locate",
+  "query": "Check if the request is stale, aka \"Last-Modified\" and / or the \"ETag\" for the resource has changed.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:25",
+  "repo": "express",
+  "type": "locate",
+  "query": "Check if the request was an _XMLHttpRequest_.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:26",
+  "repo": "express",
+  "type": "locate",
+  "query": "Helper function for creating a getter on an object.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "defineGetter"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:loc:27",
+  "repo": "express",
+  "type": "locate",
+  "query": "Checks if the specified charsets are acceptable based on the request's Accept-Charset header.",
+  "gold": [
+   "lib/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "req.acceptsCharsets"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:dep:0",
+  "repo": "express",
+  "type": "dependency",
+  "query": "Which files import test/support/tmpl.js?",
+  "gold": [
+   "test/app.render.js",
+   "test/res.render.js"
+  ],
+  "exclude": [
+   "test/support/tmpl.js"
+  ],
+  "meta": {
+   "target": "test/support/tmpl.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:dep:1",
+  "repo": "express",
+  "type": "dependency",
+  "query": "Which files import test/support/utils.js?",
+  "gold": [
+   "test/acceptance/cookies.js",
+   "test/app.router.js",
+   "test/express.static.js",
+   "test/req.fresh.js",
+   "test/res.download.js",
+   "test/res.jsonp.js",
+   "test/res.redirect.js",
+   "test/res.send.js",
+   "test/res.sendFile.js",
+   "test/res.vary.js"
+  ],
+  "exclude": [
+   "test/support/utils.js"
+  ],
+  "meta": {
+   "target": "test/support/utils.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:dep:2",
+  "repo": "express",
+  "type": "dependency",
+  "query": "Which files import examples/content-negotiation/db.js?",
+  "gold": [
+   "examples/content-negotiation/index.js",
+   "examples/content-negotiation/users.js"
+  ],
+  "exclude": [
+   "examples/content-negotiation/db.js"
+  ],
+  "meta": {
+   "target": "examples/content-negotiation/db.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:dep:3",
+  "repo": "express",
+  "type": "dependency",
+  "query": "Which files import examples/mvc/db.js?",
+  "gold": [
+   "examples/mvc/controllers/pet/index.js",
+   "examples/mvc/controllers/user-pet/index.js",
+   "examples/mvc/controllers/user/index.js"
+  ],
+  "exclude": [
+   "examples/mvc/db.js"
+  ],
+  "meta": {
+   "target": "examples/mvc/db.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:dep:4",
+  "repo": "express",
+  "type": "dependency",
+  "query": "Which files import lib/utils.js?",
+  "gold": [
+   "lib/application.js",
+   "lib/response.js",
+   "test/Route.js",
+   "test/Router.js",
+   "test/app.router.js",
+   "test/res.send.js",
+   "test/utils.js"
+  ],
+  "exclude": [
+   "lib/utils.js"
+  ],
+  "meta": {
+   "target": "lib/utils.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:dep:5",
+  "repo": "express",
+  "type": "dependency",
+  "query": "Which files import lib/express.js?",
+  "gold": [
+   "examples/route-map/index.js",
+   "examples/route-middleware/index.js",
+   "index.js"
+  ],
+  "exclude": [
+   "lib/express.js"
+  ],
+  "meta": {
+   "target": "lib/express.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "express:dep:6",
+  "repo": "express",
+  "type": "dependency",
+  "query": "Which files import lib/view.js?",
+  "gold": [
+   "lib/application.js",
+   "test/view.js"
+  ],
+  "exclude": [
+   "lib/view.js"
+  ],
+  "meta": {
+   "target": "lib/view.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:0",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/validation.js?",
+  "gold": [
+   "lib/core.js",
+   "lib/route.js",
+   "lib/server.js"
+  ],
+  "exclude": [
+   "lib/validation.js"
+  ],
+  "meta": {
+   "target": "lib/validation.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:1",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/auth.js?",
+  "gold": [
+   "lib/core.js",
+   "lib/route.js"
+  ],
+  "exclude": [
+   "lib/auth.js"
+  ],
+  "meta": {
+   "target": "lib/auth.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:2",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/streams.js?",
+  "gold": [
+   "lib/response.js",
+   "lib/route.js"
+  ],
+  "exclude": [
+   "lib/streams.js"
+  ],
+  "meta": {
+   "target": "lib/streams.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:3",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import test/common.js?",
+  "gold": [
+   "test/core.js",
+   "test/request.js",
+   "test/transmit.js"
+  ],
+  "exclude": [
+   "test/common.js"
+  ],
+  "meta": {
+   "target": "test/common.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:4",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/toolkit.js?",
+  "gold": [
+   "lib/core.js",
+   "lib/request.js",
+   "lib/server.js"
+  ],
+  "exclude": [
+   "lib/toolkit.js"
+  ],
+  "meta": {
+   "target": "lib/toolkit.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:5",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/response.js?",
+  "gold": [
+   "lib/core.js",
+   "test/response.js"
+  ],
+  "exclude": [
+   "lib/response.js"
+  ],
+  "meta": {
+   "target": "lib/response.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:6",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/ext.js?",
+  "gold": [
+   "lib/core.js",
+   "lib/route.js",
+   "lib/server.js"
+  ],
+  "exclude": [
+   "lib/ext.js"
+  ],
+  "meta": {
+   "target": "lib/ext.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:7",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/config.js?",
+  "gold": [
+   "lib/auth.js",
+   "lib/core.js",
+   "lib/methods.js",
+   "lib/route.js",
+   "lib/server.js",
+   "lib/transmit.js"
+  ],
+  "exclude": [
+   "lib/config.js"
+  ],
+  "meta": {
+   "target": "lib/config.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:8",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/request.js?",
+  "gold": [
+   "lib/auth.js",
+   "lib/core.js"
+  ],
+  "exclude": [
+   "lib/request.js"
+  ],
+  "meta": {
+   "target": "lib/request.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:9",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/cors.js?",
+  "gold": [
+   "lib/core.js",
+   "lib/request.js",
+   "lib/route.js",
+   "lib/server.js"
+  ],
+  "exclude": [
+   "lib/cors.js"
+  ],
+  "meta": {
+   "target": "lib/cors.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "hapi:dep:10",
+  "repo": "hapi",
+  "type": "dependency",
+  "query": "Which files import lib/route.js?",
+  "gold": [
+   "lib/core.js",
+   "lib/cors.js",
+   "lib/server.js"
+  ],
+  "exclude": [
+   "lib/route.js"
+  ],
+  "meta": {
+   "target": "lib/route.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:0",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Estimate data: URL byte lengths *without* allocating large buffers.",
+  "gold": [
+   "lib/helpers/estimateDataURLDecodedBytes.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isHexDigit"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:1",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determine if a value is a non-null object",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isUndefined"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:2",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Config-specific merge-function which creates a new config-object by merging two configuration objects together.",
+  "gold": [
+   "lib/core/mergeConfig.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "mergeConfig"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:3",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Convert a data object to FormData",
+  "gold": [
+   "lib/helpers/toFormData.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "toFormData"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:4",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Returns new array from array like object or null if failed",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "toArray"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:5",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determines if a value is thenable (has then and catch methods).",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isThenable"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:6",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determine if a value is a Blob",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isBlob"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:7",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determine if a value is a Boolean",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isBoolean"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:8",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Checking if the Uint8Array exists and if it does, it returns a function that checks if the thing passed in is an instance of Uint8Array",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "forEachEntry"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:9",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Estimate the Buffer backing allocation used after Node's percent-decoding step.",
+  "gold": [
+   "lib/helpers/estimateDataURLDecodedBytes.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "estimateDataURLBufferAllocation"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:10",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Estimate the percent-decoded payload size used by Fetch data: URLs.",
+  "gold": [
+   "lib/helpers/estimateDataURLDecodedBytes.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "estimateDataURLDecodedBytes"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:11",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determine if a value is a plain Object",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isPlainObject"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:12",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determine if a value is a FormData",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getGlobal"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:13",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determine if a value is a Function",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isFunction"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:14",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Resolve object with deep prototype chain to a flat object",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "toFlatObject"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:15",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determine if a value is an ArrayBuffer",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isArrayBuffer"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:16",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Create an Error with the specified message, config, error code, request and response.",
+  "gold": [
+   "lib/core/AxiosError.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "constructor"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:17",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Convert an array to an object.",
+  "gold": [
+   "lib/helpers/formDataToJSON.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "arrayToObject"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:18",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determines whether the specified URL is absolute",
+  "gold": [
+   "lib/helpers/isAbsoluteURL.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isAbsoluteURL"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:19",
+  "repo": "axios",
+  "type": "locate",
+  "query": "It takes a params object and converts it to a FormData object",
+  "gold": [
+   "lib/helpers/AxiosURLSearchParams.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "AxiosURLSearchParams"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:20",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Parse headers into an object Date: Wed, 27 Aug 2014 08:58:49 GMT Content-Type: application/json Connection: keep-alive Transfer-Encoding: chunked",
+  "gold": [
+   "lib/helpers/parseHeaders.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "default"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:21",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determine whether an inherited object must be treated as a shared-prototype boundary.",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isPrototypeBoundary"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:22",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Determines if the given thing is a array or js object.",
+  "gold": [
+   "lib/helpers/toFormData.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isVisitable"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:23",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Apply the headers generated by a FormData implementation to the request headers, honoring the formDataHeaderPolicy option: with 'content-only', copy only the content-* headers; otherwise merge all of them.",
+  "gold": [
+   "lib/core/setFormDataHeaders.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "setFormDataHeaders"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:24",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Pipes a file to the HTTP response.",
+  "gold": [
+   "sandbox/server.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "pipeFileToResponse"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:25",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Create a bound version of a function with a specified this context",
+  "gold": [
+   "lib/helpers/bind.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "bind"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:26",
+  "repo": "axios",
+  "type": "locate",
+  "query": "The GraphQL query to get all sponsors.",
+  "gold": [
+   "docs/scripts/process-sponsors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getAllSponsorsQuery"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:27",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Whole milliseconds elapsed since start, floored at zero.",
+  "gold": [
+   "lib/core/dispatchRequest.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "elapsedSince"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:28",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Selects the most recent membership for each sponsor slug.",
+  "gold": [
+   "docs/scripts/selectLatestSponsorsBySlug.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "selectLatestSponsorsBySlug"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:loc:29",
+  "repo": "axios",
+  "type": "locate",
+  "query": "Resolve the clock used to time adapter execution.",
+  "gold": [
+   "lib/core/dispatchRequest.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "resolveClock"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:0",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/cancel/CanceledError.js?",
+  "gold": [
+   "lib/adapters/http.js",
+   "lib/adapters/xhr.js",
+   "lib/axios.js",
+   "lib/cancel/CancelToken.js",
+   "lib/core/dispatchRequest.js",
+   "lib/helpers/composeSignals.js",
+   "tests/browser/cancelToken.browser.test.js",
+   "tests/unit/cancel/canceledError.test.js",
+   "tests/unit/cancel/isCancel.test.js"
+  ],
+  "exclude": [
+   "lib/cancel/CanceledError.js"
+  ],
+  "meta": {
+   "target": "lib/cancel/CanceledError.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:1",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/core/InterceptorManager.js?",
+  "gold": [
+   "lib/core/Axios.js",
+   "tests/unit/core/InterceptorManager.test.js"
+  ],
+  "exclude": [
+   "lib/core/InterceptorManager.js"
+  ],
+  "meta": {
+   "target": "lib/core/InterceptorManager.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:2",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/helpers/Http2Sessions.js?",
+  "gold": [
+   "lib/adapters/http.js",
+   "tests/unit/helpers/Http2Sessions.test.js"
+  ],
+  "exclude": [
+   "lib/helpers/Http2Sessions.js"
+  ],
+  "meta": {
+   "target": "lib/helpers/Http2Sessions.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:3",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/platform/index.js?",
+  "gold": [
+   "lib/adapters/fetch.js",
+   "lib/adapters/http.js",
+   "lib/adapters/xhr.js",
+   "lib/core/createMultipartBody.js",
+   "lib/defaults/index.js",
+   "lib/helpers/cookies.js",
+   "lib/helpers/formDataToStream.js",
+   "lib/helpers/fromDataURI.js",
+   "lib/helpers/isURLSameOrigin.js",
+   "lib/helpers/resolveConfig.js",
+   "lib/helpers/toURLEncodedForm.js",
+   "tests/setup/formBodyLengthCases.js",
+   "tests/unit/platform.test.js",
+   "tests/unit/regression.test.js"
+  ],
+  "exclude": [
+   "lib/platform/index.js"
+  ],
+  "meta": {
+   "target": "lib/platform/index.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:4",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/helpers/isURLSameOrigin.js?",
+  "gold": [
+   "lib/helpers/resolveConfig.js",
+   "tests/browser/baseURLResolution.browser.test.js",
+   "tests/browser/isURLSameOrigin.browser.test.js",
+   "tests/unit/helpers/isURLSameOrigin.test.js"
+  ],
+  "exclude": [
+   "lib/helpers/isURLSameOrigin.js"
+  ],
+  "meta": {
+   "target": "lib/helpers/isURLSameOrigin.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:5",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/core/AxiosHeaders.js?",
+  "gold": [
+   "lib/adapters/fetch.js",
+   "lib/adapters/http.js",
+   "lib/adapters/xhr.js",
+   "lib/axios.js",
+   "lib/core/Axios.js",
+   "lib/core/AxiosError.js",
+   "lib/core/dispatchRequest.js",
+   "lib/core/mergeConfig.js",
+   "lib/core/transformData.js",
+   "lib/helpers/resolveConfig.js",
+   "tests/browser/defaults.browser.test.js",
+   "tests/unit/axios.test.js",
+   "tests/unit/axiosHeaders.test.js",
+   "tests/unit/core/AxiosError.test.js",
+   "tests/unit/prototypePollution.test.js"
+  ],
+  "exclude": [
+   "lib/core/AxiosHeaders.js"
+  ],
+  "meta": {
+   "target": "lib/core/AxiosHeaders.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:6",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/helpers/shouldBypassProxy.js?",
+  "gold": [
+   "lib/adapters/http.js",
+   "tests/unit/adapters/routingConsistency.test.js",
+   "tests/unit/helpers/shouldBypassProxy.test.js"
+  ],
+  "exclude": [
+   "lib/helpers/shouldBypassProxy.js"
+  ],
+  "meta": {
+   "target": "lib/helpers/shouldBypassProxy.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:7",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/core/createMultipartBody.js?",
+  "gold": [
+   "lib/adapters/fetch.js",
+   "tests/setup/formBodyLengthCases.js"
+  ],
+  "exclude": [
+   "lib/core/createMultipartBody.js"
+  ],
+  "meta": {
+   "target": "lib/core/createMultipartBody.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:8",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/adapters/adapters.js?",
+  "gold": [
+   "lib/axios.js",
+   "lib/core/dispatchRequest.js",
+   "tests/unit/adapters/adapters.test.js"
+  ],
+  "exclude": [
+   "lib/adapters/adapters.js"
+  ],
+  "meta": {
+   "target": "lib/adapters/adapters.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:9",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/helpers/estimateDataURLDecodedBytes.js?",
+  "gold": [
+   "lib/adapters/fetch.js",
+   "lib/adapters/http.js",
+   "tests/setup/formBodyLengthCases.js",
+   "tests/unit/adapters/bodyLength.test.js",
+   "tests/unit/adapters/runtimeConsistency.test.js",
+   "tests/unit/estimateDataURLDecodedBytes.test.js"
+  ],
+  "exclude": [
+   "lib/helpers/estimateDataURLDecodedBytes.js"
+  ],
+  "meta": {
+   "target": "lib/helpers/estimateDataURLDecodedBytes.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:10",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/adapters/http.js?",
+  "gold": [
+   "lib/adapters/adapters.js",
+   "tests/unit/adapters/directAgent.test.js",
+   "tests/unit/adapters/http.test.js",
+   "tests/unit/adapters/routingConsistency.test.js"
+  ],
+  "exclude": [
+   "lib/adapters/http.js"
+  ],
+  "meta": {
+   "target": "lib/adapters/http.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:11",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/helpers/isAxiosError.js?",
+  "gold": [
+   "lib/axios.js",
+   "tests/unit/helpers/isAxiosError.test.js"
+  ],
+  "exclude": [
+   "lib/helpers/isAxiosError.js"
+  ],
+  "meta": {
+   "target": "lib/helpers/isAxiosError.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:12",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/cancel/isCancel.js?",
+  "gold": [
+   "lib/axios.js",
+   "lib/core/dispatchRequest.js",
+   "tests/unit/cancel/isCancel.test.js"
+  ],
+  "exclude": [
+   "lib/cancel/isCancel.js"
+  ],
+  "meta": {
+   "target": "lib/cancel/isCancel.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:13",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/defaults/transitional.js?",
+  "gold": [
+   "lib/adapters/http.js",
+   "lib/adapters/xhr.js",
+   "lib/core/Axios.js",
+   "lib/defaults/index.js"
+  ],
+  "exclude": [
+   "lib/defaults/transitional.js"
+  ],
+  "meta": {
+   "target": "lib/defaults/transitional.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "axios:dep:14",
+  "repo": "axios",
+  "type": "dependency",
+  "query": "Which files import lib/core/methodList.js?",
+  "gold": [
+   "lib/core/Axios.js",
+   "lib/defaults/index.js",
+   "tests/unit/axios.test.js"
+  ],
+  "exclude": [
+   "lib/core/methodList.js"
+  ],
+  "meta": {
+   "target": "lib/core/methodList.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:0",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Dispatched when loading the repositories fails",
+  "gold": [
+   "app/containers/App/actions.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "repoLoadingError"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:1",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Checks if we are under Git version control.",
+  "gold": [
+   "internals/scripts/setup.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "cleanCurrentRepository"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:2",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Add all files to the new repository",
+  "gold": [
+   "internals/scripts/setup.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "addToGitRepository"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:3",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Parses the JSON returned by a network request",
+  "gold": [
+   "app/utils/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "parseJSON"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:4",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "This script is for internal react-boilerplate's usage.",
+  "gold": [
+   "internals/scripts/generate-templates-for-linting.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "chalk"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:5",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Deletes a file in the current directory",
+  "gold": [
+   "internals/scripts/setup.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "deleteFileInCurrentDir"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:6",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Run eslint on all js files in the given directory",
+  "gold": [
+   "internals/scripts/generate-templates-for-linting.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "runLintingOnDirectory"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:7",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Checks if we are under Git version control",
+  "gold": [
+   "internals/scripts/setup.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "hasGitRepository"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:8",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "/**.js\", { silent: true, }, code => code ?",
+  "gold": [
+   "internals/scripts/generate-templates-for-linting.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "runLintingOnFile"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:9",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Checks if this is a clone from our repo",
+  "gold": [
+   "internals/scripts/setup.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "checkIfRepositoryIsAClone"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:10",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Dispatched when the repositories are loaded by the request saga",
+  "gold": [
+   "app/containers/App/actions.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "reposLoaded"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:11",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Direct selector to the languageToggle state domain",
+  "gold": [
+   "internals/templates/containers/LanguageProvider/selectors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "selectLanguage"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:12",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Checks if a network request came back fine, and throws an error if not",
+  "gold": [
+   "app/utils/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "checkStatus"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:13",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "This script will extract the internationalization messages from all components and package them in the translation json files in the translations file.",
+  "gold": [
+   "internals/scripts/extract-intl.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "require"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:14",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Direct selector to the language domain",
+  "gold": [
+   "app/containers/LanguageProvider/selectors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "selectLanguage"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:15",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Load the repositories, this action starts the request saga",
+  "gold": [
+   "app/containers/App/actions.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "loadRepos"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:16",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Ask user if he wants to start with a new repository",
+  "gold": [
+   "internals/scripts/setup.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "askUserIfWeShouldRemoveRepo"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:17",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "generator/index.js Exports the generators so plop knows them",
+  "gold": [
+   "internals/generators/index.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "fs"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:18",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "componentExists Check whether the given component exist in either the components or containers directory",
+  "gold": [
+   "internals/generators/utils/componentExists.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "fs"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:19",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Gets the repositories of the user from Github / import { call, put, select, takeLatest } from 'redux-saga/effects'; import { LOAD_REPOS } from 'containers/App/constants'; import { reposLoaded, repoLoadingError } from 'co",
+  "gold": [
+   "app/containers/HomePage/saga.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getRepos"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:20",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Test the language generator and rollback when successful",
+  "gold": [
+   "internals/scripts/generate-templates-for-linting.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "generateLanguage"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:21",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Every generated component/container is preceded by this",
+  "gold": [
+   "internals/scripts/generate-templates-for-linting.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "NAMESPACE"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:22",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Every generated backup file gets this extension",
+  "gold": [
+   "internals/generators/index.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "BACKUPFILE_EXTENSION"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:23",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Changes the input field of the form",
+  "gold": [
+   "app/containers/HomePage/actions.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "changeUsername"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:24",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Report the the given error and exits the setup",
+  "gold": [
+   "internals/scripts/setup.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "reportError"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:25",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Test the component generator and rollback when successful",
+  "gold": [
+   "internals/scripts/generate-templates-for-linting.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "generateComponent"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:loc:26",
+  "repo": "react-boilerplate",
+  "type": "locate",
+  "query": "Test the container generator and rollback when successful",
+  "gold": [
+   "internals/scripts/generate-templates-for-linting.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "generateContainer"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:0",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/containers/RepoListItem/RepoLink.js?",
+  "gold": [
+   "app/containers/RepoListItem/index.js",
+   "app/containers/RepoListItem/tests/RepoLink.test.js"
+  ],
+  "exclude": [
+   "app/containers/RepoListItem/RepoLink.js"
+  ],
+  "meta": {
+   "target": "app/containers/RepoListItem/RepoLink.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:1",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/components/Footer/Wrapper.js?",
+  "gold": [
+   "app/components/Footer/index.js",
+   "app/components/Footer/tests/Wrapper.test.js"
+  ],
+  "exclude": [
+   "app/components/Footer/Wrapper.js"
+  ],
+  "meta": {
+   "target": "app/components/Footer/Wrapper.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:2",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import internals/scripts/helpers/xmark.js?",
+  "gold": [
+   "internals/scripts/generate-templates-for-linting.js",
+   "internals/scripts/setup.js"
+  ],
+  "exclude": [
+   "internals/scripts/helpers/xmark.js"
+  ],
+  "meta": {
+   "target": "internals/scripts/helpers/xmark.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:3",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/reducers.js?",
+  "gold": [
+   "app/configureStore.js",
+   "app/utils/reducerInjectors.js"
+  ],
+  "exclude": [
+   "app/reducers.js"
+  ],
+  "meta": {
+   "target": "app/reducers.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:4",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import internals/generators/utils/componentExists.js?",
+  "gold": [
+   "internals/generators/component/index.js",
+   "internals/generators/container/index.js"
+  ],
+  "exclude": [
+   "internals/generators/utils/componentExists.js"
+  ],
+  "meta": {
+   "target": "internals/generators/utils/componentExists.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:5",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import internals/templates/reducers.js?",
+  "gold": [
+   "internals/templates/configureStore.js",
+   "internals/templates/utils/reducerInjectors.js"
+  ],
+  "exclude": [
+   "internals/templates/reducers.js"
+  ],
+  "meta": {
+   "target": "internals/templates/reducers.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:6",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/utils/checkStore.js?",
+  "gold": [
+   "app/utils/reducerInjectors.js",
+   "app/utils/sagaInjectors.js",
+   "app/utils/tests/checkStore.test.js"
+  ],
+  "exclude": [
+   "app/utils/checkStore.js"
+  ],
+  "meta": {
+   "target": "app/utils/checkStore.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:7",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import internals/templates/utils/constants.js?",
+  "gold": [
+   "internals/templates/utils/sagaInjectors.js",
+   "internals/templates/utils/tests/sagaInjectors.test.js"
+  ],
+  "exclude": [
+   "internals/templates/utils/constants.js"
+  ],
+  "meta": {
+   "target": "internals/templates/utils/constants.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:8",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/components/ListItem/Wrapper.js?",
+  "gold": [
+   "app/components/ListItem/index.js",
+   "app/components/ListItem/tests/Wrapper.test.js"
+  ],
+  "exclude": [
+   "app/components/ListItem/Wrapper.js"
+  ],
+  "meta": {
+   "target": "app/components/ListItem/Wrapper.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:9",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/containers/HomePage/constants.js?",
+  "gold": [
+   "app/containers/HomePage/actions.js",
+   "app/containers/HomePage/reducer.js",
+   "app/containers/HomePage/tests/actions.test.js"
+  ],
+  "exclude": [
+   "app/containers/HomePage/constants.js"
+  ],
+  "meta": {
+   "target": "app/containers/HomePage/constants.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:10",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import internals/templates/utils/sagaInjectors.js?",
+  "gold": [
+   "internals/templates/utils/injectSaga.js",
+   "internals/templates/utils/tests/injectSaga.test.js",
+   "internals/templates/utils/tests/sagaInjectors.test.js"
+  ],
+  "exclude": [
+   "internals/templates/utils/sagaInjectors.js"
+  ],
+  "meta": {
+   "target": "internals/templates/utils/sagaInjectors.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:11",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/containers/LanguageProvider/actions.js?",
+  "gold": [
+   "app/containers/LanguageProvider/tests/actions.test.js",
+   "app/containers/LocaleToggle/index.js",
+   "app/containers/LocaleToggle/tests/index.test.js"
+  ],
+  "exclude": [
+   "app/containers/LanguageProvider/actions.js"
+  ],
+  "meta": {
+   "target": "app/containers/LanguageProvider/actions.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:12",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/containers/HomePage/CenteredSection.js?",
+  "gold": [
+   "app/containers/HomePage/index.js",
+   "app/containers/HomePage/tests/CenteredSection.test.js"
+  ],
+  "exclude": [
+   "app/containers/HomePage/CenteredSection.js"
+  ],
+  "meta": {
+   "target": "app/containers/HomePage/CenteredSection.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:13",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/containers/LanguageProvider/selectors.js?",
+  "gold": [
+   "app/containers/LanguageProvider/index.js",
+   "app/containers/LanguageProvider/tests/selectors.test.js",
+   "app/containers/LocaleToggle/index.js"
+  ],
+  "exclude": [
+   "app/containers/LanguageProvider/selectors.js"
+  ],
+  "meta": {
+   "target": "app/containers/LanguageProvider/selectors.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "react-boilerplate:dep:14",
+  "repo": "react-boilerplate",
+  "type": "dependency",
+  "query": "Which files import app/containers/App/reducer.js?",
+  "gold": [
+   "app/containers/App/selectors.js",
+   "app/containers/App/tests/reducer.test.js"
+  ],
+  "exclude": [
+   "app/containers/App/reducer.js"
+  ],
+  "meta": {
+   "target": "app/containers/App/reducer.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:0",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "The Fetch Standard treats this as if \"total bytes\" is a property on the body.",
+  "gold": [
+   "src/body.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getTotalBytes"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:1",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "For better console.log(headers) and also to convert Headers into Node.js Request compatible format / [Symbol.for('nodejs.util.inspect.custom')]() { return [...this.keys()].reduce((result, key) => { const values = this.ge",
+  "gold": [
+   "src/headers.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "fromRawHeaders"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:2",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Performs the operation \"extract a Content-Type value from |object|\" as specified in the specification: https://fetch.spec.whatwg.org/#concept-bodyinit-extract This function assumes that instance.body is present.",
+  "gold": [
+   "src/body.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "extractContentType"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:3",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Modifies the referrerURL to enforce any extra security policy considerations.",
+  "gold": [
+   "src/utils/referrer.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "determineRequestsReferrer"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:4",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Request.js Request class contains server only options All spec algorithm step numbers are based on https://fetch.spec.whatwg.org/commit-snapshots/ae716822cb3a61843226cd090eefc6589446c1d2/.",
+  "gold": [
+   "src/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isRequest"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:5",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Convert a Request to Node.js http request options.",
+  "gold": [
+   "src/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getNodeRequestOptions"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:6",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Check if object is a W3C Blob object (which File inherits from)",
+  "gold": [
+   "src/utils/is.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isBlob"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:7",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Check if obj is a URLSearchParams object ref: https://github.com/node-fetch/node-fetch/issues/296#issuecomment-307598143",
+  "gold": [
+   "src/utils/is.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isURLSearchParameters"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:8",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Convenience property representing if the request ended normally / get ok() { return this[INTERNALS].status >= 200 && this[INTERNALS].status < 300; } get redirected() { return this[INTERNALS].counter > 0; } get statusText",
+  "gold": [
+   "src/response.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "clone"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:9",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Check if obj is an instance of AbortSignal.",
+  "gold": [
+   "src/utils/is.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isAbortSignal"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:10",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Consume and convert an entire Body to a Buffer.",
+  "gold": [
+   "src/body.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "consumeBody"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:11",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Write a Body to a Node.js WritableStream (e.g.",
+  "gold": [
+   "src/body.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "writeToStream"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:loc:12",
+  "repo": "node-fetch",
+  "type": "locate",
+  "query": "Headers.js Headers class offers convenient helpers / import {types} from 'node:util'; import http from 'node:http'; /* c8 ignore next 9",
+  "gold": [
+   "src/headers.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "validateHeaderName"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:0",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/utils/is-redirect.js?",
+  "gold": [
+   "src/index.js",
+   "src/response.js"
+  ],
+  "exclude": [
+   "src/utils/is-redirect.js"
+  ],
+  "meta": {
+   "target": "src/utils/is-redirect.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:1",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/utils/referrer.js?",
+  "gold": [
+   "src/index.js",
+   "src/request.js",
+   "test/referrer.js"
+  ],
+  "exclude": [
+   "src/utils/referrer.js"
+  ],
+  "meta": {
+   "target": "src/utils/referrer.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:2",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/errors/base.js?",
+  "gold": [
+   "src/body.js",
+   "src/errors/abort-error.js",
+   "src/errors/fetch-error.js"
+  ],
+  "exclude": [
+   "src/errors/base.js"
+  ],
+  "meta": {
+   "target": "src/errors/base.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:3",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/index.js?",
+  "gold": [
+   "test/external-encoding.js",
+   "test/form-data.js",
+   "test/headers.js",
+   "test/main.js",
+   "test/referrer.js",
+   "test/request.js",
+   "test/response.js"
+  ],
+  "exclude": [
+   "src/index.js"
+  ],
+  "meta": {
+   "target": "src/index.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:4",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/response.js?",
+  "gold": [
+   "src/index.js",
+   "test/main.js"
+  ],
+  "exclude": [
+   "src/response.js"
+  ],
+  "meta": {
+   "target": "src/response.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:5",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/request.js?",
+  "gold": [
+   "src/index.js",
+   "test/main.js"
+  ],
+  "exclude": [
+   "src/request.js"
+  ],
+  "meta": {
+   "target": "src/request.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:6",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import test/utils/server.js?",
+  "gold": [
+   "test/main.js",
+   "test/referrer.js",
+   "test/request.js",
+   "test/response.js"
+  ],
+  "exclude": [
+   "test/utils/server.js"
+  ],
+  "meta": {
+   "target": "test/utils/server.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:7",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/errors/fetch-error.js?",
+  "gold": [
+   "src/body.js",
+   "src/index.js",
+   "test/main.js"
+  ],
+  "exclude": [
+   "src/errors/fetch-error.js"
+  ],
+  "meta": {
+   "target": "src/errors/fetch-error.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:8",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/headers.js?",
+  "gold": [
+   "src/index.js",
+   "src/request.js",
+   "src/response.js",
+   "test/main.js"
+  ],
+  "exclude": [
+   "src/headers.js"
+  ],
+  "meta": {
+   "target": "src/headers.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:9",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/utils/is.js?",
+  "gold": [
+   "src/body.js",
+   "src/index.js",
+   "src/request.js",
+   "test/main.js"
+  ],
+  "exclude": [
+   "src/utils/is.js"
+  ],
+  "meta": {
+   "target": "src/utils/is.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "node-fetch:dep:10",
+  "repo": "node-fetch",
+  "type": "dependency",
+  "query": "Which files import src/body.js?",
+  "gold": [
+   "src/index.js",
+   "src/request.js",
+   "src/response.js",
+   "test/main.js"
+  ],
+  "exclude": [
+   "src/body.js"
+  ],
+  "meta": {
+   "target": "src/body.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:loc:0",
+  "repo": "passport",
+  "type": "locate",
+  "query": "Registers a function used to transform auth info.",
+  "gold": [
+   "lib/authenticator.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "Authenticator.prototype.transformAuthInfo"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:loc:1",
+  "repo": "passport",
+  "type": "locate",
+  "query": "Initiate a login session for user.",
+  "gold": [
+   "lib/http/request.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "req.isAuthenticated"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:loc:2",
+  "repo": "passport",
+  "type": "locate",
+  "query": "The name of the strategy, set to 'session'.",
+  "gold": [
+   "lib/strategies/session.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "SessionStrategy.prototype.authenticate"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:loc:3",
+  "repo": "passport",
+  "type": "locate",
+  "query": "Deregister a strategy that was previously registered with the given name.",
+  "gold": [
+   "lib/authenticator.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "Authenticator.prototype.unuse"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:loc:4",
+  "repo": "passport",
+  "type": "locate",
+  "query": "Registers a function used to deserialize user objects out of the session.",
+  "gold": [
+   "lib/authenticator.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "Authenticator.prototype.deserializeUser"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:loc:5",
+  "repo": "passport",
+  "type": "locate",
+  "query": "Registers a function used to serialize user objects into the session.",
+  "gold": [
+   "lib/authenticator.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "Authenticator.prototype.serializeUser"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:dep:0",
+  "repo": "passport",
+  "type": "dependency",
+  "query": "Which files import lib/http/request.js?",
+  "gold": [
+   "lib/middleware/authenticate.js",
+   "lib/middleware/initialize.js",
+   "test/http/request.test.js"
+  ],
+  "exclude": [
+   "lib/http/request.js"
+  ],
+  "meta": {
+   "target": "lib/http/request.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:dep:1",
+  "repo": "passport",
+  "type": "dependency",
+  "query": "Which files import lib/strategies/session.js?",
+  "gold": [
+   "lib/authenticator.js",
+   "lib/index.js",
+   "test/strategies/session.test.js"
+  ],
+  "exclude": [
+   "lib/strategies/session.js"
+  ],
+  "meta": {
+   "target": "lib/strategies/session.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:dep:2",
+  "repo": "passport",
+  "type": "dependency",
+  "query": "Which files import lib/authenticator.js?",
+  "gold": [
+   "lib/index.js",
+   "test/authenticator.framework.test.js",
+   "test/authenticator.middleware.test.js",
+   "test/authenticator.test.js"
+  ],
+  "exclude": [
+   "lib/authenticator.js"
+  ],
+  "meta": {
+   "target": "lib/authenticator.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "passport:dep:3",
+  "repo": "passport",
+  "type": "dependency",
+  "query": "Which files import lib/middleware/initialize.js?",
+  "gold": [
+   "lib/framework/connect.js",
+   "test/middleware/initialize.test.js"
+  ],
+  "exclude": [
+   "lib/middleware/initialize.js"
+  ],
+  "meta": {
+   "target": "lib/middleware/initialize.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "connect:loc:0",
+  "repo": "connect",
+  "type": "locate",
+  "query": "Utilize the given middleware handle to the given route, defaulting to _/_.",
+  "gold": [
+   "index.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "proto.use"
+  },
+  "split": "test"
+ },
+ {
+  "id": "connect:loc:1",
+  "repo": "connect",
+  "type": "locate",
+  "query": "Get get protocol + host for a URL.",
+  "gold": [
+   "index.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getProtohost"
+  },
+  "split": "test"
+ },
+ {
+  "id": "connect:dep:0",
+  "repo": "connect",
+  "type": "dependency",
+  "query": "Which files import test/support/rawagent.js?",
+  "gold": [
+   "test/fqdn.js",
+   "test/server.js"
+  ],
+  "exclude": [
+   "test/support/rawagent.js"
+  ],
+  "meta": {
+   "target": "test/support/rawagent.js"
+  },
+  "split": "test"
+ },
+ {
+  "id": "request:loc:0",
+  "repo": "request",
+  "type": "locate",
+  "query": "RFC 2617: handle both MD5 and MD5-sess algorithms.",
+  "gold": [
+   "lib/auth.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "ha1Compute"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "request:dep:0",
+  "repo": "request",
+  "type": "dependency",
+  "query": "Which files import lib/cookies.js?",
+  "gold": [
+   "index.js",
+   "request.js"
+  ],
+  "exclude": [
+   "lib/cookies.js"
+  ],
+  "meta": {
+   "target": "lib/cookies.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "request:dep:1",
+  "repo": "request",
+  "type": "dependency",
+  "query": "Which files import lib/helpers.js?",
+  "gold": [
+   "index.js",
+   "lib/auth.js",
+   "request.js",
+   "tests/test-agent.js"
+  ],
+  "exclude": [
+   "lib/helpers.js"
+  ],
+  "meta": {
+   "target": "lib/helpers.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "request:dep:2",
+  "repo": "request",
+  "type": "dependency",
+  "query": "Which files import lib/hawk.js?",
+  "gold": [
+   "request.js",
+   "tests/test-hawk.js"
+  ],
+  "exclude": [
+   "lib/hawk.js"
+  ],
+  "meta": {
+   "target": "lib/hawk.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:0",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Removes all transports from this logger instance.",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "clear"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:1",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Tracks the time inbetween subsequent calls to this method with the same id parameter.",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "profile"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:2",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Retrieves a winston.Logger instance for the specified id.",
+  "gold": [
+   "lib/winston/container.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "add"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:3",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Unpipe from the stream that has been marked as full and end it so it flushes to disk.",
+  "gold": [
+   "lib/winston/transports/file.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_endStream"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:4",
+  "repo": "winston",
+  "type": "locate",
+  "query": "container.js: Inversion of control container for winston logger instances.",
+  "gold": [
+   "lib/winston/container.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "constructor"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:5",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Initiate a request with the memorized batch options, stop the batch timeout",
+  "gold": [
+   "lib/winston/transports/http.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_doBatchRequest"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:6",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Send or memorize the options according to batch configuration",
+  "gold": [
+   "lib/winston/transports/http.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_doBatch"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:7",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Returns a Set-like object with strArray's elements as keys (each with the value true).",
+  "gold": [
+   "lib/winston/transports/console.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_stringArrayToSet"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:8",
+  "repo": "winston",
+  "type": "locate",
+  "query": "http.js: Transport for outputting to a json-rpcserver.",
+  "gold": [
+   "lib/winston/transports/http.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "log"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:9",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Called by Node.js Writable stream before emitting 'finish'.",
+  "gold": [
+   "lib/winston/transports/file.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_final"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:10",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Writes the info object to our transport instance if (and only if) the exception property is set on the info.",
+  "gold": [
+   "lib/winston/exception-stream.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_write"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:11",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Removes any handlers to uncaughtException events for the current process.",
+  "gold": [
+   "lib/winston/exception-handler.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "unhandle"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:12",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Remove a logger based on the id.",
+  "gold": [
+   "lib/winston/container.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_removeLogger"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:13",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Returns the WritableStream for the active file on this instance.",
+  "gold": [
+   "lib/winston/transports/file.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_createStream"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:14",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Retreives a winston.Logger instance for the specified id.",
+  "gold": [
+   "lib/winston/container.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "get"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:15",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Queries the all transports for this instance with the specified options.",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "query"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:16",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Deletes a Logger instance with the specified id.",
+  "gold": [
+   "lib/winston/container.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_delete"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:17",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Sets the target levels specified on this instance.",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "setLevels"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:18",
+  "repo": "winston",
+  "type": "locate",
+  "query": "exception-stream.js: TODO: add file header handler.",
+  "gold": [
+   "lib/winston/exception-stream.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "constructor"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:19",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Transport for outputting to the console.",
+  "gold": [
+   "lib/winston/transports/console.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "constructor"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:20",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Delays the 'finish' event until all transport pipe targets have also emitted 'finish' or are already finished.",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_final"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:21",
+  "repo": "winston",
+  "type": "locate",
+  "query": "logger.js: TODO: add file header description.",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "formatRegExp"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:22",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Compresses src to dest with gzip and unlinks src",
+  "gold": [
+   "lib/winston/transports/file.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_compressFile"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:23",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Returns an object corresponding to a specific timing.",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "startTimer"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:24",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Checks to see the filesize of.",
+  "gold": [
+   "lib/winston/transports/file.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "open"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:25",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Increment the number of files created or checked by this instance.",
+  "gold": [
+   "lib/winston/transports/file.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_checkMaxFilesIncrementing"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:26",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Pushes data so that it can be picked up by all of our pipe targets.",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_transform"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:27",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Throw a more meaningful deprecation notice",
+  "gold": [
+   "lib/winston/logger.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "cli"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:28",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Roll files forward based on integer, up to maxFiles.",
+  "gold": [
+   "lib/winston/transports/file.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_checkMaxFilesTailable"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:loc:29",
+  "repo": "winston",
+  "type": "locate",
+  "query": "Writes the info object to our transport instance if (and only if) the rejection property is set on the info.",
+  "gold": [
+   "lib/winston/rejection-stream.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_write"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:0",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/logger.js?",
+  "gold": [
+   "lib/winston.js",
+   "lib/winston/create-logger.js",
+   "lib/winston/profiler.js",
+   "test/integration/logger.test.js",
+   "test/unit/winston/profiler.test.js"
+  ],
+  "exclude": [
+   "lib/winston/logger.js"
+  ],
+  "meta": {
+   "target": "lib/winston/logger.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:1",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import test/helpers/handler-tests.js?",
+  "gold": [
+   "test/unit/winston/exception-handler.test.js",
+   "test/unit/winston/rejection-handler.test.js"
+  ],
+  "exclude": [
+   "test/helpers/handler-tests.js"
+  ],
+  "meta": {
+   "target": "test/helpers/handler-tests.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:2",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/exception-handler.js?",
+  "gold": [
+   "lib/winston.js",
+   "lib/winston/logger.js"
+  ],
+  "exclude": [
+   "lib/winston/exception-handler.js"
+  ],
+  "meta": {
+   "target": "lib/winston/exception-handler.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:3",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import jest.config.js?",
+  "gold": [
+   "test/jest.config.integration.js",
+   "test/jest.config.unit.js"
+  ],
+  "exclude": [
+   "jest.config.js"
+  ],
+  "meta": {
+   "target": "jest.config.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:4",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/common.js?",
+  "gold": [
+   "lib/winston.js",
+   "lib/winston/logger.js"
+  ],
+  "exclude": [
+   "lib/winston/common.js"
+  ],
+  "meta": {
+   "target": "lib/winston/common.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:5",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/config/index.js?",
+  "gold": [
+   "lib/winston.js",
+   "lib/winston/create-logger.js",
+   "lib/winston/logger.js"
+  ],
+  "exclude": [
+   "lib/winston/config/index.js"
+  ],
+  "meta": {
+   "target": "lib/winston/config/index.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:6",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/create-logger.js?",
+  "gold": [
+   "lib/winston.js",
+   "lib/winston/container.js"
+  ],
+  "exclude": [
+   "lib/winston/create-logger.js"
+  ],
+  "meta": {
+   "target": "lib/winston/create-logger.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:7",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/profiler.js?",
+  "gold": [
+   "lib/winston/logger.js",
+   "test/unit/winston/profiler.test.js"
+  ],
+  "exclude": [
+   "lib/winston/profiler.js"
+  ],
+  "meta": {
+   "target": "lib/winston/profiler.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:8",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/rejection-handler.js?",
+  "gold": [
+   "lib/winston.js",
+   "lib/winston/logger.js"
+  ],
+  "exclude": [
+   "lib/winston/rejection-handler.js"
+  ],
+  "meta": {
+   "target": "lib/winston/rejection-handler.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:9",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/tail-file.js?",
+  "gold": [
+   "lib/winston/transports/file.js",
+   "test/unit/winston/tail-file.test.js"
+  ],
+  "exclude": [
+   "lib/winston/tail-file.js"
+  ],
+  "meta": {
+   "target": "lib/winston/tail-file.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:10",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import test/helpers/mocks/mock-transport.js?",
+  "gold": [
+   "test/helpers/index.js",
+   "test/unit/winston/logger.test.js"
+  ],
+  "exclude": [
+   "test/helpers/mocks/mock-transport.js"
+  ],
+  "meta": {
+   "target": "test/helpers/mocks/mock-transport.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:11",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/transports/http.js?",
+  "gold": [
+   "lib/winston/transports/index.js",
+   "test/unit/winston/transports/http.test.js"
+  ],
+  "exclude": [
+   "lib/winston/transports/http.js"
+  ],
+  "meta": {
+   "target": "lib/winston/transports/http.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:12",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import lib/winston/exception-stream.js?",
+  "gold": [
+   "lib/winston/exception-handler.js",
+   "test/unit/winston/exception-stream.test.js"
+  ],
+  "exclude": [
+   "lib/winston/exception-stream.js"
+  ],
+  "meta": {
+   "target": "lib/winston/exception-stream.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "winston:dep:13",
+  "repo": "winston",
+  "type": "dependency",
+  "query": "Which files import test/helpers/index.js?",
+  "gold": [
+   "test/integration/formats.test.js",
+   "test/unit/formats/errors.test.js",
+   "test/unit/winston/log-exception.test.js",
+   "test/unit/winston/logger.test.js",
+   "test/unit/winston/transports/00-file-stress.test.js",
+   "test/unit/winston/transports/stream.test.js"
+  ],
+  "exclude": [
+   "test/helpers/index.js"
+  ],
+  "meta": {
+   "target": "test/helpers/index.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:0",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates an error object to be thrown when the reporter specified in the options was not found.",
+  "gold": [
+   "lib/errors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createInvalidReporterError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:1",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates an error object to be thrown when the interface specified in the options was not found.",
+  "gold": [
+   "lib/errors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createInvalidInterfaceError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:2",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Constructs a new HTML reporter instance.",
+  "gold": [
+   "lib/reporters/html.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "constructor"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:3",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Writes the summary epilogue to reporter output stream.",
+  "gold": [
+   "lib/reporters/tap.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "writeEpilogue"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:4",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Writes that test passed to reporter output stream.",
+  "gold": [
+   "lib/reporters/tap.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "writePass"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:5",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates event listeners (using {@link ParallelBuffered#createListener}) for each reporter-relevant event emitted by a {@link Runner}.",
+  "gold": [
+   "lib/nodejs/reporters/parallel-buffered.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createListeners"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:6",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "If this class is the Runner in use, then this is going to return true.",
+  "gold": [
+   "lib/nodejs/parallel-buffered-runner.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isParallelMode"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:7",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates an error object to be thrown when a plugin definition is invalid",
+  "gold": [
+   "lib/errors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createInvalidPluginDefinitionError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:8",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates an error object to be thrown when no files to be tested could be found using specified pattern.",
+  "gold": [
+   "lib/errors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createNoFilesMatchPatternError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:9",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Checks that a / b have the same type.",
+  "gold": [
+   "lib/reporters/base.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "sameType"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:10",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates an underlying worker pool instance; determines max worker count",
+  "gold": [
+   "lib/nodejs/buffered-worker-pool.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "constructor"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:11",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Check if argument is an instance of Error object or a duck-typed equivalent.",
+  "gold": [
+   "lib/runner.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "isError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:12",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Fail all tests that are affected by a hook failure.",
+  "gold": [
+   "lib/runner.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "Runner.prototype.failAffectedTests"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:13",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Escape a value for use in a GitHub Actions workflow command.",
+  "gold": [
+   "lib/reporters/github-actions.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "escapeWorkflowValue"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:14",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates an error object to be thrown when a mocha object's run method is called while a test run is in progress.",
+  "gold": [
+   "lib/errors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createMochaInstanceAlreadyRunningError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:15",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "The interval at which we will display stats for worker processes in debug mode",
+  "gold": [
+   "lib/nodejs/parallel-buffered-runner.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "DEBUG_STATS_INTERVAL"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:16",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Initialize a new Hook with the given title and callback fn",
+  "gold": [
+   "lib/hook.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "constructor"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:17",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Writes the plan to reporter output stream.",
+  "gold": [
+   "lib/reporters/tap.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "writePlan"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:18",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates an error object to be thrown when done() is called multiple times in a test",
+  "gold": [
+   "lib/errors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createMultipleDoneError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:19",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Parse the args into a config object.",
+  "gold": [
+   "lib/cli/parse-args.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "parseMochaArgs"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:20",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Functions common to more than one interface.",
+  "gold": [
+   "lib/interfaces/common.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createCommon"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:21",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Run the current test and callback fn(err).",
+  "gold": [
+   "lib/runner.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "Runner.prototype.runTest"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:22",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Get or set the test err.",
+  "gold": [
+   "lib/hook.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "error"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:23",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Returns the array of hooks by hook name; see HOOK_TYPE_* constants.",
+  "gold": [
+   "lib/suite.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getHooks"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:24",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Describe a \"suite\" with the given title and callback fn containing nested suites and/or tests.",
+  "gold": [
+   "lib/interfaces/bdd.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "context.describe.only"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:25",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Creates an error object to be thrown when an unrecoverable error occurs.",
+  "gold": [
+   "lib/errors.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createFatalError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:26",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Traverses err.cause and returns all stack traces",
+  "gold": [
+   "lib/reporters/base.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getFullErrorStack"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:27",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Returns a mapping function to enqueue a file in the worker pool and return results of its execution.",
+  "gold": [
+   "lib/nodejs/parallel-buffered-runner.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "_createFileRunner"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:28",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Contains CLI entry point and public API for programmatic usage in Node.js.",
+  "gold": [
+   "lib/cli/cli.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "main"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:loc:29",
+  "repo": "mocha",
+  "type": "locate",
+  "query": "Save log references to avoid tests interfering (see GH-3604).",
+  "gold": [
+   "lib/reporters/base.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "consoleLog"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:0",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/runnable.js?",
+  "gold": [
+   "lib/hook.js",
+   "lib/reporters/landing.js",
+   "lib/reporters/xunit.js",
+   "lib/runner.js",
+   "lib/test.js"
+  ],
+  "exclude": [
+   "lib/runnable.js"
+  ],
+  "meta": {
+   "target": "lib/runnable.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:1",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/cli/cli.js?",
+  "gold": [
+   "bin/mocha.js",
+   "test/node-unit/cli/cli.spec.js"
+  ],
+  "exclude": [
+   "lib/cli/cli.js"
+  ],
+  "meta": {
+   "target": "lib/cli/cli.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:2",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import test/integration/fixtures/esm/add.js?",
+  "gold": [
+   "test/integration/fixtures/esm/esm-failure.fixture.js",
+   "test/integration/fixtures/esm/esm-success.fixture.js"
+  ],
+  "exclude": [
+   "test/integration/fixtures/esm/add.js"
+  ],
+  "meta": {
+   "target": "test/integration/fixtures/esm/add.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:3",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/suite.js?",
+  "gold": [
+   "lib/interfaces/bdd.js",
+   "lib/interfaces/common.js",
+   "lib/interfaces/exports.js",
+   "lib/interfaces/qunit.js",
+   "lib/interfaces/tdd.js",
+   "lib/runner.js"
+  ],
+  "exclude": [
+   "lib/suite.js"
+  ],
+  "meta": {
+   "target": "lib/suite.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:4",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/reporters/base.js?",
+  "gold": [
+   "lib/nodejs/reporters/parallel-buffered.js",
+   "lib/reporters/doc.js",
+   "lib/reporters/dot.js",
+   "lib/reporters/html.js",
+   "lib/reporters/json-stream.js",
+   "lib/reporters/json.js",
+   "lib/reporters/landing.js",
+   "lib/reporters/list.js",
+   "lib/reporters/markdown.js",
+   "lib/reporters/min.js",
+   "lib/reporters/nyan.js",
+   "lib/reporters/progress.js",
+   "lib/reporters/spec.js",
+   "lib/reporters/tap.js",
+   "lib/reporters/xunit.js"
+  ],
+  "exclude": [
+   "lib/reporters/base.js"
+  ],
+  "meta": {
+   "target": "lib/reporters/base.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:5",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import test/browser/config.js?",
+  "gold": [
+   "playwright.config.js",
+   "test/browser/global-setup.js",
+   "test/browser/run.spec.js",
+   "test/browser/server.js"
+  ],
+  "exclude": [
+   "test/browser/config.js"
+  ],
+  "meta": {
+   "target": "test/browser/config.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:6",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/interfaces/common.js?",
+  "gold": [
+   "lib/interfaces/bdd.js",
+   "lib/interfaces/qunit.js",
+   "lib/interfaces/tdd.js",
+   "test/integration/fixtures/simple-ui.fixture.js"
+  ],
+  "exclude": [
+   "lib/interfaces/common.js"
+  ],
+  "meta": {
+   "target": "lib/interfaces/common.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:7",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/errors.js?",
+  "gold": [
+   "lib/cli/lookup-files.js",
+   "lib/cli/parse-args.js",
+   "lib/interfaces/common.js",
+   "lib/nodejs/buffered-worker-pool.js",
+   "lib/nodejs/parallel-buffered-runner.js",
+   "lib/nodejs/serializer.js",
+   "lib/nodejs/worker-core.js",
+   "lib/plugin-loader.js",
+   "lib/reporters/json.js",
+   "lib/reporters/xunit.js",
+   "lib/runnable.js",
+   "lib/runner.js",
+   "lib/suite.js",
+   "lib/test.js"
+  ],
+  "exclude": [
+   "lib/errors.js"
+  ],
+  "meta": {
+   "target": "lib/errors.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:8",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/cli/unparse-args.js?",
+  "gold": [
+   "bin/mocha.js",
+   "test/node-unit/cli/unparse-args.spec.js"
+  ],
+  "exclude": [
+   "lib/cli/unparse-args.js"
+  ],
+  "meta": {
+   "target": "lib/cli/unparse-args.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:9",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/nodejs/serializer.js?",
+  "gold": [
+   "lib/nodejs/buffered-worker-pool.js",
+   "lib/nodejs/reporters/parallel-buffered.js",
+   "lib/nodejs/worker-core.js"
+  ],
+  "exclude": [
+   "lib/nodejs/serializer.js"
+  ],
+  "meta": {
+   "target": "lib/nodejs/serializer.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:10",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import index.js?",
+  "gold": [
+   "test/integration/fixtures/parallel/circular-error-array.js",
+   "test/integration/fixtures/parallel/circular-error-object.js",
+   "test/integration/fixtures/parallel/getter-error-object.js",
+   "test/integration/fixtures/parallel/non-circular-error.js",
+   "test/integration/fixtures/parallel/test1.js",
+   "test/integration/fixtures/parallel/test2.js",
+   "test/integration/fixtures/parallel/test3.js",
+   "test/jsapi/index.js",
+   "test/reporters/json.spec.js"
+  ],
+  "exclude": [
+   "index.js"
+  ],
+  "meta": {
+   "target": "index.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:11",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/error-constants.js?",
+  "gold": [
+   "lib/errors.js",
+   "lib/runner.js",
+   "test/node-unit/cli/options.spec.js",
+   "test/node-unit/cli/parse-args.spec.js"
+  ],
+  "exclude": [
+   "lib/error-constants.js"
+  ],
+  "meta": {
+   "target": "lib/error-constants.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:12",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/pending.js?",
+  "gold": [
+   "lib/runnable.js",
+   "lib/runner.js"
+  ],
+  "exclude": [
+   "lib/pending.js"
+  ],
+  "meta": {
+   "target": "lib/pending.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "mocha:dep:13",
+  "repo": "mocha",
+  "type": "dependency",
+  "query": "Which files import lib/test.js?",
+  "gold": [
+   "lib/interfaces/bdd.js",
+   "lib/interfaces/exports.js",
+   "lib/interfaces/qunit.js",
+   "lib/interfaces/tdd.js"
+  ],
+  "exclude": [
+   "lib/test.js"
+  ],
+  "meta": {
+   "target": "lib/test.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:0",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "attach location info object to saga",
+  "gold": [
+   "packages/babel-plugin-redux-saga/src/index.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "FunctionDeclaration"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:1",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "This is the generator driver It's a recursive async/continuation function which calls itself until the generator terminates or throws",
+  "gold": [
+   "packages/core/src/internal/proc.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "next"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:2",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "attach location info object to effect descriptor ignores delegated yields routes the value through a shared helper that only attaches location metadata to objects, so yielding a primitive doesn't crash (issue #2088)",
+  "gold": [
+   "packages/babel-plugin-redux-saga/src/index.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "YieldExpression"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:3",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "Tracks the current effect cancellation Each time the generator progresses.",
+  "gold": [
+   "packages/core/src/internal/proc.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "mainTask"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:4",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "Executes or queues a task depending on the state of the scheduler (suspended or released)",
+  "gold": [
+   "packages/core/src/internal/scheduler.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "asap"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:5",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "Used to track a parent task and its forks In the fork model, forked tasks are attached by default to their parent We model this using the concept of Parent task && main Task main task is the main flow of the current Gene",
+  "gold": [
+   "packages/core/src/internal/forkQueue.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "forkQueue"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:6",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "attaches cancellation logic to this task's continuation this will permit cancellation to propagate down the call chain",
+  "gold": [
+   "packages/core/src/internal/proc.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "if"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:7",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "getting TASK_CANCEL automatically cancels the main task We can get this value here - By cancelling the parent task manually - By joining a Cancelled task */ mainTask.status = CANCELLED /** Cancels the current effect; thi",
+  "gold": [
+   "packages/core/src/internal/proc.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "if"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:8",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "each effect runner must attach its own logic of cancellation to the provided callback it allows this generator to propagate cancellation downward.",
+  "gold": [
+   "packages/core/src/internal/proc.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "if"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:9",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "channel(pattern, [buffer]) => creates a proxy channel for store actions",
+  "gold": [
+   "packages/core/src/internal/io.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "actionChannel"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:10",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "Schedule the put in case another saga is holding a lock.",
+  "gold": [
+   "packages/core/src/internal/effectRunnerMap.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "asap"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:loc:11",
+  "repo": "redux-saga",
+  "type": "locate",
+  "query": "Builds a call into the shared location helper for a yielded expression.",
+  "gold": [
+   "packages/babel-plugin-redux-saga/src/index.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createLocationHelperCall"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:0",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import packages/core/src/internal/proc.js?",
+  "gold": [
+   "packages/core/src/internal/effectRunnerMap.js",
+   "packages/core/src/internal/runSaga.js"
+  ],
+  "exclude": [
+   "packages/core/src/internal/proc.js"
+  ],
+  "meta": {
+   "target": "packages/core/src/internal/proc.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:1",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/real-world/containers/DevTools.js?",
+  "gold": [
+   "examples/real-world/containers/Root.dev.js",
+   "examples/real-world/store/configureStore.dev.js"
+  ],
+  "exclude": [
+   "examples/real-world/containers/DevTools.js"
+  ],
+  "meta": {
+   "target": "examples/real-world/containers/DevTools.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:2",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/real-world/reducers/index.js?",
+  "gold": [
+   "examples/real-world/store/configureStore.dev.js",
+   "examples/real-world/store/configureStore.prod.js"
+  ],
+  "exclude": [
+   "examples/real-world/reducers/index.js"
+  ],
+  "meta": {
+   "target": "examples/real-world/reducers/index.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:3",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/async/src/sagas/index.js?",
+  "gold": [
+   "examples/async/src/main.js",
+   "examples/async/test/sagas.js"
+  ],
+  "exclude": [
+   "examples/async/src/sagas/index.js"
+  ],
+  "meta": {
+   "target": "examples/async/src/sagas/index.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:4",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/real-world/store/configureStore.js?",
+  "gold": [
+   "examples/real-world/index.js",
+   "examples/real-world/server.js"
+  ],
+  "exclude": [
+   "examples/real-world/store/configureStore.js"
+  ],
+  "meta": {
+   "target": "examples/real-world/store/configureStore.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:5",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import packages/core/src/internal/resolvePromise.js?",
+  "gold": [
+   "packages/core/src/internal/effectRunnerMap.js",
+   "packages/core/src/internal/proc.js"
+  ],
+  "exclude": [
+   "packages/core/src/internal/resolvePromise.js"
+  ],
+  "meta": {
+   "target": "packages/core/src/internal/resolvePromise.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:6",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/real-world/components/Repo.js?",
+  "gold": [
+   "examples/real-world/containers/RepoPage.js",
+   "examples/real-world/containers/UserPage.js"
+  ],
+  "exclude": [
+   "examples/real-world/components/Repo.js"
+  ],
+  "meta": {
+   "target": "examples/real-world/components/Repo.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:7",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import packages/core/src/internal/runSaga.js?",
+  "gold": [
+   "packages/core/src/index.js",
+   "packages/core/src/internal/middleware.js"
+  ],
+  "exclude": [
+   "packages/core/src/internal/runSaga.js"
+  ],
+  "meta": {
+   "target": "packages/core/src/internal/runSaga.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:8",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import packages/core/src/internal/effectTypes.js?",
+  "gold": [
+   "packages/core/src/effects.js",
+   "packages/core/src/internal/effectRunnerMap.js",
+   "packages/core/src/internal/io.js"
+  ],
+  "exclude": [
+   "packages/core/src/internal/effectTypes.js"
+  ],
+  "meta": {
+   "target": "packages/core/src/internal/effectTypes.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:9",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/cancellable-counter/src/sagas/index.js?",
+  "gold": [
+   "examples/cancellable-counter/src/main.js",
+   "examples/cancellable-counter/test/sagas.js"
+  ],
+  "exclude": [
+   "examples/cancellable-counter/src/sagas/index.js"
+  ],
+  "meta": {
+   "target": "examples/cancellable-counter/src/sagas/index.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:10",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/real-world/containers/Root.js?",
+  "gold": [
+   "examples/real-world/index.js",
+   "examples/real-world/server.js"
+  ],
+  "exclude": [
+   "examples/real-world/containers/Root.js"
+  ],
+  "meta": {
+   "target": "examples/real-world/containers/Root.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:11",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/real-world/components/User.js?",
+  "gold": [
+   "examples/real-world/containers/RepoPage.js",
+   "examples/real-world/containers/UserPage.js"
+  ],
+  "exclude": [
+   "examples/real-world/components/User.js"
+  ],
+  "meta": {
+   "target": "examples/real-world/components/User.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:12",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/real-world/routes.js?",
+  "gold": [
+   "examples/real-world/index.js",
+   "examples/real-world/server.js"
+  ],
+  "exclude": [
+   "examples/real-world/routes.js"
+  ],
+  "meta": {
+   "target": "examples/real-world/routes.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:13",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import packages/core/src/internal/buffers.js?",
+  "gold": [
+   "packages/core/src/index.js",
+   "packages/core/src/internal/channel.js",
+   "packages/core/src/internal/sagaHelpers/throttle.js"
+  ],
+  "exclude": [
+   "packages/core/src/internal/buffers.js"
+  ],
+  "meta": {
+   "target": "packages/core/src/internal/buffers.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "redux-saga:dep:14",
+  "repo": "redux-saga",
+  "type": "dependency",
+  "query": "Which files import examples/cancellable-counter/src/actionTypes.js?",
+  "gold": [
+   "examples/cancellable-counter/src/components/Counter.js",
+   "examples/cancellable-counter/src/reducers/counter.js",
+   "examples/cancellable-counter/src/sagas/index.js",
+   "examples/cancellable-counter/test/sagas.js"
+  ],
+  "exclude": [
+   "examples/cancellable-counter/src/actionTypes.js"
+  ],
+  "meta": {
+   "target": "examples/cancellable-counter/src/actionTypes.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "body-parser:loc:0",
+  "repo": "body-parser",
+  "type": "locate",
+  "query": "Get the first non-whitespace character in a string.",
+  "gold": [
+   "lib/types/json.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "firstNonWhitespaceChar"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "body-parser:loc:1",
+  "repo": "body-parser",
+  "type": "locate",
+  "query": "Get the charset of a request.",
+  "gold": [
+   "lib/read.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "getCharset"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "body-parser:loc:2",
+  "repo": "body-parser",
+  "type": "locate",
+  "query": "Count the number of parameters, stopping once limit reached",
+  "gold": [
+   "lib/types/urlencoded.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "parameterCount"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "body-parser:loc:3",
+  "repo": "body-parser",
+  "type": "locate",
+  "query": "Normalizes the common options for all parsers.",
+  "gold": [
+   "lib/utils.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "normalizeOptions"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "body-parser:loc:4",
+  "repo": "body-parser",
+  "type": "locate",
+  "query": "Create a decompression stream for the given encoding.",
+  "gold": [
+   "lib/read.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createDecompressionStream"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "body-parser:loc:5",
+  "repo": "body-parser",
+  "type": "locate",
+  "query": "Create strict violation syntax error matching native error.",
+  "gold": [
+   "lib/types/json.js"
+  ],
+  "exclude": [],
+  "meta": {
+   "identifier": "createStrictSyntaxError"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "body-parser:dep:0",
+  "repo": "body-parser",
+  "type": "dependency",
+  "query": "Which files import lib/utils.js?",
+  "gold": [
+   "lib/types/json.js",
+   "lib/types/raw.js",
+   "lib/types/text.js",
+   "lib/types/urlencoded.js",
+   "test/utils.js"
+  ],
+  "exclude": [
+   "lib/utils.js"
+  ],
+  "meta": {
+   "target": "lib/utils.js"
+  },
+  "split": "test2"
+ },
+ {
+  "id": "body-parser:dep:1",
+  "repo": "body-parser",
+  "type": "dependency",
+  "query": "Which files import lib/read.js?",
+  "gold": [
+   "lib/types/json.js",
+   "lib/types/raw.js",
+   "lib/types/text.js",
+   "lib/types/urlencoded.js"
+  ],
+  "exclude": [
+   "lib/read.js"
+  ],
+  "meta": {
+   "target": "lib/read.js"
+  },
+  "split": "test2"
+ }
+]

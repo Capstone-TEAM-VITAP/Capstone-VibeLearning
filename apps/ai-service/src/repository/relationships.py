@@ -117,7 +117,7 @@ class Relationship:
 # Supported languages
 # ---------------------------------------------------------------------------
 
-_SUPPORTED_LANGUAGES: frozenset[str] = frozenset({"javascript"})
+_SUPPORTED_LANGUAGES: frozenset[str] = frozenset({"javascript", "python"})
 
 # ---------------------------------------------------------------------------
 # Tree-sitter parser cache (independent of parser.py cache — same grammar)
@@ -521,6 +521,24 @@ def _walk_for_calls_and_refs(
         # --- Emit a CALLS relationship for the callee ---
         if callee is not None:
             callee_name = _callee_name(callee)
+            if callee_name == "require":
+                # CommonJS: ``require("./mod")`` is recorded as a module-level
+                # import (no symbol binding, like a side-effect import) so the
+                # resolver can link the two files.
+                req_path = _require_module_path(args)
+                if req_path is not None:
+                    results.append(
+                        Relationship(
+                            kind=RelationshipKind.IMPORTS,
+                            source_path=path,
+                            source_position=_pos(node.start_point),  # type: ignore[attr-defined]
+                            target_name="",
+                            module_path=req_path,
+                            alias=None,
+                            is_default=False,
+                            is_namespace=False,
+                        )
+                    )
             if callee_name:
                 results.append(
                     Relationship(
@@ -611,6 +629,21 @@ def _walk_for_calls_and_refs(
     return results
 
 
+def _require_module_path(args: object | None) -> str | None:
+    """Return the string literal passed to ``require(...)``, or ``None``.
+
+    Only a single plain string argument counts; dynamic expressions such as
+    ``require(name)`` or template strings are not statically resolvable.
+    """
+    if args is None:
+        return None
+    named = [c for c in args.children if c.is_named]  # type: ignore[attr-defined]
+    if len(named) != 1 or named[0].type != "string":  # type: ignore[attr-defined]
+        return None
+    module_path = _module_path_from_string_node(named[0])
+    return module_path or None
+
+
 def _callee_name(callee: object) -> str | None:
     """
     Derive a human-readable callee name from a call_expression's function node.
@@ -671,6 +704,11 @@ def extract_relationships(
 
     if isinstance(source, str):
         source = source.encode("utf-8")
+
+    if language == "python":
+        from .python_lang import extract_python_relationships
+
+        return extract_python_relationships(path, source)
 
     parser = _get_js_parser()
     tree = parser.parse(source)  # type: ignore[attr-defined]

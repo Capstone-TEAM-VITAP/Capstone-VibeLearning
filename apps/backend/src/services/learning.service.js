@@ -3,7 +3,7 @@ import { learningRepository } from "../repositories/learning.repository.js";
 import { repositoryRepository } from "../repositories/repository.repository.js";
 import { snapshotRepository } from "../repositories/snapshot.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
-import { findRelevantContext } from "./chat.service.js";
+import { findRelevantContextWithDense } from "./chat.service.js";
 import gitService, { ensureMirror, getChangedFiles, getSnapshotDiff } from "./git.service.js";
 import { BadRequestError, NotFoundError } from "../utils/errors.js";
 
@@ -127,11 +127,21 @@ export function buildOfflineQuestions(graphIr, count = DEFAULT_COUNT) {
     nodes.filter((n) => n.type === "file").map((n) => n.metadata?.path || n.label).filter(Boolean),
   );
   const files = [...fileSet];
+  // A name defined in several files has no single correct answer, so it is never quizzed.
+  const definingFiles = new Map();
+  for (const sym of symbols) {
+    const n = sym.metadata?.name || sym.label;
+    if (!n) continue;
+    if (!definingFiles.has(n)) definingFiles.set(n, new Set());
+    definingFiles.get(n).add(sym.metadata?.path);
+  }
   const questions = [];
+  const asked = new Set();
   for (const sym of symbols) {
     if (questions.length >= count) break;
     const name = sym.metadata?.name || sym.label;
     if (!name || /[/\\]/.test(name)) continue; // never quiz on path-like labels
+    if (name.length < 3 || asked.has(name) || definingFiles.get(name).size > 1) continue;
     const correctPath = sym.metadata?.path;
     if (!correctPath || !fileSet.has(correctPath)) continue;
     // Prefer same-extension distractors so options look plausible
@@ -141,9 +151,10 @@ export function buildOfflineQuestions(graphIr, count = DEFAULT_COUNT) {
     const distractors = [...sameExt, ...others].slice(0, 3);
     if (distractors.length < 3) continue;
     const options = [correctPath, ...distractors];
-    // Deterministic rotation so the answer is not always first
-    const rotation = name.length % 4;
+    // Deterministic rotation by question index so answer positions cycle A, B, C, D
+    const rotation = questions.length % 4;
     const rotated = options.map((_, idx) => options[(idx + rotation) % 4]);
+    asked.add(name);
     const kind = sym.metadata?.kind || sym.type;
     questions.push({
       prompt: questions.length % 2 === 0
@@ -436,7 +447,7 @@ export const learningService = {
         snapshotDir = null;
       }
     }
-    const context = findRelevantContext(graphIr, topic || "repository overview", snapshotDir);
+    const context = await findRelevantContextWithDense(graphIr, topic || "repository overview", snapshotDir);
     return { snapshot: latestSnapshot, graphIr, context };
   },
 

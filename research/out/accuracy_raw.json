@@ -1,0 +1,206 @@
+[
+ {
+  "repo": "hackathon-starter",
+  "lang": "js",
+  "oracle": 37,
+  "graph": 37,
+  "precision": 1.0,
+  "recall": 1.0
+ },
+ {
+  "repo": "koa",
+  "lang": "js",
+  "oracle": 70,
+  "graph": 69,
+  "precision": 1.0,
+  "recall": 0.9857142857142858
+ },
+ {
+  "repo": "react-redux-realworld-example-app",
+  "lang": "js",
+  "oracle": 82,
+  "graph": 82,
+  "precision": 1.0,
+  "recall": 1.0
+ },
+ {
+  "repo": "express",
+  "lang": "js",
+  "oracle": 58,
+  "graph": 58,
+  "precision": 1.0,
+  "recall": 1.0
+ },
+ {
+  "repo": "hapi",
+  "lang": "js",
+  "oracle": 43,
+  "graph": 43,
+  "precision": 1.0,
+  "recall": 1.0
+ },
+ {
+  "repo": "axios",
+  "lang": "js",
+  "oracle": 371,
+  "graph": 369,
+  "precision": 1.0,
+  "recall": 0.9946091644204852
+ },
+ {
+  "repo": "react-boilerplate",
+  "lang": "js",
+  "oracle": 230,
+  "graph": 225,
+  "precision": 1.0,
+  "recall": 0.9782608695652174
+ },
+ {
+  "repo": "node-fetch",
+  "lang": "js",
+  "oracle": 42,
+  "graph": 41,
+  "precision": 1.0,
+  "recall": 0.9761904761904762
+ },
+ {
+  "repo": "passport",
+  "lang": "js",
+  "oracle": 32,
+  "graph": 32,
+  "precision": 1.0,
+  "recall": 1.0
+ },
+ {
+  "repo": "connect",
+  "lang": "js",
+  "oracle": 2,
+  "graph": 2,
+  "precision": 1.0,
+  "recall": 1.0
+ },
+ {
+  "repo": "request",
+  "lang": "js",
+  "oracle": 93,
+  "graph": 93,
+  "precision": 1.0,
+  "recall": 1.0
+ },
+ {
+  "repo": "winston",
+  "lang": "js",
+  "oracle": 76,
+  "graph": 77,
+  "precision": 0.987012987012987,
+  "recall": 1.0
+ },
+ {
+  "repo": "mocha",
+  "lang": "js",
+  "oracle": 118,
+  "graph": 117,
+  "precision": 1.0,
+  "recall": 0.9915254237288136
+ },
+ {
+  "repo": "redux-saga",
+  "lang": "js",
+  "oracle": 249,
+  "graph": 237,
+  "precision": 1.0,
+  "recall": 0.9518072289156626
+ },
+ {
+  "repo": "body-parser",
+  "lang": "js",
+  "oracle": 13,
+  "graph": 13,
+  "precision": 1.0,
+  "recall": 1.0
+ },
+ {
+  "repo": "requests",
+  "lang": "python",
+  "oracle": 115,
+  "graph": 106,
+  "precision": 1.0,
+  "recall": 0.9217391304347826,
+  "symbols": {
+   "oracle": 720,
+   "found": 720,
+   "recall": 1.0,
+   "precision": 1.0
+  },
+  "calls": {
+   "oracle": 129,
+   "graph_cross_file": 135,
+   "graph_in_scope": 124,
+   "recall": 0.9612403100775194,
+   "precision_in_scope": 1.0
+  }
+ },
+ {
+  "repo": "click",
+  "lang": "python",
+  "oracle": 176,
+  "graph": 173,
+  "precision": 1.0,
+  "recall": 0.9829545454545454,
+  "symbols": {
+   "oracle": 1511,
+   "found": 1511,
+   "recall": 1.0,
+   "precision": 1.0
+  },
+  "calls": {
+   "oracle": 103,
+   "graph_cross_file": 103,
+   "graph_in_scope": 98,
+   "recall": 0.9514563106796117,
+   "precision_in_scope": 1.0
+  }
+ },
+ {
+  "repo": "flask",
+  "lang": "python",
+  "oracle": 219,
+  "graph": 214,
+  "precision": 0.985981308411215,
+  "recall": 0.9634703196347032,
+  "symbols": {
+   "oracle": 1298,
+   "found": 1298,
+   "recall": 1.0,
+   "precision": 1.0
+  },
+  "calls": {
+   "oracle": 56,
+   "graph_cross_file": 64,
+   "graph_in_scope": 53,
+   "recall": 0.9464285714285714,
+   "precision_in_scope": 1.0
+  }
+ },
+ {
+  "repo": "httpx",
+  "lang": "python",
+  "oracle": 123,
+  "graph": 123,
+  "precision": 1.0,
+  "recall": 1.0,
+  "symbols": {
+   "oracle": 1067,
+   "found": 1067,
+   "recall": 1.0,
+   "precision": 1.0
+  },
+  "calls": {
+   "oracle": 69,
+   "graph_cross_file": 77,
+   "graph_in_scope": 69,
+   "recall": 1.0,
+   "precision_in_scope": 1.0
+  }
+ }
+]

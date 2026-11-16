@@ -1,0 +1,5 @@
+# Optional: enables neural (embedding) file ranking for chat and quizzes (/dense endpoints).
+# Without these packages the AI service runs normally and the backend ranks without embeddings.
+# CPU-only torch: pip install --index-url https://download.pytorch.org/whl/cpu torch
+sentence-transformers
+torch

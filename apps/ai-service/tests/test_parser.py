@@ -455,10 +455,10 @@ export default Counter;
 # ===========================================================================
 
 class TestUnsupportedLanguage:
-    def test_python_raises_unsupported(self) -> None:
+    def test_java_raises_unsupported(self) -> None:
         with pytest.raises(UnsupportedLanguageError) as exc_info:
-            parse_source(path="main.py", language="python", source=b"x = 1")
-        assert exc_info.value.language == "python"
+            parse_source(path="Main.java", language="java", source=b"class A {}")
+        assert exc_info.value.language == "java"
 
     def test_typescript_raises_unsupported(self) -> None:
         with pytest.raises(UnsupportedLanguageError) as exc_info:

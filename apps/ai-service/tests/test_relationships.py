@@ -703,10 +703,10 @@ class TestSyntaxErrorSource:
 
 
 class TestUnsupportedLanguage:
-    def test_python_raises(self) -> None:
+    def test_java_raises(self) -> None:
         with pytest.raises(UnsupportedLanguageError) as exc_info:
-            extract_relationships(path="main.py", language="python", source=b"x = 1")
-        assert exc_info.value.language == "python"
+            extract_relationships(path="Main.java", language="java", source=b"class A {}")
+        assert exc_info.value.language == "java"
 
     def test_typescript_raises(self) -> None:
         with pytest.raises(UnsupportedLanguageError):
@@ -837,3 +837,38 @@ class TestRelationshipKindEnum:
     def test_kind_is_str(self) -> None:
         """RelationshipKind(str, Enum) — each kind IS a str."""
         assert isinstance(RelationshipKind.IMPORTS, str)
+
+
+class TestCommonJsRequire:
+    """CommonJS ``require("./x")`` is extracted as a module-level IMPORTS fact."""
+
+    @staticmethod
+    def _imports(src: str):
+        rels = extract_relationships("a.js", "javascript", src)
+        return [r for r in rels if r.kind == RelationshipKind.IMPORTS]
+
+    def test_plain_require(self) -> None:
+        imps = self._imports("const x = require('./x');")
+        assert [i.module_path for i in imps] == ["./x"]
+        assert imps[0].target_name == ""
+
+    def test_destructured_and_bare_require(self) -> None:
+        imps = self._imports("const { a, b } = require('./m');\nrequire('./side');")
+        assert sorted(i.module_path for i in imps) == ["./m", "./side"]
+
+    def test_nested_require_inside_function(self) -> None:
+        imps = self._imports("function f() { return require('./lazy'); }")
+        assert [i.module_path for i in imps] == ["./lazy"]
+
+    def test_package_require_is_kept_for_external_classification(self) -> None:
+        imps = self._imports("const e = require('express');")
+        assert [i.module_path for i in imps] == ["express"]
+
+    def test_dynamic_require_ignored(self) -> None:
+        assert self._imports("const m = require(name);") == []
+        assert self._imports("const m = require(`./${n}`);") == []
+        assert self._imports("const m = require('a', 'b');") == []
+
+    def test_require_still_recorded_as_call(self) -> None:
+        rels = extract_relationships("a.js", "javascript", "const x = require('./x');")
+        assert any(r.kind == RelationshipKind.CALLS and r.target_name == "require" for r in rels)

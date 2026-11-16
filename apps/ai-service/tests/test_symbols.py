@@ -641,10 +641,10 @@ class TestExportedDeclarations:
 
 
 class TestUnsupportedLanguage:
-    def test_python_raises(self) -> None:
+    def test_java_raises(self) -> None:
         with pytest.raises(UnsupportedLanguageError) as exc_info:
-            extract_symbols(path="main.py", language="python", source=b"x = 1")
-        assert exc_info.value.language == "python"
+            extract_symbols(path="Main.java", language="java", source=b"class A {}")
+        assert exc_info.value.language == "java"
 
     def test_typescript_raises(self) -> None:
         with pytest.raises(UnsupportedLanguageError):
