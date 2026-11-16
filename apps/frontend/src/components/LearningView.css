@@ -97,6 +97,17 @@
   align-items: end;
 }
 
+.learning-diff-empty {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.learning-generator--diff {
+  grid-template-columns: 1fr 1fr 150px 110px auto;
+}
+
 .learning-field {
   display: flex;
   flex-direction: column;
@@ -122,6 +133,9 @@
 
 @media (max-width: 900px) {
   .learning-generator {
+    grid-template-columns: 1fr 1fr;
+  }
+  .learning-generator--diff {
     grid-template-columns: 1fr 1fr;
   }
   .learning-generate-btn {

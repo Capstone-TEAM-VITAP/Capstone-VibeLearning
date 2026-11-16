@@ -466,3 +466,36 @@
   overflow: hidden !important;
 }
 
+/* --- AI Assistant Full Viewport Fit (No overflow, fully visible & scrollable) --- */
+.codeai-main-container--assistant {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.codeai-page-content--assistant {
+  padding: 16px 28px 16px !important;
+  max-width: 1440px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  height: calc(100vh - 64px) !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.dashboard-content--assistant {
+  margin: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+

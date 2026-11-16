@@ -15,6 +15,17 @@ export const generateLearningSchema = z.object({
   count: z.number().int().min(1).max(10).optional().default(5),
 });
 
+const fullShaSchema = z
+  .string()
+  .regex(/^[0-9a-f]{40}$/i, { message: "Must be a full 40-character commit SHA" });
+
+export const generateDiffLearningSchema = z.object({
+  baseSha: fullShaSchema.optional(),
+  headSha: fullShaSchema.optional(),
+  difficulty: z.enum(["beginner", "intermediate", "advanced"]).optional().default("beginner"),
+  count: z.number().int().min(1).max(10).optional().default(5),
+});
+
 export const submitLearningSchema = z.object({
   answers: z
     .array(
@@ -30,5 +41,6 @@ export const submitLearningSchema = z.object({
 export default {
   learningSetIdParamSchema,
   generateLearningSchema,
+  generateDiffLearningSchema,
   submitLearningSchema,
 };

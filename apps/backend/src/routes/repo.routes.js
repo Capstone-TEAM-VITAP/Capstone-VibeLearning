@@ -8,6 +8,7 @@ import { learningController } from "../controllers/learning.controller.js";
 import { repoController } from "../controllers/repo.controller.js";
 import { chatMessageSchema } from "../validators/chat.validator.js";
 import {
+  generateDiffLearningSchema,
   generateLearningSchema,
   learningSetIdParamSchema,
   submitLearningSchema,
@@ -102,6 +103,13 @@ router.post(
   "/:id/learning/generate",
   validate({ params: repoIdParamSchema, body: generateLearningSchema }),
   learningController.generate
+);
+
+// POST /api/v1/repos/:id/learning/generate-diff — MCQ set from a base..head diff
+router.post(
+  "/:id/learning/generate-diff",
+  validate({ params: repoIdParamSchema, body: generateDiffLearningSchema }),
+  learningController.generateDiff
 );
 
 // GET /api/v1/repos/:id/learning/sets — list quiz sets with progress

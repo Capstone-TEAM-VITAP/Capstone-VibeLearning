@@ -4,12 +4,14 @@ import { repositoryRepository } from "../repositories/repository.repository.js";
 import { snapshotRepository } from "../repositories/snapshot.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 import { findRelevantContextWithDense } from "./chat.service.js";
-import gitService from "./git.service.js";
+import gitService, { ensureMirror, getChangedFiles, getSnapshotDiff } from "./git.service.js";
 import { BadRequestError, NotFoundError } from "../utils/errors.js";
 
 const VALID_DIFFICULTIES = ["beginner", "intermediate", "advanced"];
 const DEFAULT_COUNT = 5;
 const MAX_COUNT = 10;
+const MAX_DIFF_PACK_FILES = 12;
+const MAX_DIFF_PACK_CHARS = 6000;
 
 /**
  * Learning flow (MCQ v1):
@@ -170,6 +172,107 @@ export function buildOfflineQuestions(graphIr, count = DEFAULT_COUNT) {
 }
 
 /**
+ * Build a deterministic markdown "diff pack" from a base..head change:
+ * changed-file list plus capped unified hunks. Pure function.
+ */
+export function buildDiffPack({ repo, baseSha, headSha, files = [], diffFiles = [] }) {
+  const repoName = `${repo.owner}/${repo.name}`;
+  const short = (s) => (s ? String(s).slice(0, 7) : "—");
+  const list = Array.isArray(files) ? files.filter((f) => f && (f.path || f.oldPath)) : [];
+  const byPath = new Map(
+    (Array.isArray(diffFiles) ? diffFiles : []).filter((d) => d && d.path).map((d) => [d.path, d]),
+  );
+  const lines = [];
+  lines.push(`# Diff Pack: ${repoName}`);
+  lines.push(`Range: ${short(baseSha)}..${short(headSha)} (${list.length} files changed)`);
+  lines.push(``);
+  lines.push(`## Changed Files`);
+  if (!list.length) {
+    lines.push(`No changed files in this range.`);
+  } else {
+    for (const f of list.slice(0, MAX_DIFF_PACK_FILES)) {
+      lines.push(`- ${f.status || "?"} ${f.path || f.oldPath}`);
+    }
+    if (list.length > MAX_DIFF_PACK_FILES) {
+      lines.push(`- ... and ${list.length - MAX_DIFF_PACK_FILES} more`);
+    }
+  }
+  lines.push(``);
+  lines.push(`## Diffs`);
+  let budget = MAX_DIFF_PACK_CHARS;
+  let included = 0;
+  for (const f of list.slice(0, MAX_DIFF_PACK_FILES)) {
+    if (budget <= 0) break;
+    const hunks = Array.isArray(byPath.get(f.path)?.hunks) ? byPath.get(f.path).hunks : [];
+    if (!hunks.length) continue;
+    const d = byPath.get(f.path);
+    lines.push(`### ${f.status || "?"} ${f.path} (+${d.additions ?? 0} -${d.deletions ?? 0})`);
+    lines.push("```diff");
+    for (const h of hunks) {
+      const hunkLines = Array.isArray(h.lines) ? h.lines : [];
+      for (const l of hunkLines) {
+        const prefix = l.type === "add" ? "+" : l.type === "del" ? "-" : " ";
+        const text = `${prefix}${l.text ?? ""}`;
+        if (text.length + 1 > budget) {
+          budget = 0;
+          break;
+        }
+        lines.push(text);
+        budget -= text.length + 1;
+      }
+      if (budget <= 0) break;
+    }
+    lines.push("```");
+    included += 1;
+  }
+  if (!included) {
+    lines.push(`No hunk details available — quiz on which files changed and how.`);
+  }
+  return lines.join("\n");
+}
+
+const DIFF_STATUS_VERBS = {
+  A: "added",
+  M: "modified",
+  D: "deleted",
+  R: "renamed",
+  C: "copied",
+  T: "type-changed",
+};
+
+/**
+ * Deterministic offline fallback for diffs: "which file was X?" MCQs
+ * from the changed-file list. Needs 4+ changed files for distractors.
+ * Pure function.
+ */
+export function buildDiffOfflineQuestions({ baseSha, headSha, files = [] }, count = DEFAULT_COUNT) {
+  const list = (Array.isArray(files) ? files : []).filter((f) => f && f.path);
+  if (list.length < 4) return [];
+  const range = `${String(baseSha || "").slice(0, 7)}..${String(headSha || "").slice(0, 7)}`;
+  const paths = list.map((f) => f.path);
+  const questions = [];
+  for (const f of list) {
+    if (questions.length >= count) break;
+    const verb = DIFF_STATUS_VERBS[f.status] || "changed";
+    const distractors = paths.filter((p) => p !== f.path).slice(0, 3);
+    if (distractors.length < 3) continue;
+    const options = [f.path, ...distractors];
+    const rotation = f.path.length % 4;
+    const rotated = options.map((_, idx) => options[(idx + rotation) % 4]);
+    questions.push({
+      prompt: `Which file was ${verb} in ${range}?`,
+      options: rotated,
+      answerIndex: rotated.indexOf(f.path),
+      explanation: `"${f.path}" was ${verb} between ${range}.`,
+      citationPath: f.path,
+      citationStart: null,
+      citationEnd: null,
+    });
+  }
+  return questions;
+}
+
+/**
  * Grade submitted picks against stored questions. Pure function.
  */
 export function gradeAnswers(questions, picks) {
@@ -297,10 +400,18 @@ Return ONLY a JSON array. Each item: {"prompt": string, "options": [exactly 4 st
 Rules: every question must be answerable from the pack below; cite the file + lines that prove the answer; vary the correct option position; keep prompts under 280 characters.`;
 }
 
+function mcqDiffSystemPrompt() {
+  return `You generate multiple-choice questions that teach a developer what changed between two states of a real codebase.
+Return ONLY a JSON array. Each item: {"prompt": string, "options": [exactly 4 strings], "answerIndex": 0-3, "explanation": string, "citation": {"path": string, "startLine": number, "endLine": number}}.
+Rules: every question must be about the diff below (added, removed, or changed code; renamed or deleted files); cite the file (+ lines when shown) that proves the answer; vary the correct option position; keep prompts under 280 characters.`;
+}
+
 export const learningService = {
   buildLearningPack,
+  buildDiffPack,
   parseMcqResponse,
   buildOfflineQuestions,
+  buildDiffOfflineQuestions,
   gradeAnswers,
 
   async _resolveRepo(clerkUserId, repositoryId) {
@@ -398,6 +509,105 @@ export const learningService = {
     }
     const saved = await this.getSet(clerkUserId, repositoryId, set.id);
     return { ...saved, engine };
+  },
+
+  /**
+   * Generate (or reuse) an MCQ set grounded in the diff between two
+   * states (base..head). Defaults to the latest snapshot vs its base.
+   * Idempotent per user/repo/range/difficulty.
+   */
+  async generateDiff(clerkUserId, repositoryId, { baseSha = null, headSha = null, difficulty = "beginner", count = DEFAULT_COUNT } = {}) {
+    if (!VALID_DIFFICULTIES.includes(difficulty)) throw new BadRequestError("Invalid difficulty");
+    const n = Math.min(Math.max(Number(count) || DEFAULT_COUNT, 1), MAX_COUNT);
+    const { user, repo } = await this._resolveRepo(clerkUserId, repositoryId);
+    const snapshots =
+      typeof snapshotRepository.findManyByRepositoryId === "function"
+        ? await snapshotRepository.findManyByRepositoryId(repo.id)
+        : [];
+    let headSnapshot = null;
+    if (headSha) {
+      headSnapshot =
+        typeof snapshotRepository.findByRepoAndSha === "function"
+          ? await snapshotRepository.findByRepoAndSha(repo.id, headSha)
+          : null;
+      if (!headSnapshot) throw new NotFoundError("Snapshot not found");
+    } else {
+      headSnapshot = snapshots[0] || null;
+    }
+    if (!headSnapshot?.commitSha) {
+      throw new BadRequestError("No snapshots yet — connect and sync a repository first");
+    }
+    const head = headSnapshot.commitSha;
+    const base = baseSha || headSnapshot.baseSha || null;
+    if (!base) {
+      throw new BadRequestError("No base state to diff against — sync the repository again to record one");
+    }
+    if (base === head) throw new BadRequestError("No changes between base and head");
+    const topic = `diff:${base.slice(0, 7)}..${head.slice(0, 7)}`;
+
+    const existing = await learningRepository.findSetByRepoTopicSha(user.id, repo.id, head, topic, difficulty);
+    if (existing) {
+      const hit = await this.getSet(clerkUserId, repositoryId, existing.id);
+      return { ...hit, baseSha: base, headSha: head };
+    }
+
+    await ensureMirror({ repositoryId: repo.id, repoUrl: repo.repoUrl, defaultBranch: repo.defaultBranch });
+    const changed = await getChangedFiles(repo.id, base, head);
+    const files = Array.isArray(changed) ? changed.filter((f) => f && (f.path || f.oldPath)) : [];
+    if (!files.length) throw new BadRequestError("No changed files between base and head");
+    let diffFiles = [];
+    try {
+      const diff = await getSnapshotDiff(repo.id, base, head, []);
+      diffFiles = Array.isArray(diff?.files) ? diff.files : [];
+    } catch (err) {
+      console.warn("Diff hunks unavailable, quizzing on file list only:", err.message);
+    }
+
+    const pack = buildDiffPack({ repo, baseSha: base, headSha: head, files, diffFiles });
+    const knownPaths = files.slice(0, MAX_DIFF_PACK_FILES).map((f) => f.path).filter(Boolean);
+    let questions = [];
+    let engine = "offline";
+    try {
+      const raw = await callLlm(
+        mcqDiffSystemPrompt(),
+        `DIFF PACK:\n${pack}\n\nGenerate ${n} ${difficulty}-level multiple-choice questions about what changed in this diff.`,
+      );
+      if (raw) {
+        questions = parseMcqResponse(raw, knownPaths).slice(0, n);
+        engine = "llm";
+      }
+    } catch (err) {
+      console.warn("Diff LLM generation failed, using offline fallback:", err.message);
+    }
+    if (!questions.length) {
+      questions = buildDiffOfflineQuestions({ baseSha: base, headSha: head, files }, n);
+      if (!questions.length) {
+        throw new BadRequestError("Not enough changed files to quiz on — need at least 4 changed files");
+      }
+    }
+
+    const set = await learningRepository.createSet({
+      userId: user.id,
+      repositoryId: repo.id,
+      commitSha: head,
+      topic,
+      difficulty,
+      questionCount: questions.length,
+    });
+    for (const q of questions) {
+      await learningRepository.createQuestion({
+        setId: set.id,
+        prompt: q.prompt,
+        optionsJson: q.options,
+        answerIndex: q.answerIndex,
+        explanation: q.explanation,
+        citationPath: q.citationPath,
+        citationStart: q.citationStart,
+        citationEnd: q.citationEnd,
+      });
+    }
+    const saved = await this.getSet(clerkUserId, repositoryId, set.id);
+    return { ...saved, engine, baseSha: base, headSha: head, fileCount: files.length };
   },
 
   async listSets(clerkUserId, repositoryId) {

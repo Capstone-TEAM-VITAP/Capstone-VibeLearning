@@ -125,6 +125,14 @@ export async function generateLearningSet(getToken, id, payload) {
   return body.data;
 }
 
+export async function generateDiffLearningSet(getToken, id, payload) {
+  const body = await authedFetch(getToken, `/repos/${id}/learning/generate-diff`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return body.data;
+}
+
 export async function listLearningSets(getToken, id) {
   const body = await authedFetch(getToken, `/repos/${id}/learning/sets`);
   return body.data;

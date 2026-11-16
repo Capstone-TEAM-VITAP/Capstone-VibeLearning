@@ -1,9 +1,11 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
+  buildDiffPack,
   buildLearningPack,
   parseMcqResponse,
   buildOfflineQuestions,
+  buildDiffOfflineQuestions,
   gradeAnswers,
 } from "../src/services/learning.service.js";
 
@@ -214,6 +216,83 @@ describe("Answer grading", () => {
     assert.throws(
       () => gradeAnswers(questions, [{ questionId: "nope", pickedIndex: 0 }]),
       /Unknown question/,
+    );
+  });
+});
+
+const DIFF_FILES = [
+  { path: "src/a.js", status: "M" },
+  { path: "src/b.js", status: "A" },
+  { path: "src/c.js", status: "D" },
+  { path: "src/d.js", status: "M" },
+  { path: "src/e.js", status: "R" },
+];
+
+const DIFF_HUNKS = [
+  {
+    path: "src/a.js",
+    status: "M",
+    additions: 3,
+    deletions: 1,
+    hunks: [
+      { oldStart: 10, oldLines: 3, newStart: 10, newLines: 5, lines: [
+        { type: "context", text: "function old() {" },
+        { type: "del", text: "  return 1;" },
+        { type: "add", text: "  return 2;" },
+      ] },
+    ],
+  },
+];
+
+describe("Diff pack builder", () => {
+  it("builds markdown with range, file list, and hunks", () => {
+    const pack = buildDiffPack({
+      repo: REPO,
+      baseSha: "aaaaaaa000000000000000000000000000000000",
+      headSha: "bbbbbbb111111111111111111111111111111111",
+      files: DIFF_FILES,
+      diffFiles: DIFF_HUNKS,
+    });
+    assert.match(pack, /octo\/hello/);
+    assert.match(pack, /aaaaaaa\.\.bbbbbbb/);
+    assert.match(pack, /5 files changed/);
+    assert.match(pack, /- M src\/a\.js/);
+    assert.match(pack, /```diff/);
+    assert.match(pack, /\+  return 2;/);
+    assert.match(pack, /-  return 1;/);
+  });
+
+  it("falls back to file-list quizzing when hunks are missing", () => {
+    const pack = buildDiffPack({ repo: REPO, baseSha: "a", headSha: "b", files: DIFF_FILES, diffFiles: [] });
+    assert.match(pack, /No hunk details available/);
+    assert.match(pack, /- A src\/b\.js/);
+  });
+});
+
+describe("Diff offline fallback", () => {
+  it("builds which-file-changed questions with 4 options", () => {
+    const out = buildDiffOfflineQuestions({ baseSha: "a", headSha: "b", files: DIFF_FILES }, 5);
+    assert.equal(out.length, 5);
+    assert.match(out[0].prompt, /Which file was modified/);
+    assert.match(out[1].prompt, /Which file was added/);
+    for (const q of out) {
+      assert.equal(q.options.length, 4);
+      assert.equal(new Set(q.options).size, 4);
+    }
+    assert.equal(out[0].options[out[0].answerIndex], "src/a.js");
+    assert.equal(out[1].options[out[1].answerIndex], "src/b.js");
+  });
+
+  it("rotates answer positions deterministically", () => {
+    const once = buildDiffOfflineQuestions({ baseSha: "a", headSha: "b", files: DIFF_FILES }, 5);
+    const twice = buildDiffOfflineQuestions({ baseSha: "a", headSha: "b", files: DIFF_FILES }, 5);
+    assert.deepEqual(once.map((q) => q.answerIndex), twice.map((q) => q.answerIndex));
+  });
+
+  it("returns empty when fewer than 4 files changed", () => {
+    assert.deepEqual(
+      buildDiffOfflineQuestions({ baseSha: "a", headSha: "b", files: DIFF_FILES.slice(0, 3) }, 5),
+      [],
     );
   });
 });

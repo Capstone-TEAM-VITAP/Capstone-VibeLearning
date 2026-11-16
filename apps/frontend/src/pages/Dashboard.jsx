@@ -393,7 +393,7 @@ function Dashboard() {
       />
 
       {/* Main Workstation Container */}
-      <div className={`codeai-main-container ${view === "graph" ? "codeai-main-container--graph" : ""}`}>
+      <div className={`codeai-main-container ${view === "graph" ? "codeai-main-container--graph" : view === "assistant" ? "codeai-main-container--assistant" : ""}`}>
         {/* Google Stitch Terminal Horizon Header */}
         <Header
           repositories={repos}
@@ -409,7 +409,7 @@ function Dashboard() {
         />
 
         {/* Dynamic Page Content */}
-        <main className={`codeai-page-content ${view === "graph" ? "codeai-page-content--fullbleed" : ""}`}>
+        <main className={`codeai-page-content ${view === "graph" ? "codeai-page-content--fullbleed" : view === "assistant" ? "codeai-page-content--assistant" : ""}`}>
           {/* =========================================================
              OVERVIEW DASHBOARD (PHASE 3)
              ========================================================= */}
@@ -708,7 +708,7 @@ function Dashboard() {
              AI ASSISTANT WORKSPACE
              ========================================================= */}
           {view === "assistant" && (
-            <section className="dashboard-content">
+            <section className="dashboard-content dashboard-content--assistant">
               <AIAssistant
                 getToken={getToken}
                 selectedRepo={selectedRepo}
