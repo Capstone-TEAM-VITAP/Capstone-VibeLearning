@@ -79,6 +79,7 @@ def score_edges(
     *,
     use_roles: bool = True,
     relevance: Mapping[str, float] | None = None,
+    threshold: float | None = None,
 ) -> list[ScoredEdge]:
     """
     Score every non-test dependency edge for *query*; best first, threshold applied.
@@ -123,7 +124,7 @@ def score_edges(
                     s += PRIMARY_BONUS
                 elif e.source in secondary:
                     s += SECONDARY_BONUS
-        if s >= SCORE_THRESHOLD:
+        if s >= (SCORE_THRESHOLD if threshold is None else threshold):
             out.append(ScoredEdge(e.source, e.target, round(s, 6)))
     out.sort(key=lambda x: (-x.score, x.source, x.target))
     return out
@@ -137,9 +138,15 @@ def prune(
     use_roles: bool = True,
     use_continuity: bool = True,
     relevance: Mapping[str, float] | None = None,
+    threshold: float | None = None,
 ) -> list[ScoredEdge]:
-    """Return at most *k_max* edges forming the most query-relevant, connected flow."""
-    candidates = score_edges(fg, query, use_roles=use_roles, relevance=relevance)
+    """
+    Return at most *k_max* edges forming the most query-relevant, connected flow.
+
+    *threshold* overrides SCORE_THRESHOLD; 0 keeps every edge that touches a relevant file, which
+    avoids empty output when relevance comes from reciprocal ranks (values well below 1).
+    """
+    candidates = score_edges(fg, query, use_roles=use_roles, relevance=relevance, threshold=threshold)
     selected: list[ScoredEdge] = []
     remaining = list(candidates)
     while remaining and len(selected) < k_max:
@@ -160,16 +167,21 @@ def prune(
     return selected
 
 
-def bfs_edges(fg: FileGraph, query: str, hops: int = 2, n_seeds: int = 3) -> list[tuple[str, str]]:
+def bfs_edges(
+    fg: FileGraph, query: str, hops: int = 2, n_seeds: int = 3, seeds: list[str] | None = None
+) -> list[tuple[str, str]]:
     """
     Unpruned baseline: expand outgoing edges up to *hops* from the *n_seeds* files whose
-    paths best match the query, and return every edge traversed.
+    paths best match the query (or from *seeds*, e.g. a retrieval ranking), and return every edge traversed.
     """
-    kws = keywords(query)
-    ranked = sorted(
-        (p for p in fg.files if not fg.is_test(p) and overlap(p, kws) > 0),
-        key=lambda p: (-overlap(p, kws), p),
-    )[:n_seeds]
+    if seeds is not None:
+        ranked = [p for p in seeds if not fg.is_test(p)][:n_seeds]
+    else:
+        kws = keywords(query)
+        ranked = sorted(
+            (p for p in fg.files if not fg.is_test(p) and overlap(p, kws) > 0),
+            key=lambda p: (-overlap(p, kws), p),
+        )[:n_seeds]
     seen_edges: dict[tuple[str, str], None] = {}
     frontier = list(ranked)
     visited = set(frontier)
@@ -212,3 +224,13 @@ def top_relevance_edges(
             scored.append((-s, e.source, e.target))
     scored.sort()
     return [(u, v) for _, u, v in scored[:k_max]]
+
+
+def candidate_edges(fg: FileGraph, relevance: Mapping[str, float]) -> list[tuple[str, str]]:
+    """Unpruned counterpart of the pruner: every non-test edge with a relevant endpoint (the pool it scores)."""
+    return [
+        (e.source, e.target)
+        for e in fg.edges
+        if not fg.is_test(e.source) and not fg.is_test(e.target)
+        and (relevance.get(e.source, 0.0) > 0 or relevance.get(e.target, 0.0) > 0)
+    ]

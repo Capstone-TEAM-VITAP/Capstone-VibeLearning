@@ -3,7 +3,7 @@ import { learningRepository } from "../repositories/learning.repository.js";
 import { repositoryRepository } from "../repositories/repository.repository.js";
 import { snapshotRepository } from "../repositories/snapshot.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
-import { findRelevantContext } from "./chat.service.js";
+import { findRelevantContextWithDense } from "./chat.service.js";
 import gitService from "./git.service.js";
 import { BadRequestError, NotFoundError } from "../utils/errors.js";
 
@@ -336,7 +336,7 @@ export const learningService = {
         snapshotDir = null;
       }
     }
-    const context = findRelevantContext(graphIr, topic || "repository overview", snapshotDir);
+    const context = await findRelevantContextWithDense(graphIr, topic || "repository overview", snapshotDir);
     return { snapshot: latestSnapshot, graphIr, context };
   },
 

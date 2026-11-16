@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { buildFileGraph, graphRank, questionKind, rrf } from "./graph-retrieval.service.js";
 
 /**
  * Content-aware file retrieval for repository questions.
@@ -68,7 +69,7 @@ export function buildSearchIndex(graphIr, snapshotDir) {
     if (!symbols.has(p)) symbols.set(p, []);
     symbols.get(p).push(new Set(tokenize(name)));
   }
-  return { docs, df, avgLen, N: docs.length, symbols };
+  return { docs, df, avgLen, N: docs.length, symbols, fileGraph: buildFileGraph(graphIr) };
 }
 
 /** Ranked list of `{ path, score }`, best first. Files with no signal are omitted. */
@@ -104,6 +105,27 @@ export function rankFiles(index, query, { symbolWeight = SYMBOL_WEIGHT } = {}) {
   return [...score.entries()]
     .sort((a, c) => c[1] - a[1] || a[0].localeCompare(c[0]))
     .map(([p, s]) => ({ path: p, score: s }));
+}
+
+/**
+ * The retriever CodeAI's chat and quizzes use (version 2, adopted from the research benchmark).
+ *
+ * Routing by question type:
+ *   - importers ("which files import lib/x.js?"): reverse-import ranking from the dependency graph;
+ *   - impact ("what is affected if lib/x.js changes?") and every other question: Reciprocal Rank Fusion
+ *     of the text ranking (`rankFiles`), the graph ranking and, when the AI service provides it, a neural
+ *     embedding ranking (`denseRanking`, a list of paths best first).
+ * Returns paths best first. `kind` reports the route taken.
+ */
+export function rankFilesHybrid(index, query, { denseRanking = null } = {}) {
+  const fg = index.fileGraph || buildFileGraph(null);
+  const { kind } = questionKind(fg, query);
+  const graph = graphRank(fg, query);
+  if (kind === "importers" && graph.length > 0) return { kind, paths: graph };
+  const text = rankFiles(index, query).map((r) => r.path);
+  const lists = [text, graph];
+  if (Array.isArray(denseRanking) && denseRanking.length > 0) lists.push(denseRanking);
+  return { kind, paths: rrf(lists) };
 }
 
 const cache = new Map();

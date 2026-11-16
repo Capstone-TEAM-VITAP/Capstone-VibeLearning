@@ -6,7 +6,8 @@ import { jobRepository } from "../repositories/job.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 import { NotFoundError, BadRequestError } from "../utils/errors.js";
 import gitService from "./git.service.js";
-import { getSearchIndex, rankFiles } from "./retrieval.service.js";
+import { getSearchIndex, rankFilesHybrid } from "./retrieval.service.js";
+import { aiService } from "./ai.service.js";
 
 const TOKEN_PATTERN = /[A-Za-z0-9_]+/g;
 
@@ -225,20 +226,22 @@ const ARCHITECTURE_QUERY = /\b(architecture|overview|structure|components)\b/;
 /**
  * Select the files and excerpts that ground an answer.
  *
- * Files are ranked by content-aware BM25 plus a graph symbol bonus
- * (`retrieval.service.js`). Without a snapshot directory there is no text to
- * search, so this falls back to the legacy name/path heuristic. Architecture
- * questions keep the legacy entrypoint-oriented selection because they ask
- * about structure rather than about text in a file.
+ * Files are ranked by `rankFilesHybrid` (`retrieval.service.js`): importer
+ * questions use the dependency graph, every other question fuses the text
+ * ranking (BM25 plus a symbol bonus), the graph ranking and, when supplied,
+ * a neural embedding ranking (`options.denseRanking`, from the AI service).
+ * Without a snapshot directory there is no text to search, so this falls back
+ * to the legacy name/path heuristic. Architecture questions keep the legacy
+ * entrypoint-oriented selection because they ask about overall structure.
  */
-export function findRelevantContext(graphIr, query, snapshotDir) {
+export function findRelevantContext(graphIr, query, snapshotDir, { denseRanking = null } = {}) {
   const lowerQuery = String(query || "").toLowerCase();
   if (!snapshotDir || ARCHITECTURE_QUERY.test(lowerQuery)) {
     return findRelevantContextLegacy(graphIr, query, snapshotDir);
   }
 
   const index = getSearchIndex(graphIr, snapshotDir);
-  const ranked = rankFiles(index, query).slice(0, TOP_FILES).map((r) => r.path);
+  const ranked = rankFilesHybrid(index, query, { denseRanking }).paths.slice(0, TOP_FILES);
   if (ranked.length === 0) return findRelevantContextLegacy(graphIr, query, snapshotDir);
 
   const symbols = findRelevantContextLegacy(graphIr, query, null);
@@ -249,6 +252,22 @@ export function findRelevantContext(graphIr, query, snapshotDir) {
     citations,
     rolesSummary: symbols.rolesSummary,
   };
+}
+
+/**
+ * `findRelevantContext` plus the AI service's neural ranking when it is available. Neural ranking is
+ * best effort: if it is not installed, not ready or slow, the context is the same as without it.
+ */
+export async function findRelevantContextWithDense(graphIr, query, snapshotDir, { denseRank = aiService.denseRank.bind(aiService) } = {}) {
+  let denseRanking = null;
+  if (snapshotDir && graphIr && !ARCHITECTURE_QUERY.test(String(query || "").toLowerCase())) {
+    const paths = (Array.isArray(graphIr.nodes) ? graphIr.nodes : [])
+      .filter((n) => n.type === "file")
+      .map((n) => n.metadata?.path || n.label)
+      .filter(Boolean);
+    denseRanking = await denseRank(snapshotDir, query, paths);
+  }
+  return findRelevantContext(graphIr, query, snapshotDir, { denseRanking });
 }
 
 /**
@@ -473,7 +492,7 @@ export const chatService = {
     }
 
     // Search and extract grounded context
-    const context = findRelevantContext(graphIr, message, snapshotDir);
+    const context = await findRelevantContextWithDense(graphIr, message, snapshotDir);
     const systemPrompt = buildSystemPrompt({ repo, snapshot: latestSnapshot, context });
 
     let answer = "";

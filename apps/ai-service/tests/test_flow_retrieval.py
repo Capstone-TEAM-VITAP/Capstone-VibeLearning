@@ -147,3 +147,21 @@ def test_bm25_and_lsa_rank_relevant_file_first():
 def test_retriever_builds_all_rankings():
     r = RepoRetriever(IR, {p: p for p in PATHS}, lsa_dim=4)
     assert set(r.rankings("repo service git")) == {"bm25", "vector", "graph", "hybrid", "hybrid+bm25"}
+
+
+def test_threshold_zero_avoids_empty_output_with_rank_relevance():
+    fg = build_file_graph(IR)
+    rel = {PATHS[3]: 0.2, PATHS[4]: 0.1}  # weak reciprocal-rank relevance, below the default threshold
+    assert prune(fg, "x", k_max=3, relevance=rel, use_roles=False) == []
+    out = prune(fg, "x", k_max=3, relevance=rel, use_roles=False, threshold=0.0)
+    assert out and all(PATHS[3] in e.pair or PATHS[4] in e.pair for e in out)
+
+
+def test_bfs_accepts_explicit_seeds_and_candidate_pool():
+    from src.retrieval.pruner import candidate_edges
+
+    fg = build_file_graph(IR)
+    edges = bfs_edges(fg, "", hops=1, seeds=[PATHS[1]])
+    assert edges == [(PATHS[1], PATHS[2])]
+    pool = candidate_edges(fg, {PATHS[2]: 1.0})
+    assert set(pool) == {(PATHS[1], PATHS[2]), (PATHS[2], PATHS[3]), (PATHS[2], PATHS[4])}

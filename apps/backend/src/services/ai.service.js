@@ -126,6 +126,51 @@ export const aiService = {
 
     return payload.ir;
   },
+
+  /**
+   * Neural (embedding) file ranking for a question, from the AI service's optional /dense endpoints.
+   *
+   * Best effort by design: returns `null` whenever neural ranking cannot help right now (not installed,
+   * service down, snapshot not embedded yet, slow response), and the caller then ranks without it. If the
+   * snapshot has not been embedded yet, embedding is started in the background for later questions.
+   *
+   * @param {string} repositoryPath Local snapshot directory.
+   * @param {string} query The user's question.
+   * @param {string[]} paths Repository-relative files to embed (from the Graph IR).
+   * @returns {Promise<string[]|null>} Paths best first, or null.
+   */
+  async denseRank(repositoryPath, query, paths) {
+    if (process.env.CODEAI_DENSE_RANKING === "off" || !repositoryPath || !query) return null;
+    const baseUrl = this.getBaseUrl();
+    const timeoutMs = Number(process.env.AI_DENSE_TIMEOUT_MS) || 2500;
+    const post = async (route, body, ms) => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), ms);
+      try {
+        return await fetch(`${baseUrl}${route}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(body),
+          signal: controller.signal,
+        });
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+    try {
+      const res = await post("/dense/rank", { repository_path: repositoryPath, query, top_k: 50 }, timeoutMs);
+      if (res.ok) {
+        const data = await res.json();
+        return Array.isArray(data?.paths) ? data.paths : null;
+      }
+      if (res.status === 409 && Array.isArray(paths) && paths.length > 0) {
+        post("/dense/index", { repository_path: repositoryPath, paths }, timeoutMs).catch(() => {});
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  },
 };
 
 export default aiService;
