@@ -156,3 +156,60 @@ def transitive_importers(imp: dict[str, set[str]], target: str, max_depth: int =
         frontier = nxt
     dist.pop(target)
     return dist
+
+
+def py_call_triples(repo: str) -> set[tuple[str, str, str]]:
+    """
+    Cross-file call oracle for Python, using only ``ast``: (caller file, callee file, name) for every call
+    ``name(...)`` where ``name`` was brought in by ``from M import name`` (absolute or relative), M resolves
+    to a repository file, and that file defines ``name`` as a top-level function or class.
+    """
+    files = [p for p in file_paths(load_ir(repo)) if p.endswith(".py")]
+    fileset = set(files)
+    by_name: dict[str, set[str]] = {}
+    for p in files:
+        for name in _py_module_names(p):
+            by_name.setdefault(name, set()).add(p)
+    trees: dict[str, ast.Module] = {}
+    for p in files:
+        try:
+            trees[p] = ast.parse(read_text(repo, p))
+        except (SyntaxError, ValueError):
+            pass
+    defs = {p: {n.name for n in t.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))}
+            for p, t in trees.items()}
+
+    def lookup_abs(dotted: str, src: str) -> str | None:
+        cands = by_name.get(dotted, set()) - {src}
+        if not cands:
+            return None
+        return max(sorted(cands), key=lambda c: _shared_dirs(src, c))
+
+    def lookup_rel(src: str, level: int, module: str | None) -> str | None:
+        base = posixpath.dirname(src)
+        for _ in range(level - 1):
+            base = posixpath.dirname(base)
+        joined = posixpath.normpath(posixpath.join(base, *module.split("."))) if module else base
+        joined = "" if joined == "." else joined
+        for cand in ((joined + ".py") if joined else None, posixpath.join(joined, "__init__.py") if joined else "__init__.py"):
+            if cand and cand in fileset:
+                return cand
+        return None
+
+    out: set[tuple[str, str, str]] = set()
+    for src, tree in trees.items():
+        alias: dict[str, tuple[str, str]] = {}
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom):
+                level = node.level or 0
+                t = lookup_rel(src, level, node.module) if level else (lookup_abs(node.module, src) if node.module else None)
+                if not t or t == src:
+                    continue
+                for a in node.names:
+                    if a.name != "*" and a.name in defs.get(t, ()):
+                        alias[a.asname or a.name] = (t, a.name)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in alias:
+                t, name = alias[node.func.id]
+                out.add((src, t, name))
+    return out

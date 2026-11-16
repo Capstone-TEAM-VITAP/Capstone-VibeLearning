@@ -34,3 +34,12 @@ Pooled python: recall 0.968 over 633 pairs, precision 0.995 over 616 pairs.
 | click | 1511 | 1511 | 1.000 | 1.000 |
 | flask | 1298 | 1298 | 1.000 | 1.000 |
 | httpx | 1067 | 1067 | 1.000 | 1.000 |
+
+## Python cross-file calls vs ast (from-imported names called directly)
+
+| Repo | oracle calls | graph cross-file calls | in-scope graph calls | recall | precision (in scope) |
+|---|---|---|---|---|---|
+| requests | 129 | 135 | 124 | 0.961 | 1.000 |
+| click | 103 | 103 | 98 | 0.951 | 1.000 |
+| flask | 56 | 64 | 53 | 0.946 | 1.000 |
+| httpx | 69 | 77 | 69 | 1.000 | 1.000 |

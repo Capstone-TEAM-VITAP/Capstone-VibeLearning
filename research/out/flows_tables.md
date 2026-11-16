@@ -9,12 +9,16 @@ heldout: 25 questions; gold edges absent from the independent import oracle: non
 
 | System | precision | recall | F1 (mean [95% CI]) | mean predicted edges |
 |---|---|---|---|---|
+| random3 | 0.040 | 0.053 | 0.045 [0.000, 0.096] | 3.0 |
 | bfs2 | 0.051 | 0.380 | 0.081 [0.032, 0.146] | 15.7 |
+| bfs2-bm25 | 0.040 | 0.440 | 0.064 [0.024, 0.123] | 33.3 |
+| candidates-bm25 | 0.088 | 0.860 | 0.146 [0.094, 0.208] | 36.9 |
 | overlap-top3 | 0.267 | 0.360 | 0.300 [0.181, 0.423] | 2.2 |
 | relevance-top3 | 0.227 | 0.300 | 0.256 [0.160, 0.355] | 2.9 |
 | pruner-path | 0.080 | 0.073 | 0.072 [0.013, 0.144] | 0.5 |
 | pruner-bm25 | 0.173 | 0.240 | 0.200 [0.096, 0.320] | 1.9 |
 | pruner-hybrid | 0.307 | 0.433 | 0.353 [0.251, 0.463] | 3.0 |
+| pruner-bm25-thr0 | 0.253 | 0.333 | 0.285 [0.173, 0.403] | 2.9 |
 | pruner-bm25-noroles | 0.173 | 0.240 | 0.200 [0.096, 0.320] | 1.9 |
 | pruner-bm25-nocont | 0.227 | 0.320 | 0.264 [0.144, 0.392] | 1.9 |
 | pruner-bm25-K2 | 0.220 | 0.207 | 0.212 [0.092, 0.352] | 1.3 |
@@ -24,12 +28,16 @@ heldout: 25 questions; gold edges absent from the independent import oracle: non
 
 | System | precision | recall | F1 (mean [95% CI]) | mean predicted edges |
 |---|---|---|---|---|
+| random3 | 0.032 | 0.048 | 0.038 [0.000, 0.095] | 3.0 |
 | bfs2 | 0.023 | 0.333 | 0.043 [0.019, 0.069] | 16.4 |
+| bfs2-bm25 | 0.024 | 0.476 | 0.045 [0.023, 0.070] | 39.3 |
+| candidates-bm25 | 0.051 | 0.833 | 0.095 [0.070, 0.123] | 41.3 |
 | overlap-top3 | 0.159 | 0.254 | 0.192 [0.111, 0.281] | 2.0 |
 | relevance-top3 | 0.190 | 0.270 | 0.222 [0.114, 0.337] | 2.9 |
 | pruner-path | 0.095 | 0.087 | 0.086 [0.016, 0.171] | 0.6 |
 | pruner-bm25 | 0.206 | 0.286 | 0.238 [0.114, 0.381] | 2.3 |
 | pruner-hybrid | 0.286 | 0.429 | 0.338 [0.219, 0.467] | 3.0 |
+| pruner-bm25-thr0 | 0.222 | 0.310 | 0.257 [0.133, 0.400] | 2.9 |
 | pruner-bm25-noroles | 0.206 | 0.286 | 0.238 [0.114, 0.381] | 2.3 |
 | pruner-bm25-nocont | 0.270 | 0.381 | 0.314 [0.190, 0.457] | 2.3 |
 | pruner-bm25-K2 | 0.262 | 0.246 | 0.252 [0.119, 0.410] | 1.6 |
@@ -39,12 +47,16 @@ heldout: 25 questions; gold edges absent from the independent import oracle: non
 
 | System | precision | recall | F1 (mean [95% CI]) | mean predicted edges |
 |---|---|---|---|---|
+| random3 | 0.083 | 0.083 | 0.083 [0.000, 0.250] | 3.0 |
 | bfs2 | 0.196 | 0.625 | 0.283 [0.032, 0.533] | 11.8 |
+| bfs2-bm25 | 0.125 | 0.250 | 0.167 [0.000, 0.500] | 1.5 |
+| candidates-bm25 | 0.278 | 1.000 | 0.412 [0.236, 0.583] | 13.8 |
 | overlap-top3 | 0.833 | 0.917 | 0.867 [0.733, 1.000] | 3.0 |
 | relevance-top3 | 0.417 | 0.458 | 0.433 [0.333, 0.583] | 3.0 |
 | pruner-path | 0.000 | 0.000 | 0.000 [0.000, 0.000] | 0.0 |
 | pruner-bm25 | 0.000 | 0.000 | 0.000 [0.000, 0.000] | 0.0 |
 | pruner-hybrid | 0.417 | 0.458 | 0.433 [0.333, 0.583] | 3.0 |
+| pruner-bm25-thr0 | 0.417 | 0.458 | 0.433 [0.333, 0.583] | 3.0 |
 | pruner-bm25-noroles | 0.000 | 0.000 | 0.000 [0.000, 0.000] | 0.0 |
 | pruner-bm25-nocont | 0.000 | 0.000 | 0.000 [0.000, 0.000] | 0.0 |
 | pruner-bm25-K2 | 0.000 | 0.000 | 0.000 [0.000, 0.000] | 0.0 |
@@ -54,12 +66,16 @@ heldout: 25 questions; gold edges absent from the independent import oracle: non
 
 | System | precision | recall | F1 (mean [95% CI]) | mean predicted edges |
 |---|---|---|---|---|
+| random3 | 0.058 | 0.080 | 0.067 [0.017, 0.133] | 3.0 |
 | bfs2 | 0.152 | 0.326 | 0.159 [0.075, 0.255] | 10.0 |
+| bfs2-bm25 | 0.174 | 0.478 | 0.197 [0.104, 0.312] | 16.9 |
+| candidates-bm25 | 0.087 | 0.841 | 0.154 [0.119, 0.195] | 30.5 |
 | overlap-top3 | 0.319 | 0.348 | 0.325 [0.200, 0.458] | 2.7 |
 | relevance-top3 | 0.333 | 0.435 | 0.374 [0.255, 0.501] | 3.0 |
 | pruner-path | 0.290 | 0.254 | 0.267 [0.138, 0.404] | 2.3 |
 | pruner-bm25 | 0.246 | 0.297 | 0.267 [0.168, 0.368] | 2.8 |
 | pruner-hybrid | 0.304 | 0.355 | 0.325 [0.209, 0.449] | 3.0 |
+| pruner-bm25-thr0 | 0.246 | 0.297 | 0.267 [0.168, 0.368] | 3.0 |
 | pruner-bm25-noroles | 0.261 | 0.333 | 0.290 [0.183, 0.403] | 2.8 |
 | pruner-bm25-nocont | 0.232 | 0.275 | 0.249 [0.159, 0.339] | 2.8 |
 | pruner-bm25-K2 | 0.304 | 0.239 | 0.265 [0.152, 0.378] | 1.9 |
@@ -69,6 +85,11 @@ heldout: 25 questions; gold edges absent from the independent import oracle: non
 
 | Set | A | B | mean diff | 95% CI | p |
 |---|---|---|---|---|---|
+| heldout | pruner-bm25 | bfs2-bm25 | +0.136 | [+0.012, +0.271] | 0.0521 |
+| heldout | pruner-bm25 | candidates-bm25 | +0.054 | [-0.082, +0.206] | 0.4641 |
+| heldout | pruner-bm25 | random3 | +0.155 | [+0.024, +0.304] | 0.0386 |
+| heldout | pruner-bm25-thr0 | relevance-top3 | +0.029 | [-0.032, +0.091] | 0.6250 |
+| heldout | pruner-bm25-thr0 | pruner-bm25 | +0.085 | [+0.027, +0.160] | 0.0625 |
 | heldout | pruner-bm25 | bfs2 | +0.119 | [-0.009, +0.259] | 0.0969 |
 | heldout | pruner-bm25 | overlap-top3 | -0.100 | [-0.280, +0.079] | 0.3025 |
 | heldout | pruner-bm25 | relevance-top3 | -0.056 | [-0.144, +0.029] | 0.3125 |
@@ -79,6 +100,11 @@ heldout: 25 questions; gold edges absent from the independent import oracle: non
 | heldout | pruner-hybrid | bfs2 | +0.272 | [+0.161, +0.380] | 0.0001 |
 | heldout | pruner-hybrid | overlap-top3 | +0.053 | [-0.091, +0.197] | 0.4981 |
 | heldout | pruner-hybrid | relevance-top3 | +0.097 | [+0.023, +0.177] | 0.0312 |
+| dev | pruner-bm25 | bfs2-bm25 | +0.069 | [-0.094, +0.213] | 0.4078 |
+| dev | pruner-bm25 | candidates-bm25 | +0.113 | [+0.025, +0.199] | 0.0230 |
+| dev | pruner-bm25 | random3 | +0.200 | [+0.093, +0.307] | 0.0039 |
+| dev | pruner-bm25-thr0 | relevance-top3 | -0.107 | [-0.246, +0.032] | 0.1423 |
+| dev | pruner-bm25-thr0 | pruner-bm25 | +0.000 | [+0.000, +0.000] | 1.0000 |
 | dev | pruner-bm25 | bfs2 | +0.107 | [-0.034, +0.247] | 0.1680 |
 | dev | pruner-bm25 | overlap-top3 | -0.058 | [-0.220, +0.107] | 0.5362 |
 | dev | pruner-bm25 | relevance-top3 | -0.107 | [-0.246, +0.032] | 0.1423 |
@@ -93,6 +119,35 @@ heldout: 25 questions; gold edges absent from the independent import oracle: non
 ## Edge reduction (held-out)
 
 Mean predicted edges: bfs2 15.7, pruner-bm25 1.9 (87.8% fewer).
+
+## Empty outputs and layer-rule activity
+
+dev: empty outputs {'random3': 0, 'bfs2': 3, 'bfs2-bm25': 2, 'candidates-bm25': 0, 'overlap-top3': 1, 'relevance-top3': 0, 'pruner-path': 3, 'pruner-bm25': 0, 'pruner-hybrid': 0, 'pruner-bm25-thr0': 0, 'pruner-bm25-noroles': 0, 'pruner-bm25-nocont': 0, 'pruner-bm25-K2': 0, 'pruner-bm25-K5': 0}; questions with >=1 layered candidate edge: 19/23; layered share of candidate edges: 203/701
+
+heldout: empty outputs {'random3': 0, 'bfs2': 11, 'bfs2-bm25': 8, 'candidates-bm25': 1, 'overlap-top3': 7, 'relevance-top3': 1, 'pruner-path': 20, 'pruner-bm25': 8, 'pruner-hybrid': 0, 'pruner-bm25-thr0': 1, 'pruner-bm25-noroles': 8, 'pruner-bm25-nocont': 8, 'pruner-bm25-K2': 8, 'pruner-bm25-K5': 8}; questions with >=1 layered candidate edge: 0/25; layered share of candidate edges: 0/923
+
+
+## Constant sensitivity of the primary pruner (mean F1)
+
+| setting | dev | held-out |
+|---|---|---|
+| as declared | 0.267 | 0.200 |
+| OVERLAP_WEIGHTx0.5 | 0.249 | 0.171 |
+| OVERLAP_WEIGHTx2.0 | 0.313 | 0.227 |
+| HIERARCHY_BONUSx0.5 | 0.313 | 0.200 |
+| HIERARCHY_BONUSx2.0 | 0.267 | 0.200 |
+| BOTH_ENDS_BONUSx0.5 | 0.267 | 0.200 |
+| BOTH_ENDS_BONUSx2.0 | 0.267 | 0.200 |
+| PRIMARY_BONUSx0.5 | 0.252 | 0.200 |
+| PRIMARY_BONUSx2.0 | 0.267 | 0.200 |
+| SECONDARY_BONUSx0.5 | 0.267 | 0.200 |
+| SECONDARY_BONUSx2.0 | 0.267 | 0.200 |
+| CONTINUITY_BONUSx0.5 | 0.267 | 0.200 |
+| CONTINUITY_BONUSx2.0 | 0.284 | 0.200 |
+| SCORE_THRESHOLDx0.5 | 0.284 | 0.243 |
+| SCORE_THRESHOLDx2.0 | 0.225 | 0.000 |
+| KIND_BONUSx0.5 | 0.255 | 0.171 |
+| KIND_BONUSx2.0 | 0.267 | 0.223 |
 
 ## Per-question results
 

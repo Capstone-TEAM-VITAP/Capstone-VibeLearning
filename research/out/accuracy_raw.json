@@ -131,6 +131,13 @@
    "found": 720,
    "recall": 1.0,
    "precision": 1.0
+  },
+  "calls": {
+   "oracle": 129,
+   "graph_cross_file": 135,
+   "graph_in_scope": 124,
+   "recall": 0.9612403100775194,
+   "precision_in_scope": 1.0
   }
  },
  {
@@ -145,6 +152,13 @@
    "found": 1511,
    "recall": 1.0,
    "precision": 1.0
+  },
+  "calls": {
+   "oracle": 103,
+   "graph_cross_file": 103,
+   "graph_in_scope": 98,
+   "recall": 0.9514563106796117,
+   "precision_in_scope": 1.0
   }
  },
  {
@@ -159,6 +173,13 @@
    "found": 1298,
    "recall": 1.0,
    "precision": 1.0
+  },
+  "calls": {
+   "oracle": 56,
+   "graph_cross_file": 64,
+   "graph_in_scope": 53,
+   "recall": 0.9464285714285714,
+   "precision_in_scope": 1.0
   }
  },
  {
@@ -173,6 +194,13 @@
    "found": 1067,
    "recall": 1.0,
    "precision": 1.0
+  },
+  "calls": {
+   "oracle": 69,
+   "graph_cross_file": 77,
+   "graph_in_scope": 69,
+   "recall": 1.0,
+   "precision_in_scope": 1.0
   }
  }
 ]

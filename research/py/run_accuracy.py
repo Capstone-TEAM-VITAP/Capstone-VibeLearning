@@ -11,7 +11,7 @@ import ast
 import json
 
 from common import ALL_REPOS, REPOS, RESEARCH, file_paths, load_ir, read_text
-from oracle import import_pairs
+from oracle import import_pairs, py_call_triples
 
 
 def graph_pairs(ir: dict) -> set[tuple[str, str]]:
@@ -46,6 +46,32 @@ def py_symbol_counts(repo: str, ir: dict) -> dict:
             "precision": tp / len(found) if found else None}
 
 
+def graph_call_triples(ir: dict) -> set[tuple[str, str, str]]:
+    """Cross-file CALLS edges of the Graph IR as (caller file, callee file, callee name)."""
+    out = set()
+    for e in ir["edges"]:
+        if e["type"] != "calls" or not e["target"].startswith("symbol:"):
+            continue
+        s = e["source"]
+        # a call inside a function has that function's symbol as source
+        src = s[5:] if s.startswith("file:") else s[len("symbol:"):].rsplit(":", 3)[0]
+        tgt = e["target"][len("symbol:"):].rsplit(":", 3)[0]
+        if tgt != src:
+            out.add((src, tgt, e["metadata"].get("target_name", "")))
+    return out
+
+
+def py_call_counts(repo: str, ir: dict) -> dict:
+    """Recall of the analyzer's cross-file CALLS edges against the ast call oracle (its scope only)."""
+    oracle = py_call_triples(repo)
+    graph = graph_call_triples(ir)
+    in_scope = {g for g in graph if (g[0], g[2]) in {(o[0], o[2]) for o in oracle}}
+    tp = len(oracle & graph)
+    return {"oracle": len(oracle), "graph_cross_file": len(graph), "graph_in_scope": len(in_scope),
+            "recall": tp / len(oracle) if oracle else None,
+            "precision_in_scope": len(oracle & in_scope) / len(in_scope) if in_scope else None}
+
+
 def main() -> None:
     rows = []
     for repo in ALL_REPOS:
@@ -68,6 +94,7 @@ def main() -> None:
         }
         if python:
             row["symbols"] = py_symbol_counts(repo, ir)
+            row["calls"] = py_call_counts(repo, ir)
         rows.append(row)
     (RESEARCH / "out" / "accuracy_raw.json").write_text(json.dumps(rows, indent=1))
 
@@ -89,6 +116,11 @@ def main() -> None:
         if "symbols" in r:
             s = r["symbols"]
             md.append(f"| {r['repo']} | {s['oracle']} | {s['found']} | {f(s['recall'])} | {f(s['precision'])} |")
+    md.append("\n## Python cross-file calls vs ast (from-imported names called directly)\n\n| Repo | oracle calls | graph cross-file calls | in-scope graph calls | recall | precision (in scope) |\n|---|---|---|---|---|---|")
+    for r in rows:
+        if "calls" in r:
+            c = r["calls"]
+            md.append(f"| {r['repo']} | {c['oracle']} | {c['graph_cross_file']} | {c['graph_in_scope']} | {f(c['recall'])} | {f(c['precision_in_scope'])} |")
     text = "\n".join(md)
     (RESEARCH / "out" / "accuracy_tables.md").write_text(text)
     print(text)

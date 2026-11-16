@@ -25,3 +25,8 @@ apps/ai-service/**/__pycache__/
 research/data/repos/
 research/out/graphs/
 research/out/v1/graphs/
+
+# research embedding env and cache
+research/.venv-emb/
+research/out/emb_cache/
+research/out/code_only/
