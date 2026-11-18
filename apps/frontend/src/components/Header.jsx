@@ -121,7 +121,7 @@ function Header({
           <span className="header-search-icon">
             <Search size={15} />
           </span>
-          <span className="header-search-text">Search</span>
+          <span className="header-search-text">Search code, symbols, files</span>
           <kbd className="header-search-kbd">Ctrl K</kbd>
         </button>
 

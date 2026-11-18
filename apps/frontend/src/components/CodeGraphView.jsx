@@ -585,6 +585,43 @@ function CodeGraphContent({
     });
   }, [layoutedNodes, selectedNodeId, hoveredNodeId, activeFocusNeighbors]);
 
+  // React Flow measures each node, but in a controlled flow those sizes only
+  // reach our node objects through onNodesChange. The MiniMap draws a node only
+  // when it has a size, so keep the measured sizes and merge them back in.
+  const [measuredSizes, setMeasuredSizes] = useState({});
+
+  const handleNodesChange = useCallback((changes) => {
+    const sized = changes.filter((c) => c.type === "dimensions" && c.dimensions);
+    if (sized.length === 0) return;
+    setMeasuredSizes((prev) => {
+      let next = prev;
+      for (const c of sized) {
+        const old = prev[c.id];
+        if (!old || old.width !== c.dimensions.width || old.height !== c.dimensions.height) {
+          if (next === prev) next = { ...prev };
+          next[c.id] = { width: c.dimensions.width, height: c.dimensions.height };
+        }
+      }
+      return next;
+    });
+  }, []);
+
+  const rfNodesWithSize = useMemo(
+    () =>
+      rfNodes.map((n) => (measuredSizes[n.id] ? { ...n, measured: measuredSizes[n.id] } : n)),
+    [rfNodes, measuredSizes],
+  );
+
+  // MiniMap: neutral blocks, the selected node in the primary ink color
+  const miniMapNodeColor = useCallback(
+    (node) => {
+      if (node.data?.isSelected) return isLight ? "#18181b" : "#fafafa";
+      if (node.data?.isDimmed) return isLight ? "#e4e4e7" : "#27272a";
+      return isLight ? "#a1a1aa" : "#52525b";
+    },
+    [isLight],
+  );
+
   // Transform to React Flow Edges with Noise-Reduction & Low-Opacity Default
   const rfEdges = useMemo(() => {
     return filteredEdges.map((e) => {
@@ -1070,9 +1107,10 @@ function CodeGraphContent({
         {/* Canvas */}
         <div className="codegraph-canvas">
           <ReactFlow
-            nodes={rfNodes}
+            nodes={rfNodesWithSize}
             edges={rfEdges}
             nodeTypes={nodeTypes}
+            onNodesChange={handleNodesChange}
             onNodeClick={handleNodeClick}
             onNodeMouseEnter={handleNodeMouseEnter}
             onNodeMouseLeave={handleNodeMouseLeave}
@@ -1089,9 +1127,16 @@ function CodeGraphContent({
             <MiniMap
               className="codegraph-minimap"
               position="bottom-right"
-              nodeStrokeColor={isLight ? "#0462d3" : "#38bdf8"}
-              nodeColor={isLight ? "#ffffff" : "#1e293b"}
-              maskColor={isLight ? "rgba(233, 237, 201, 0.75)" : "rgba(9, 9, 11, 0.75)"}
+              ariaLabel="Code graph overview"
+              pannable
+              zoomable
+              nodeColor={miniMapNodeColor}
+              nodeStrokeWidth={0}
+              nodeBorderRadius={3}
+              bgColor={isLight ? "#ffffff" : "#0f0f11"}
+              maskColor={isLight ? "rgba(244, 244, 245, 0.72)" : "rgba(5, 5, 6, 0.6)"}
+              maskStrokeColor={isLight ? "#18181b" : "#fafafa"}
+              maskStrokeWidth={1.5}
             />
           </ReactFlow>
         </div>

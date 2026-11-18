@@ -6,18 +6,18 @@
 .codeai-header {
   position: fixed;
   top: 0;
-  left: 288px;
+  left: var(--sidebar-w);
   right: 0;
-  height: 64px;
+  height: var(--header-h);
   background: var(--header-bg, rgba(10, 14, 21, 0.85));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  gap: 16px;
+  padding: 0 16px;
+  gap: 12px;
   z-index: 30;
   box-sizing: border-box;
   transition: left 0.25s ease;
@@ -42,7 +42,7 @@
 .header-context-cluster {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -56,12 +56,13 @@
   align-items: center;
   gap: 6px;
   background-color: var(--bg-surface-low);
-  border: 1px solid var(--border-hairline);
+  border: 1px solid var(--border-subtle);
   border-radius: 6px;
-  padding: 4px 10px;
+  padding: 3px 8px;
   color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
   white-space: nowrap;
   max-width: 240px;
   overflow: hidden;
@@ -82,8 +83,7 @@
 
 .header-meta-pill--open {
   background-color: var(--bg-surface-high);
-  border-color: var(--primary);
-  box-shadow: 0 0 0 1px var(--border-active);
+  border-color: var(--border-active);
 }
 
 .header-chevron-icon {
@@ -124,14 +124,13 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border-radius: 999px;
-  padding: 3px 10px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
+  border-radius: 6px;
+  padding: 3px 4px;
+  font-size: 12px;
+  font-weight: 400;
   white-space: nowrap;
-  border: 1px solid var(--border-hairline);
-  background: var(--bg-surface-low);
+  border: 0;
+  background: transparent;
   color: var(--text-muted);
 }
 
@@ -144,30 +143,24 @@
 }
 
 .header-status-pill.status-complete {
-  background: rgba(16, 185, 129, 0.08);
-  border-color: rgba(16, 185, 129, 0.25);
-  color: var(--status-success);
+  color: var(--text-secondary);
 }
 .header-status-pill.status-complete .header-status-dot {
   background-color: var(--status-success);
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
 }
 
 .header-status-pill.status-busy {
-  background: rgba(245, 158, 11, 0.08);
-  border-color: rgba(245, 158, 11, 0.25);
-  color: var(--status-warning);
+  color: var(--text-secondary);
 }
 .header-status-pill.status-busy .header-status-dot {
   background-color: var(--status-warning);
-  box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
 }
 
 /* Right Cluster */
 .header-actions-cluster {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
@@ -176,19 +169,19 @@
   align-items: center;
   gap: 8px;
   background-color: var(--bg-surface-low);
-  border: 1px solid var(--border-hairline);
-  border-radius: 6px;
-  padding: 6px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  padding: 4px 6px 4px 10px;
+  min-width: 240px;
   color: var(--text-muted);
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 12.5px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .header-search-btn:hover {
-  background-color: var(--bg-surface-container);
-  border-color: var(--border-subtle);
+  border-color: var(--border-active);
   color: var(--text-secondary);
 }
 
@@ -199,20 +192,21 @@
 
 .header-search-kbd {
   font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 10.5px;
+  font-weight: 500;
   padding: 2px 5px;
+  margin-left: auto;
   border-radius: 4px;
-  background-color: var(--bg-surface-high);
-  border: 1px solid var(--border-hairline);
-  color: var(--text-secondary);
+  background-color: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
   line-height: 1;
 }
 
 /* Responsive Breakpoints */
 @media (max-width: 1024px) and (min-width: 769px) {
   .codeai-header {
-    left: 72px;
+    left: var(--sidebar-w-collapsed);
   }
 }
 
@@ -231,6 +225,23 @@
     display: none;
   }
   .header-search-text {
+    display: none;
+  }
+  .header-search-btn {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-context-cluster {
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 560px) {
+  /* The repository card already shows status; keep the header to repo + search */
+  .header-status-pill {
     display: none;
   }
 }

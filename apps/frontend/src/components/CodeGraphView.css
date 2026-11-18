@@ -614,13 +614,23 @@
 }
 
 .codegraph-minimap {
-  background: var(--bg-surface-low) !important;
   border: 1px solid var(--border-subtle) !important;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
-  margin-right: 14px !important;
-  margin-bottom: 14px !important;
+  box-shadow: var(--shadow-sm) !important;
+  margin: 0 12px 12px 0 !important;
+}
+
+.codegraph-minimap svg {
+  display: block;
+  width: 200px;
+  height: 140px;
+}
+
+@media (max-width: 768px) {
+  .codegraph-minimap {
+    display: none;
+  }
 }
 
 /* Telemetry Strip */
