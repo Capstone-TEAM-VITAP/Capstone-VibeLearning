@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { repositoryRepository } from "../repositories/repository.repository.js";
@@ -354,7 +355,7 @@ function synthesizeOfflineAnswer({ repo, query, context }) {
 /**
  * Call an OpenAI-compatible API (Grok, OpenAI, Ollama, LM Studio).
  */
-async function callOpenAiCompatible({ baseUrl, apiKey, model, systemPrompt, history = [], message, max_tokens = 2500 }) {
+async function callOpenAiCompatible({ baseUrl, apiKey, model, systemPrompt, history = [], message, max_tokens = 2500, extraHeaders = {}, extraBody = {} }) {
   // Keep last 4 history messages to prevent token blowup in multi-turn chats
   const safeHistory = (history || []).slice(-4);
   const messages = [
@@ -365,6 +366,7 @@ async function callOpenAiCompatible({ baseUrl, apiKey, model, systemPrompt, hist
 
   const headers = {
     "Content-Type": "application/json",
+    ...extraHeaders,
   };
   if (apiKey) {
     headers["Authorization"] = `Bearer ${apiKey}`;
@@ -379,6 +381,7 @@ async function callOpenAiCompatible({ baseUrl, apiKey, model, systemPrompt, hist
       messages,
       temperature: 0.2,
       max_tokens,
+      ...extraBody,
     }),
   });
 
@@ -409,6 +412,7 @@ async function callOpenAiCompatible({ baseUrl, apiKey, model, systemPrompt, hist
           ],
           temperature: 0.2,
           max_tokens: Math.min(max_tokens, 1500),
+          ...extraBody,
         }),
       });
       if (contRes.ok) {
@@ -531,6 +535,7 @@ export const chatService = {
     let answer = "";
     let activeModel = "offline-structural-intelligence";
 
+    const opencodeKey = process.env.OPENCODE_API_KEY;
     const groqKey = process.env.GROQ_API_KEY;
     const grokKey = process.env.GROK_API_KEY || process.env.XAI_API_KEY;
     const openAiKey = process.env.OPENAI_API_KEY;
@@ -538,7 +543,32 @@ export const chatService = {
     const customBaseUrl = process.env.AI_BASE_URL || process.env.LOCAL_LLM_URL;
 
     try {
-      if (groqKey) {
+      if (opencodeKey) {
+        // OpenCode Go: OpenAI-compatible. It asks clients to identify themselves
+        // and send a stable session id per conversation (routing + prompt caching).
+        activeModel = process.env.OPENCODE_MODEL || "deepseek-v4.1-flash";
+        const reasoningEffort = process.env.OPENCODE_REASONING_EFFORT || "medium";
+        const sessionId = crypto
+          .createHash("sha256")
+          .update(`${user.id}:${repo.id}`)
+          .digest("hex")
+          .slice(0, 32);
+        answer = await callOpenAiCompatible({
+          baseUrl: process.env.OPENCODE_BASE_URL || "https://opencode.ai/zen/go/v1",
+          apiKey: opencodeKey,
+          model: activeModel,
+          systemPrompt,
+          history,
+          message,
+          extraHeaders: {
+            "User-Agent": "CodeAI-Assistant/1.0",
+            "x-opencode-session": `codeai-${sessionId}`,
+          },
+          // Thinking tokens count against max_tokens, so leave room for both
+          max_tokens: 6000,
+          extraBody: reasoningEffort === "none" ? {} : { reasoning_effort: reasoningEffort },
+        });
+      } else if (groqKey) {
         const preferredModel = process.env.GROQ_MODEL || "openai/gpt-oss-120b";
         const candidateModels = [
           preferredModel,
