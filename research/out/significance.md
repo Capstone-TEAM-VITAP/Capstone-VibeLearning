@@ -28,3 +28,29 @@
 | Locate: CodeAI v2 − v1 | 79 | +0.157 | [+0.074, +0.237] | 0.0005 | 0.0005 |
 | Importers: CodeAI v2 − v1 | 48 | +0.296 | [+0.187, +0.407] | <0.0001 | 0.0001 |
 | Impact: CodeAI v2 − v1 | 37 | +0.195 | [+0.122, +0.268] | <0.0001 | 0.0001 |
+
+
+# CodeAI v1 vs the best research ranker (held-out JS; added after the study; separate Holm family of 3)
+
+| Comparison | n | diff | 95% CI | p | p (Holm) |
+|---|---|---|---|---|---|
+| Locate: v1 − RRF BM25 + dense + graph | 79 | -0.158 | [-0.239, -0.069] | 0.0007 | 0.0007 |
+| Importers: v1 − graph | 48 | -0.296 | [-0.406, -0.187] | <0.0001 | 0.0001 |
+| Impact: v1 − RRF BM25 + dense + graph | 37 | -0.263 | [-0.347, -0.177] | <0.0001 | 0.0001 |
+
+
+# Repository-level robustness (cluster bootstrap over repositories)
+
+| Comparison | repos A>B | diff | question CI | repository CI |
+|---|---|---|---|---|
+| Locate: dense − BM25 (held-out JS) | 3/5 | +0.178 | [+0.079, +0.276] | [-0.034, +0.271] |
+| Locate: dense − LSA (held-out JS) | 3/5 | +0.251 | [+0.156, +0.347] | [-0.022, +0.349] |
+| Locate: RRF all three − BM25 (held-out JS) | 4/5 (1 tied) | +0.260 | [+0.163, +0.353] | [+0.085, +0.315] |
+| Locate: RRF all three − dense (held-out JS) | 4/5 | +0.082 | [-0.021, +0.187] | [-0.021, +0.225] |
+| Locate: dense − BM25 (Python) | 4/4 | +0.191 | [+0.121, +0.258] | [+0.177, +0.204] |
+| Importers: graph − BM25 (held-out JS) | 5/5 | +0.294 | [+0.190, +0.401] | [+0.145, +0.482] |
+| Impact: graph − BM25 (held-out JS) | 4/5 | +0.158 | [-0.022, +0.317] | [-0.157, +0.473] |
+| Impact: RRF LSA+graph − graph (Python) | 1/4 | -0.107 | [-0.152, -0.060] | [-0.254, +0.025] |
+| Locate: CodeAI v2 − v1 (held-out JS) | 4/5 (1 tied) | +0.157 | [+0.074, +0.237] | [+0.054, +0.206] |
+| Importers: CodeAI v2 − v1 (held-out JS) | 3/5 (2 tied) | +0.296 | [+0.187, +0.407] | [+0.093, +0.437] |
+| Impact: CodeAI v2 − v1 (held-out JS) | 3/5 | +0.195 | [+0.122, +0.268] | [+0.050, +0.313] |

@@ -26,6 +26,7 @@ SYSTEMS = [
     ("graph", "Graph"),
     ("hybrid-lsa", "RRF: LSA + graph"),
     ("hybrid-dense", "RRF: dense + graph"),
+    ("bm25+graph", "RRF: BM25 + graph"),
     ("bm25+dense+graph", "RRF: BM25 + dense + graph"),
 ]
 NAMES = {"locate": "Locate", "dependency": "Direct importers", "impact": "Change impact"}
@@ -316,7 +317,6 @@ def significance(rows, flows):
 def product_before_after(rows) -> str:
     """CodeAI's retriever before (v1) and after (v2) this study, next to the best research ranker."""
     metric = {"locate": "mrr", "dependency": "mrr", "impact": "ndcg@10"}
-    best = {"locate": "bm25+dense+graph", "dependency": "graph", "impact": "bm25+dense+graph"}
     groups = [("Held-out JS", lambda r: r["split"] == "test2"), ("Post-hoc JS", lambda r: r["split"] in ("dev", "test")),
               ("Python", lambda r: r["split"] == "python")]
     lines = ["table(", "  columns: (2.3fr, 1fr, 1fr, 1fr, 1fr),", "  align: (left, center, center, center, center),",
@@ -327,7 +327,9 @@ def product_before_after(rows) -> str:
         for typ in ("locate", "dependency", "impact"):
             sub = [r for r in rows if r["cond"] == "code" and pred(r) and r["type"] == typ]
             m = metric[typ]
-            vals = [mean([r["scores"][s][m] for r in sub]) for s in ("product", "product-v2", "product-v2-dense", best[typ])]
+            research = [s for s, _ in SYSTEMS if s not in ("random", "product", "product-v2-dense")]
+            vals = [mean([r["scores"][s][m] for r in sub]) for s in ("product", "product-v2", "product-v2-dense")]
+            vals.append(max(mean([r["scores"][s][m] for r in sub]) for s in research))
             top = max(vals[:3])
             score_name = "MRR" if m == "mrr" else "nDCG\\@10"
             label = f"{NAMES[typ]} ({score_name}, n={len(sub)})"
@@ -370,6 +372,106 @@ def product_tests(rows) -> str:
         diff = f"{r['d']:+.3f} \\[{r['lo']:+.3f}, {r['hi']:+.3f}\\]".replace("-", "−")
         lines.append(f"  [{r['label']}], [{r['n']}], [{r['metric']}], [{diff}], [{pp(r['p'])}], {cell(pp(r['p_holm']), r['p_holm'] < 0.05)},")
     lines.append(")")
+    return "\n".join(lines)
+
+
+BEST = {"locate": "bm25+dense+graph", "dependency": "graph", "impact": "bm25+dense+graph"}
+
+
+def _pair_rows(rows, split, typ, metric, a, b):
+    sub = [r for r in rows if r["cond"] == "code" and r["type"] == typ and r["split"] in split]
+    return [(r["repo"], r["scores"][a][metric] - r["scores"][b][metric]) for r in sub]
+
+
+def v1_tests(rows) -> str:
+    """CodeAI v1 against the best research ranker per question type (held-out JS). Added after the study,
+    so it is its own Holm family of three, reported as exploratory."""
+    spec = [("locate", "mrr", "Locate: v1 − RRF BM25 + dense + graph"),
+            ("dependency", "mrr", "Importers: v1 − graph"),
+            ("impact", "ndcg@10", "Impact: v1 − RRF BM25 + dense + graph")]
+    res = []
+    for typ, metric, label in spec:
+        sub = [r for r in rows if r["cond"] == "code" and r["split"] == "test2" and r["type"] == typ]
+        xa = [r["scores"]["product"][metric] for r in sub]
+        xb = [r["scores"][BEST[typ]][metric] for r in sub]
+        d, lo, hi = paired_diff_ci(xa, xb, 5000)
+        res.append({"label": label, "n": len(sub), "metric": "MRR" if metric == "mrr" else "nDCG\\@10", "d": d, "lo": lo, "hi": hi,
+                    "p": paired_permutation_p(xa, xb, draws=20000)})
+    for r, a in zip(res, holm([r["p"] for r in res])):
+        r["p_holm"] = a
+    with open(RESEARCH / "out" / "significance.md", "a", encoding="utf-8") as fh:
+        fh.write("\n\n# CodeAI v1 vs the best research ranker (held-out JS; added after the study; separate Holm family of 3)\n\n"
+                 "| Comparison | n | diff | 95% CI | p | p (Holm) |\n|---|---|---|---|---|---|\n")
+        for r in res:
+            fh.write(f"| {r['label']} | {r['n']} | {r['d']:+.3f} | [{r['lo']:+.3f}, {r['hi']:+.3f}] | {fmt_p(r['p'])} | {fmt_p(r['p_holm'])} |\n")
+
+    def pp(p):
+        return "< 0.0001" if p < 0.0001 else f"{p:.4f}"
+
+    lines = ["table(", "  columns: (3.4fr, 0.5fr, 0.8fr, 1.9fr, 0.9fr, 0.9fr),", "  align: (left, center, center, center, center, center),",
+             "  stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),",
+             "  table.header[*Comparison (A − B)*][*n*][*Score*][*Difference \\[95% interval\\]*][*p*][*p (Holm)*],"]
+    for r in res:
+        diff = f"{r['d']:+.3f} \\[{r['lo']:+.3f}, {r['hi']:+.3f}\\]".replace("-", "−")
+        lines.append(f"  [{r['label']}], [{r['n']}], [{r['metric']}], [{diff}], [{pp(r['p'])}], {cell(pp(r['p_holm']), r['p_holm'] < 0.05)},")
+    lines.append(")")
+    return "\n".join(lines)
+
+
+def cluster_ci(pairs, b=5000, seed=11):
+    """95% interval for the mean paired difference, resampling whole repositories (cluster bootstrap)."""
+    by = {}
+    for repo, d in pairs:
+        by.setdefault(repo, []).append(d)
+    repos = sorted(by)
+    rng = random.Random(seed)
+    ms = []
+    for _ in range(b):
+        pick = [repos[rng.randrange(len(repos))] for _ in repos]
+        xs = [d for rp in pick for d in by[rp]]
+        ms.append(sum(xs) / len(xs))
+    ms.sort()
+    return ms[int(0.025 * b)], ms[int(0.975 * b)], by
+
+
+def repo_table(rows, flows) -> str:
+    """Repository-level robustness: per-repository direction and a cluster bootstrap for every retrieval test
+    of the declared family and the product tests. Questions from one repository are not independent."""
+    held, py = ("test2",), ("python",)
+    spec = [
+        (held, "locate", "mrr", "dense", "bm25", "Locate: dense − BM25 (held-out JS)"),
+        (held, "locate", "mrr", "dense", "lsa", "Locate: dense − LSA (held-out JS)"),
+        (held, "locate", "mrr", "bm25+dense+graph", "bm25", "Locate: RRF all three − BM25 (held-out JS)"),
+        (held, "locate", "mrr", "bm25+dense+graph", "dense", "Locate: RRF all three − dense (held-out JS)"),
+        (py, "locate", "mrr", "dense", "bm25", "Locate: dense − BM25 (Python)"),
+        (held, "dependency", "mrr", "graph", "bm25", "Importers: graph − BM25 (held-out JS)"),
+        (held, "impact", "ndcg@10", "graph", "bm25", "Impact: graph − BM25 (held-out JS)"),
+        (py, "impact", "ndcg@10", "hybrid-lsa", "graph", "Impact: RRF LSA+graph − graph (Python)"),
+        (held, "locate", "mrr", "product-v2-dense", "product", "Locate: CodeAI v2 − v1 (held-out JS)"),
+        (held, "dependency", "mrr", "product-v2-dense", "product", "Importers: CodeAI v2 − v1 (held-out JS)"),
+        (held, "impact", "ndcg@10", "product-v2-dense", "product", "Impact: CodeAI v2 − v1 (held-out JS)"),
+    ]
+    lines = ["table(", "  columns: (3.4fr, 1.1fr, 1.9fr, 1.9fr),", "  align: (left, center, center, center),",
+             "  stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),",
+             "  table.header[*Comparison (A − B)*][*Repositories where A > B*][*Interval over questions*][*Interval over repositories*],"]
+    md = ["\n\n# Repository-level robustness (cluster bootstrap over repositories)\n",
+          "| Comparison | repos A>B | diff | question CI | repository CI |", "|---|---|---|---|---|"]
+    for split, typ, metric, a, b, label in spec:
+        pairs = _pair_rows(rows, split, typ, metric, a, b)
+        lo, hi, by = cluster_ci(pairs)
+        d = [x for _, x in pairs]
+        _, qlo, qhi = paired_diff_ci([x for x in d], [0.0] * len(d), 5000)
+        wins = sum(1 for rp in by if mean(by[rp]) > 0)
+        ties = sum(1 for rp in by if mean(by[rp]) == 0)
+        tie = f" ({ties} tied)" if ties else ""
+        f = lambda x: f"{x:+.3f}".replace("-", "−")
+        excl = lo > 0 or hi < 0
+        rint = f"{f(mean(d))} \\[{f(lo)}, {f(hi)}\\]"
+        lines.append(f"  [{label}], [{wins} of {len(by)}{tie}], [{f(mean(d))} \\[{f(qlo)}, {f(qhi)}\\]], {cell(rint, excl)},")
+        md.append(f"| {label} | {wins}/{len(by)}{tie} | {mean(d):+.3f} | [{qlo:+.3f}, {qhi:+.3f}] | [{lo:+.3f}, {hi:+.3f}] |")
+    lines.append(")")
+    with open(RESEARCH / "out" / "significance.md", "a", encoding="utf-8") as fh:
+        fh.write("\n".join(md) + "\n")
     return "\n".join(lines)
 
 
@@ -426,6 +528,8 @@ def main() -> None:
         "#let significance-table = " + sig_table,
         "#let product-tests = " + product_tests(rows),
         "#let product-before-after = " + product_before_after(rows),
+        "#let v1-tests = " + v1_tests(rows),
+        "#let repo-table = " + repo_table(rows, flows),
         "#let accuracy = " + accuracy_table(acc),
         f"#let n-dropped = {len(raw['dropped_leaky_locate'])}",
     ]

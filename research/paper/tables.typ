@@ -20,9 +20,10 @@
   [LSA vectors], [16.5%], [0.25], [33.3%], [0.47], [42.8%], [0.35],
   [Neural dense (bge-small)], [38.0%], [0.50], [45.8%], [0.54], [30.7%], [0.27],
   [Graph], [36.7%], [0.45], table.cell(fill: rgb("#dff0e3"))[*95.8%*], table.cell(fill: rgb("#dff0e3"))[*0.97*], [74.6%], [0.74],
-  [RRF: LSA + graph], [22.8%], [0.38], [79.2%], [0.87], table.cell(fill: rgb("#dff0e3"))[*87.1%*], [0.83],
+  [RRF: LSA + graph], [22.8%], [0.38], [79.2%], [0.87], [87.1%], [0.83],
   [RRF: dense + graph], [38.0%], [0.55], [83.3%], [0.90], [73.7%], [0.73],
-  [RRF: BM25 + dense + graph], table.cell(fill: rgb("#dff0e3"))[*41.8%*], table.cell(fill: rgb("#dff0e3"))[*0.58*], [87.5%], [0.93], [87.0%], table.cell(fill: rgb("#dff0e3"))[*0.85*],
+  [RRF: BM25 + graph], table.cell(fill: rgb("#dff0e3"))[*43.0%*], [0.55], table.cell(fill: rgb("#dff0e3"))[*95.8%*], table.cell(fill: rgb("#dff0e3"))[*0.97*], table.cell(fill: rgb("#dff0e3"))[*92.1%*], table.cell(fill: rgb("#dff0e3"))[*0.91*],
+  [RRF: BM25 + dense + graph], [41.8%], table.cell(fill: rgb("#dff0e3"))[*0.58*], [87.5%], [0.93], [87.0%], [0.85],
 )
 
 #let retrieval-other = table(
@@ -48,6 +49,7 @@
   [Graph], [52.1%], [0.63], table.cell(fill: rgb("#dff0e3"))[*100.0%*], table.cell(fill: rgb("#dff0e3"))[*1.00*], [91.1%], table.cell(fill: rgb("#dff0e3"))[*0.91*],
   [RRF: LSA + graph], [42.4%], [0.57], [82.4%], [0.90], table.cell(fill: rgb("#dff0e3"))[*92.0%*], [0.89],
   [RRF: dense + graph], [56.2%], [0.67], [92.9%], [0.96], [88.8%], [0.83],
+  [RRF: BM25 + graph], [52.1%], [0.66], table.cell(fill: rgb("#dff0e3"))[*100.0%*], table.cell(fill: rgb("#dff0e3"))[*1.00*], [91.2%], [0.89],
   [RRF: BM25 + dense + graph], [56.2%], [0.69], [97.6%], [0.99], [88.8%], [0.85],
   table.cell(colspan: 7, fill: luma(235))[*Python, 4 repositories* #h(6pt) #text(size: 7.5pt)[(120 locate, 59 dependency, 60 impact questions)]],
   [Random ranking (floor)], [0.8%], [0.02], [5.1%], [0.14], [19.8%], [0.18],
@@ -59,6 +61,7 @@
   [Graph], [30.0%], [0.49], table.cell(fill: rgb("#dff0e3"))[*100.0%*], table.cell(fill: rgb("#dff0e3"))[*1.00*], [72.4%], [0.78],
   [RRF: LSA + graph], [38.3%], [0.54], [89.8%], [0.93], [67.1%], [0.67],
   [RRF: dense + graph], [43.3%], [0.59], [88.1%], [0.94], table.cell(fill: rgb("#dff0e3"))[*80.6%*], table.cell(fill: rgb("#dff0e3"))[*0.84*],
+  [RRF: BM25 + graph], [43.3%], [0.57], [98.3%], [0.99], [76.0%], [0.79],
   [RRF: BM25 + dense + graph], [45.0%], [0.61], [94.9%], [0.97], [80.3%], [0.83],
 )
 
@@ -177,6 +180,7 @@
   [Graph], [0.447], [0.452], [0.595], [0.646],
   [RRF: LSA + graph], [0.380], [0.387], [0.582], [0.772],
   [RRF: dense + graph], [0.554], [0.557], [0.835], [0.886],
+  [RRF: BM25 + graph], [0.550], [0.554], [0.722], [0.823],
   [RRF: BM25 + dense + graph], [0.584], [0.587], [0.848], [0.873],
   table.cell(colspan: 5, fill: luma(235))[*Direct importers (n=48)*],
   [BM25 (lexical)], [0.680], [0.680], [0.896], [0.979],
@@ -187,6 +191,7 @@
   [Graph], [0.974], [0.974], [1.000], [1.000],
   [RRF: LSA + graph], [0.873], [0.873], [0.979], [1.000],
   [RRF: dense + graph], [0.905], [0.905], [1.000], [1.000],
+  [RRF: BM25 + graph], [0.974], [0.974], [1.000], [1.000],
   [RRF: BM25 + dense + graph], [0.934], [0.934], [1.000], [1.000],
 )
 
@@ -233,15 +238,43 @@
   table.cell(colspan: 5, fill: luma(235))[*Held-out JS*],
   [Locate (MRR, n=79)], [0.43], [0.53], table.cell(fill: rgb("#dff0e3"))[*0.58*], [0.58],
   [Direct importers (MRR, n=48)], [0.68], table.cell(fill: rgb("#dff0e3"))[*0.97*], table.cell(fill: rgb("#dff0e3"))[*0.97*], [0.97],
-  [Change impact (nDCG\@10, n=37)], [0.58], table.cell(fill: rgb("#dff0e3"))[*0.83*], [0.78], [0.85],
+  [Change impact (nDCG\@10, n=37)], [0.58], table.cell(fill: rgb("#dff0e3"))[*0.83*], [0.78], [0.91],
   table.cell(colspan: 5, fill: luma(235))[*Post-hoc JS*],
   [Locate (MRR, n=144)], [0.57], [0.69], table.cell(fill: rgb("#dff0e3"))[*0.70*], [0.69],
   [Direct importers (MRR, n=85)], [0.75], table.cell(fill: rgb("#dff0e3"))[*1.00*], table.cell(fill: rgb("#dff0e3"))[*1.00*], [1.00],
-  [Change impact (nDCG\@10, n=78)], [0.48], table.cell(fill: rgb("#dff0e3"))[*0.90*], [0.82], [0.85],
+  [Change impact (nDCG\@10, n=78)], [0.48], table.cell(fill: rgb("#dff0e3"))[*0.90*], [0.82], [0.91],
   table.cell(colspan: 5, fill: luma(235))[*Python*],
   [Locate (MRR, n=120)], [0.46], [0.60], table.cell(fill: rgb("#dff0e3"))[*0.64*], [0.61],
   [Direct importers (MRR, n=59)], [0.79], table.cell(fill: rgb("#dff0e3"))[*1.00*], table.cell(fill: rgb("#dff0e3"))[*1.00*], [1.00],
-  [Change impact (nDCG\@10, n=60)], [0.50], [0.80], table.cell(fill: rgb("#dff0e3"))[*0.83*], [0.83],
+  [Change impact (nDCG\@10, n=60)], [0.50], [0.80], table.cell(fill: rgb("#dff0e3"))[*0.83*], [0.84],
+)
+
+#let v1-tests = table(
+  columns: (3.4fr, 0.5fr, 0.8fr, 1.9fr, 0.9fr, 0.9fr),
+  align: (left, center, center, center, center, center),
+  stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),
+  table.header[*Comparison (A − B)*][*n*][*Score*][*Difference \[95% interval\]*][*p*][*p (Holm)*],
+  [Locate: v1 − RRF BM25 + dense + graph], [79], [MRR], [−0.158 \[−0.239, −0.069\]], [0.0007], table.cell(fill: rgb("#dff0e3"))[*0.0007*],
+  [Importers: v1 − graph], [48], [MRR], [−0.296 \[−0.406, −0.187\]], [< 0.0001], table.cell(fill: rgb("#dff0e3"))[*0.0001*],
+  [Impact: v1 − RRF BM25 + dense + graph], [37], [nDCG\@10], [−0.263 \[−0.347, −0.177\]], [< 0.0001], table.cell(fill: rgb("#dff0e3"))[*0.0001*],
+)
+
+#let repo-table = table(
+  columns: (3.4fr, 1.1fr, 1.9fr, 1.9fr),
+  align: (left, center, center, center),
+  stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),
+  table.header[*Comparison (A − B)*][*Repositories where A > B*][*Interval over questions*][*Interval over repositories*],
+  [Locate: dense − BM25 (held-out JS)], [3 of 5], [+0.178 \[+0.079, +0.276\]], [+0.178 \[−0.034, +0.271\]],
+  [Locate: dense − LSA (held-out JS)], [3 of 5], [+0.251 \[+0.156, +0.347\]], [+0.251 \[−0.022, +0.349\]],
+  [Locate: RRF all three − BM25 (held-out JS)], [4 of 5 (1 tied)], [+0.260 \[+0.163, +0.353\]], table.cell(fill: rgb("#dff0e3"))[*+0.260 \[+0.085, +0.315\]*],
+  [Locate: RRF all three − dense (held-out JS)], [4 of 5], [+0.082 \[−0.021, +0.187\]], [+0.082 \[−0.021, +0.225\]],
+  [Locate: dense − BM25 (Python)], [4 of 4], [+0.191 \[+0.121, +0.258\]], table.cell(fill: rgb("#dff0e3"))[*+0.191 \[+0.177, +0.204\]*],
+  [Importers: graph − BM25 (held-out JS)], [5 of 5], [+0.294 \[+0.190, +0.401\]], table.cell(fill: rgb("#dff0e3"))[*+0.294 \[+0.145, +0.482\]*],
+  [Impact: graph − BM25 (held-out JS)], [4 of 5], [+0.158 \[−0.022, +0.317\]], [+0.158 \[−0.157, +0.473\]],
+  [Impact: RRF LSA+graph − graph (Python)], [1 of 4], [−0.107 \[−0.152, −0.060\]], [−0.107 \[−0.254, +0.025\]],
+  [Locate: CodeAI v2 − v1 (held-out JS)], [4 of 5 (1 tied)], [+0.157 \[+0.074, +0.237\]], table.cell(fill: rgb("#dff0e3"))[*+0.157 \[+0.054, +0.206\]*],
+  [Importers: CodeAI v2 − v1 (held-out JS)], [3 of 5 (2 tied)], [+0.296 \[+0.187, +0.407\]], table.cell(fill: rgb("#dff0e3"))[*+0.296 \[+0.093, +0.437\]*],
+  [Impact: CodeAI v2 − v1 (held-out JS)], [3 of 5], [+0.195 \[+0.122, +0.268\]], table.cell(fill: rgb("#dff0e3"))[*+0.195 \[+0.050, +0.313\]*],
 )
 
 #let accuracy = table(

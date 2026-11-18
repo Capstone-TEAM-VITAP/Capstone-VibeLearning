@@ -20,6 +20,7 @@ Systems
   graph         structural ranker (reverse-dependency BFS for import/impact questions)
   hybrid-lsa    RRF(lsa 0.55, graph 0.45)            <- the fusion of the earlier report
   hybrid-dense  RRF(dense 0.55, graph 0.45)
+  bm25+graph    RRF(bm25, graph), equal weights   <- control: fusion with a weak-but-real text ranker
   bm25+dense+graph  RRF of the three, equal weights
 
 Groups: JS held-out (test2), JS post-hoc (dev+test), Python (4 repositories).
@@ -48,7 +49,7 @@ from dense import DenseIndex, embed_queries
 from src.retrieval.filegraph import tokenize
 from src.retrieval.hybrid import RRF_WEIGHTS, RepoRetriever, _STOP, graph_rank, rrf
 
-SYSTEMS = ["random", "bm25", "product", "product-v2", "product-v2-dense", "lsa", "dense", "graph", "hybrid-lsa", "hybrid-dense", "bm25+dense+graph"]
+SYSTEMS = ["random", "bm25", "product", "product-v2", "product-v2-dense", "lsa", "dense", "graph", "hybrid-lsa", "hybrid-dense", "bm25+graph", "bm25+dense+graph"]
 CONDITIONS = ("code", "raw")
 GROUPS = {
     "JS held-out (5 repos)": lambda q: q["split"] == "test2",
@@ -122,6 +123,7 @@ def main() -> None:
                     "graph": base["graph"],
                     "hybrid-lsa": base["hybrid"],
                     "hybrid-dense": rrf({"vector": d, "graph": base["graph"]}, RRF_WEIGHTS),
+                    "bm25+graph": rrf({"bm25": base["bm25"], "graph": base["graph"]}),
                     "bm25+dense+graph": rrf({"bm25": base["bm25"], "dense": d, "graph": base["graph"]}),
                 }
                 row = {"id": q["id"], "repo": repo, "type": q["type"], "split": q["split"], "cond": cond,
