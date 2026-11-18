@@ -4,6 +4,7 @@ import { requireAuth } from "../middleware/auth.middleware.js";
 import { validate } from "../middleware/validate.middleware.js";
 import { analysisController } from "../controllers/analysis.controller.js";
 import { chatController } from "../controllers/chat.controller.js";
+import { intelligenceController } from "../controllers/intelligence.controller.js";
 import { learningController } from "../controllers/learning.controller.js";
 import { repoController } from "../controllers/repo.controller.js";
 import { chatMessageSchema } from "../validators/chat.validator.js";
@@ -16,6 +17,7 @@ import {
 import {
   connectRepoSchema,
   diffQuerySchema,
+  intelligenceSummarySchema,
   repoIdParamSchema,
   snapshotParamSchema,
   syncRepoSchema,
@@ -96,6 +98,13 @@ router.post(
   "/:id/chat",
   validate({ params: repoIdParamSchema, body: chatMessageSchema }),
   chatController.chat
+);
+
+// POST /api/v1/repos/:id/intelligence/summary — AI briefing for a snapshot (cached per commit)
+router.post(
+  "/:id/intelligence/summary",
+  validate({ params: repoIdParamSchema, body: intelligenceSummarySchema }),
+  intelligenceController.summary
 );
 
 // POST /api/v1/repos/:id/learning/generate — build (or reuse) an MCQ set

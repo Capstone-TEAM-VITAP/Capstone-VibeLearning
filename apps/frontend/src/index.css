@@ -72,16 +72,16 @@
   --on-tertiary: #0a0a0a;
 
   /* Semantic Status */
-  --status-success: #00c758;
-  --status-success-dim: rgba(0, 199, 88, 0.12);
+  --status-success: #22c55e;
+  --status-success-dim: rgba(34, 197, 94, 0.12);
   --status-warning: #f59e0b;
   --status-warning-dim: rgba(245, 158, 11, 0.12);
   --status-error: #ef4444;
   --status-error-dim: rgba(239, 68, 68, 0.12);
 
   /* Borders & Hairlines */
-  --border-subtle: #27272a;
-  --border-hairline: rgba(255, 255, 255, 0.08);
+  --border-subtle: #232326;
+  --border-hairline: rgba(255, 255, 255, 0.06);
   --border-active: rgba(255, 255, 255, 0.2);
   --border-focus: #ffffff;
 
@@ -102,8 +102,13 @@
   --nav-active-text: #ffffff;
 
   /* Font Families */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Dense console layout sizes */
+  --sidebar-w: 232px;
+  --sidebar-w-collapsed: 64px;
+  --header-h: 48px;
 
   /* Backward Compatibility Mappings */
   --text: var(--text-secondary);
@@ -133,27 +138,26 @@
 }
 
 /* =========================================================
-   USAGEATLAS PAPER DESIGN TOKENS (LIGHT)
-   Warm paper surfaces, ink text, blue-ink accents.
-   Inspired by https://usageatlas.com
+   DENSE CONSOLE TOKENS (LIGHT)
+   Neutral zinc surfaces, ink primary, hairline borders.
    ========================================================= */
 [data-theme="light"],
 :root[data-theme="light"] {
   /* Canvas & Background */
-  --bg-canvas: #f8f7f4;               /* paper: page backdrop */
-  --bg-surface-lowest: #f2f0ec;       /* paper-alt: sidebar, base canvas */
-  --bg-surface-low: #ffffff;          /* card: main surfaces */
-  --bg-surface-container: #f2f0ec;    /* inset wells: inputs, code */
-  --bg-surface-high: #eceae6;         /* hover / elevated */
-  --bg-surface-highest: #e2e0da;      /* badges, pills, secondary buttons */
+  --bg-canvas: #ffffff;               /* page backdrop */
+  --bg-surface-lowest: #fafafa;       /* sidebar */
+  --bg-surface-low: #ffffff;          /* cards */
+  --bg-surface-container: #f4f4f5;    /* inset wells, table heads */
+  --bg-surface-high: #f4f4f5;         /* hover */
+  --bg-surface-highest: #e4e4e7;      /* badges, pills */
   --bg-surface-bright: #ffffff;       /* popovers */
 
   /* Primary Accent: Ink (ink bg / paper text actions) */
-  --primary: #1d1d1f;
-  --primary-light: #45454a;
+  --primary: #18181b;
+  --primary-light: #3f3f46;
   --primary-container: #000000;
-  --primary-dim: rgba(29, 29, 31, 0.08);
-  --on-primary: #f8f7f4;
+  --primary-dim: rgba(24, 24, 27, 0.06);
+  --on-primary: #ffffff;
 
   /* Secondary Data Accent: Atlas Blue */
   --secondary: #0462d3;
@@ -170,34 +174,34 @@
   --on-tertiary: #ffffff;
 
   /* Semantic Status */
-  --status-success: #00884b;
-  --status-success-dim: rgba(0, 136, 75, 0.12);
+  --status-success: #16a34a;
+  --status-success-dim: rgba(22, 163, 74, 0.12);
   --status-warning: #b45309;
   --status-warning-dim: rgba(180, 83, 9, 0.12);
   --status-error: #be123c;
   --status-error-dim: rgba(190, 18, 60, 0.12);
 
   /* Borders & Hairlines */
-  --border-subtle: rgba(0, 0, 0, 0.09);
-  --border-hairline: rgba(0, 0, 0, 0.06);
-  --border-active: rgba(0, 0, 0, 0.16);
-  --border-focus: #0462d3;
+  --border-subtle: #e4e4e7;
+  --border-hairline: #efeff1;
+  --border-active: #d4d4d8;
+  --border-focus: #18181b;
 
   /* Typography Colors */
-  --text-primary: #1d1d1f;
-  --text-secondary: #45454a;
-  --text-muted: #6e6e73;
+  --text-primary: #18181b;
+  --text-secondary: #3f3f46;
+  --text-muted: #71717a;
   --text-disabled: #a1a1aa;
-  --text-inverse: #f8f7f4;
+  --text-inverse: #ffffff;
 
   /* Shadows (Soft, layered, neutral) */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05), 0 3px 8px -4px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.05), 0 8px 20px -8px rgba(0, 0, 0, 0.12), 0 24px 48px -24px rgba(0, 0, 0, 0.14);
   --shadow-lg: 0 1px 2px rgba(0, 0, 0, 0.08), 0 12px 28px -12px rgba(0, 0, 0, 0.18), 0 48px 90px -40px rgba(0, 0, 0, 0.34);
 
   /* Navigation & Chrome */
-  --header-bg: rgba(251, 252, 253, 0.72);
-  --nav-active-text: #1d1d1f;
+  --header-bg: rgba(255, 255, 255, 0.85);
+  --nav-active-text: #18181b;
 
   /* Backward Compatibility Mappings */
   --text: var(--text-secondary);
@@ -300,7 +304,7 @@ code {
   background: var(--text-muted);
 }
 
-/* Devlogue-style selection + film grain (dark only) */
+/* Selection (dark) */
 [data-theme="dark"] ::selection {
   color: #000;
   background: #fff;
@@ -309,38 +313,7 @@ code {
 /* UsageAtlas-style selection (light only) */
 [data-theme="light"] ::selection {
   color: #1d1d1f;
-  background: rgba(45, 147, 252, 0.22);
-}
-
-[data-theme="dark"] body::after {
-  content: "";
-  position: fixed;
-  inset: -200%;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  background-size: 256px 256px;
-  animation: devlogue-grain 8s steps(10, end) infinite;
-}
-
-@keyframes devlogue-grain {
-  0%, 100% { transform: translate(0); }
-  10% { transform: translate(-5%, -10%); }
-  20% { transform: translate(-15%, 5%); }
-  30% { transform: translate(7%, -25%); }
-  40% { transform: translate(-5%, 25%); }
-  50% { transform: translate(-15%, 10%); }
-  60% { transform: translate(15%, 0); }
-  70% { transform: translate(0, 15%); }
-  80% { transform: translate(3%, 35%); }
-  90% { transform: translate(-10%, 10%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  [data-theme="dark"] body::after {
-    animation: none;
-  }
+  background: rgba(24, 24, 27, 0.14);
 }
 
 @layer base {

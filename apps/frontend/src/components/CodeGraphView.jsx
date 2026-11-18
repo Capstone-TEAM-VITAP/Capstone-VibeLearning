@@ -9,6 +9,7 @@ import {
   MarkerType,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { MessageSquareText } from "lucide-react";
 import CodeGraphNode from "./CodeGraphNode.jsx";
 import GraphNodeInspector from "./GraphNodeInspector.jsx";
 import Blocks from "./Blocks.jsx";
@@ -337,7 +338,7 @@ function CodeGraphContent({
   onRetry,
   setView,
 }) {
-  const { fitView, zoomIn, zoomOut, setCenter, setViewport } = useReactFlow();
+  const { fitView, setCenter } = useReactFlow();
 
   const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [hoveredNodeId, setHoveredNodeId] = useState(null);
@@ -585,6 +586,40 @@ function CodeGraphContent({
     });
   }, [layoutedNodes, selectedNodeId, hoveredNodeId, activeFocusNeighbors]);
 
+  // Controlled nodes: React Flow reports measured sizes through onNodesChange,
+  // and both the MiniMap and fitView rely on the app feeding those changes back
+  // (fitView is queued until the next nodes update). Keep the measured sizes and
+  // always hand React Flow a fresh array after a change so queued fits run.
+  const [measuredSizes, setMeasuredSizes] = useState({});
+
+  const handleNodesChange = useCallback((changes) => {
+    setMeasuredSizes((prev) => {
+      const next = { ...prev };
+      for (const c of changes) {
+        if (c.type === "dimensions" && c.dimensions) {
+          next[c.id] = { width: c.dimensions.width, height: c.dimensions.height };
+        }
+      }
+      return next;
+    });
+  }, []);
+
+  const flowNodes = useMemo(
+    () =>
+      rfNodes.map((n) => (measuredSizes[n.id] ? { ...n, measured: measuredSizes[n.id] } : n)),
+    [rfNodes, measuredSizes],
+  );
+
+  // MiniMap: neutral blocks, the selected node in the primary ink color
+  const miniMapNodeColor = useCallback(
+    (node) => {
+      if (node.data?.isSelected) return isLight ? "#18181b" : "#fafafa";
+      if (node.data?.isDimmed) return isLight ? "#e4e4e7" : "#27272a";
+      return isLight ? "#a1a1aa" : "#52525b";
+    },
+    [isLight],
+  );
+
   // Transform to React Flow Edges with Noise-Reduction & Low-Opacity Default
   const rfEdges = useMemo(() => {
     return filteredEdges.map((e) => {
@@ -618,12 +653,12 @@ function CodeGraphContent({
 
       // Default neutral low-opacity trace (reduces visual noise)
       const neutralColor = isLight
-        ? "rgba(0, 0, 0, 0.14)"
-        : "rgba(148, 163, 184, 0.20)";
+        ? "rgba(24, 24, 27, 0.28)"
+        : "rgba(228, 228, 231, 0.26)";
 
       let strokeColor = neutralColor;
       let strokeWidth = 1.0;
-      let opacity = isLight ? 0.24 : 0.20;
+      let opacity = isLight ? 0.55 : 0.5;
       let zIndex = 2;
       let animated = false;
 
@@ -725,15 +760,13 @@ function CodeGraphContent({
   useEffect(() => {
     if (layoutedNodes.length > 0) {
       const timer = setTimeout(() => {
-        requestAnimationFrame(() => {
-          fitView({
-            padding: 0.18,
-            duration: 450,
-            maxZoom: 1.15,
-            minZoom: 0.35,
-          });
+        fitView({
+          padding: 0.08,
+          duration: 450,
+          maxZoom: 1.15,
+          minZoom: 0.2,
         });
-      }, 70);
+      }, 120);
       return () => clearTimeout(timer);
     }
   }, [layoutMode, scope, fitView, layoutedNodes.length, isInspectorOpen]);
@@ -829,239 +862,171 @@ function CodeGraphContent({
       className={`codegraph-workspace ${isFullscreen ? "codegraph-workspace--fullscreen" : ""}`}
       ref={workspaceRef}
     >
-      {/* Workspace Header */}
-      <div className="codegraph-header">
-        <div className="codegraph-header-left">
-          <div className="codegraph-eyebrow">CODE GRAPH</div>
-          <h1 className="codegraph-heading">Repository CodeGraph</h1>
-          <p className="codegraph-desc">
-            Explore the structural relationships that connect your repository.
-          </p>
-
-          <div className="codegraph-context-strip">
-            <span className="codegraph-context-pill repo-pill">
-              <span className="material-symbols-outlined">folder</span>
-              {activeRepo.name}
+      {/* Single slim bar: context, search + filters, actions */}
+      <div className="cg-bar">
+        <div className="cg-bar-context">
+          <span className="cg-title">CodeGraph</span>
+          <span className="cg-sep">/</span>
+          <span className="cg-repo" title={activeRepo.name}>{activeRepo.name}</span>
+          <span className="cg-chip font-mono" title="Branch">
+            <span className="material-symbols-outlined">fork_right</span>
+            {activeSnapshot?.branch || "main"}
+          </span>
+          {activeSnapshot?.commit_sha && (
+            <span className="cg-chip font-mono" title="Snapshot commit">
+              {activeSnapshot.commit_sha.slice(0, 7)}
             </span>
-            <span className="codegraph-context-pill branch-pill font-mono">
-              <span className="material-symbols-outlined">fork_right</span>
-              {activeSnapshot?.branch || "main"}
-            </span>
-            {activeSnapshot?.commit_sha && (
-              <span className="codegraph-context-pill sha-pill font-mono">
-                <span className="material-symbols-outlined">commit</span>
-                {activeSnapshot.commit_sha.slice(0, 7)}
-              </span>
-            )}
-            <span className="codegraph-context-pill status-pill">
-              <span className="status-dot-complete" />
-              Analysis Complete
-            </span>
-          </div>
+          )}
         </div>
 
-        <div className="codegraph-header-actions">
+        <div className="cg-bar-filters">
+            {/* Search with autocomplete dropdown */}
+            <div className="graph-search-box" ref={searchWrapRef}>
+              <span className="material-symbols-outlined graph-search-icon">search</span>
+              <input
+                type="text"
+                className="graph-search-input font-mono"
+                placeholder="Search files, symbols, roles"
+                aria-label="Search the graph"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setShowSearchDropdown(true);
+                }}
+                onFocus={() => setShowSearchDropdown(true)}
+              />
+              {searchQuery && (
+                <button
+                  className="graph-search-clear"
+                  onClick={() => setSearchQuery("")}
+                  type="button"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              )}
+
+              {showSearchDropdown && searchResults.length > 0 && (
+                <div className="graph-search-results">
+                  {searchResults.map((item) => (
+                    <button
+                      key={item.id}
+                      className="graph-search-result-item"
+                      onClick={() => handleSelectSearchResult(item)}
+                      type="button"
+                    >
+                      <span className="material-symbols-outlined result-icon">
+                        {item.type === "file" ? "description" : "hub"}
+                      </span>
+                      <div className="result-text">
+                        <div className="result-label font-mono">
+                          {item.label || item.id}
+                        </div>
+                        <div className="result-sub font-mono">
+                          {item.metadata?.path || item.type}
+                        </div>
+                      </div>
+                      {item.architecture_role && (
+                        <span className="result-role font-mono">
+                          {item.architecture_role}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          <select
+            className="graph-select"
+            value={scope}
+            onChange={(e) => setScope(e.target.value)}
+            aria-label="Scope"
+            title="Scope"
+          >
+            <option value="architecture_files">Architecture & files</option>
+            <option value="all">All nodes (incl. symbols)</option>
+            <option value="files_only">Files only</option>
+            <option value="architecture_only">Architecture only</option>
+          </select>
+
+          {availableRoles.length > 0 && (
+            <select
+              className="graph-select"
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              aria-label="Role"
+              title="Role"
+            >
+              <option value="ALL">All roles ({availableRoles.length})</option>
+              {availableRoles.map((r) => (
+                <option key={r} value={r}>
+                  {r.toLowerCase()}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {availableEdgeTypes.length > 0 && (
+            <select
+              className="graph-select"
+              value={edgeTypeFilter}
+              onChange={(e) => setEdgeTypeFilter(e.target.value)}
+              aria-label="Relationships"
+              title="Relationships"
+            >
+              <option value="ALL">All edges ({availableEdgeTypes.length})</option>
+              {availableEdgeTypes.map((et) => (
+                <option key={et} value={et}>
+                  {et.toLowerCase().replace(/_/g, " ")}
+                </option>
+              ))}
+            </select>
+          )}
+
+          <select
+            className="graph-select"
+            value={layoutMode}
+            onChange={(e) => setLayoutMode(e.target.value)}
+            aria-label="Layout"
+            title="Layout"
+          >
+            <option value="architecture">Swimlanes</option>
+            <option value="hierarchy">Hierarchy</option>
+            <option value="modular">Directories</option>
+          </select>
+        </div>
+
+        <div className="cg-bar-actions">
           <button
-            className="codegraph-action-btn codegraph-action-btn--secondary"
-            onClick={() => setView("analysis")}
+            className={`toolbar-icon-btn ${isInspectorOpen ? "toolbar-icon-btn--active" : ""}`}
+            onClick={() => setIsInspectorOpen((prev) => !prev)}
+            title={isInspectorOpen ? "Hide inspector" : "Show inspector"}
+            aria-label={isInspectorOpen ? "Hide inspector" : "Show inspector"}
+            aria-pressed={isInspectorOpen}
             type="button"
           >
-            <span className="material-symbols-outlined">smart_toy</span>
+            <span className="material-symbols-outlined">dock_to_right</span>
+          </button>
+          <button
+            className={`toolbar-icon-btn ${isFullscreen ? "toolbar-icon-btn--active" : ""}`}
+            onClick={toggleFullscreen}
+            title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+            aria-label={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+            type="button"
+          >
+            <span className="material-symbols-outlined">
+              {isFullscreen ? "fullscreen_exit" : "fullscreen"}
+            </span>
+          </button>
+          <span className="cg-bar-divider" />
+          <button className="ws-btn ws-btn-ghost" onClick={() => setView("analysis")} type="button">
+            <MessageSquareText size={14} />
             Ask AI
           </button>
-          <button
-            className="codegraph-action-btn codegraph-action-btn--primary"
-            onClick={() => setView("repos")}
-            type="button"
-          >
-            <span className="material-symbols-outlined">difference</span>
-            Analyze Changes
+          <button className="ws-btn ws-btn-secondary" onClick={() => setView("repos")} type="button">
+            <span className="material-symbols-outlined cg-btn-icon">difference</span>
+            Analyze changes
           </button>
-        </div>
-      </div>
-
-      {/* Graph Toolbar */}
-      <div className="codegraph-toolbar">
-        {/* Left Toolbar Items */}
-        <div className="toolbar-group toolbar-group--left">
-          {/* Search with autocomplete dropdown */}
-          <div className="graph-search-box" ref={searchWrapRef}>
-            <span className="material-symbols-outlined graph-search-icon">search</span>
-            <input
-              type="text"
-              className="graph-search-input font-mono"
-              placeholder="Search node, symbol, path, or role..."
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setShowSearchDropdown(true);
-              }}
-              onFocus={() => setShowSearchDropdown(true)}
-            />
-            {searchQuery && (
-              <button
-                className="graph-search-clear"
-                onClick={() => setSearchQuery("")}
-                type="button"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            )}
-
-            {showSearchDropdown && searchResults.length > 0 && (
-              <div className="graph-search-results">
-                {searchResults.map((item) => (
-                  <button
-                    key={item.id}
-                    className="graph-search-result-item"
-                    onClick={() => handleSelectSearchResult(item)}
-                    type="button"
-                  >
-                    <span className="material-symbols-outlined result-icon">
-                      {item.type === "file" ? "description" : "hub"}
-                    </span>
-                    <div className="result-text">
-                      <div className="result-label font-mono">
-                        {item.label || item.id}
-                      </div>
-                      <div className="result-sub font-mono">
-                        {item.metadata?.path || item.type}
-                      </div>
-                    </div>
-                    {item.architecture_role && (
-                      <span className="result-role font-mono">
-                        {item.architecture_role}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Scope Selector */}
-          <div className="graph-select-wrap">
-            <span className="graph-select-label">Scope:</span>
-            <select
-              className="graph-select font-mono"
-              value={scope}
-              onChange={(e) => setScope(e.target.value)}
-            >
-              <option value="architecture_files">Architecture & Files</option>
-              <option value="all">All Nodes (incl. Symbols)</option>
-              <option value="files_only">Files Only</option>
-              <option value="architecture_only">Architecture Only</option>
-            </select>
-          </div>
-
-          {/* Role Filter */}
-          {availableRoles.length > 0 && (
-            <div className="graph-select-wrap">
-              <span className="graph-select-label">Role:</span>
-              <select
-                className="graph-select font-mono"
-                value={roleFilter}
-                onChange={(e) => setRoleFilter(e.target.value)}
-              >
-                <option value="ALL">All Roles ({availableRoles.length})</option>
-                {availableRoles.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/* Edge Type Filter */}
-          {availableEdgeTypes.length > 0 && (
-            <div className="graph-select-wrap">
-              <span className="graph-select-label">Edges:</span>
-              <select
-                className="graph-select font-mono"
-                value={edgeTypeFilter}
-                onChange={(e) => setEdgeTypeFilter(e.target.value)}
-              >
-                <option value="ALL">All Relationships ({availableEdgeTypes.length})</option>
-                {availableEdgeTypes.map((et) => (
-                  <option key={et} value={et}>
-                    {et}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-        </div>
-
-        {/* Right Toolbar Items */}
-        <div className="toolbar-group toolbar-group--right">
-          {/* Layout Selector */}
-          <div className="graph-select-wrap">
-            <span className="graph-select-label">Layout:</span>
-            <select
-              className="graph-select font-mono"
-              value={layoutMode}
-              onChange={(e) => setLayoutMode(e.target.value)}
-            >
-              <option value="architecture">Architecture Swimlanes</option>
-              <option value="hierarchy">Hierarchical DAG</option>
-              <option value="modular">Directory Columns</option>
-            </select>
-          </div>
-
-          {/* Viewport & View Mode Buttons */}
-          <div className="toolbar-btn-group">
-            <button
-              className="toolbar-icon-btn"
-              onClick={() => fitView({ padding: 0.18, duration: 400 })}
-              title="Fit to Viewport"
-              type="button"
-            >
-              <span className="material-symbols-outlined">fit_screen</span>
-            </button>
-            <button
-              className="toolbar-icon-btn"
-              onClick={() => zoomIn({ duration: 300 })}
-              title="Zoom In"
-              type="button"
-            >
-              <span className="material-symbols-outlined">zoom_in</span>
-            </button>
-            <button
-              className="toolbar-icon-btn"
-              onClick={() => zoomOut({ duration: 300 })}
-              title="Zoom Out"
-              type="button"
-            >
-              <span className="material-symbols-outlined">zoom_out</span>
-            </button>
-            <button
-              className="toolbar-icon-btn"
-              onClick={() => setViewport({ x: 50, y: 50, zoom: 0.9 }, { duration: 400 })}
-              title="Reset View"
-              type="button"
-            >
-              <span className="material-symbols-outlined">restart_alt</span>
-            </button>
-            <button
-              className={`toolbar-icon-btn ${isInspectorOpen ? "toolbar-icon-btn--active" : ""}`}
-              onClick={() => setIsInspectorOpen((prev) => !prev)}
-              title={isInspectorOpen ? "Hide Inspector (Expand Graph)" : "Show Inspector"}
-              type="button"
-            >
-              <span className="material-symbols-outlined">dock_to_right</span>
-            </button>
-            <button
-              className={`toolbar-icon-btn ${isFullscreen ? "toolbar-icon-btn--active" : ""}`}
-              onClick={toggleFullscreen}
-              title={isFullscreen ? "Exit Fullscreen" : "Open Fullscreen"}
-              type="button"
-            >
-              <span className="material-symbols-outlined">
-                {isFullscreen ? "fullscreen_exit" : "fullscreen"}
-              </span>
-            </button>
-          </div>
         </div>
       </div>
 
@@ -1070,9 +1035,10 @@ function CodeGraphContent({
         {/* Canvas */}
         <div className="codegraph-canvas">
           <ReactFlow
-            nodes={rfNodes}
+            nodes={flowNodes}
             edges={rfEdges}
             nodeTypes={nodeTypes}
+            onNodesChange={handleNodesChange}
             onNodeClick={handleNodeClick}
             onNodeMouseEnter={handleNodeMouseEnter}
             onNodeMouseLeave={handleNodeMouseLeave}
@@ -1089,11 +1055,29 @@ function CodeGraphContent({
             <MiniMap
               className="codegraph-minimap"
               position="bottom-right"
-              nodeStrokeColor={isLight ? "#0462d3" : "#38bdf8"}
-              nodeColor={isLight ? "#ffffff" : "#1e293b"}
-              maskColor={isLight ? "rgba(233, 237, 201, 0.75)" : "rgba(9, 9, 11, 0.75)"}
+              ariaLabel="Code graph overview"
+              pannable
+              zoomable
+              nodeColor={miniMapNodeColor}
+              nodeStrokeWidth={0}
+              nodeBorderRadius={3}
+              bgColor={isLight ? "#ffffff" : "#0f0f11"}
+              maskColor={isLight ? "rgba(244, 244, 245, 0.72)" : "rgba(5, 5, 6, 0.6)"}
+              maskStrokeColor={isLight ? "#18181b" : "#fafafa"}
+              maskStrokeWidth={1.5}
             />
           </ReactFlow>
+
+          <div className="cg-stats font-mono" aria-label="Graph size">
+            <span>
+              <b>{filteredNodes.length}</b>
+              {filteredNodes.length !== rawNodes.length && <> / {rawNodes.length}</>} nodes
+            </span>
+            <span>
+              <b>{filteredEdges.length}</b>
+              {filteredEdges.length !== rawEdges.length && <> / {rawEdges.length}</>} edges
+            </span>
+          </div>
         </div>
 
         {/* Node Inspector */}
@@ -1107,39 +1091,6 @@ function CodeGraphContent({
         )}
       </div>
 
-      {/* Telemetry Strip */}
-      <div className="codegraph-telemetry font-mono">
-        <div className="telemetry-item">
-          <span className="telemetry-label">TOTAL NODES</span>
-          <span className="telemetry-val">{rawNodes.length}</span>
-        </div>
-        <div className="telemetry-divider">│</div>
-        <div className="telemetry-item">
-          <span className="telemetry-label">TOTAL EDGES</span>
-          <span className="telemetry-val">{rawEdges.length}</span>
-        </div>
-        <div className="telemetry-divider">│</div>
-        <div className="telemetry-item">
-          <span className="telemetry-label">VISIBLE NODES</span>
-          <span className="telemetry-val highlight">{filteredNodes.length}</span>
-        </div>
-        <div className="telemetry-divider">│</div>
-        <div className="telemetry-item">
-          <span className="telemetry-label">VISIBLE EDGES</span>
-          <span className="telemetry-val highlight">{filteredEdges.length}</span>
-        </div>
-        {selectedNodeId && (
-          <>
-            <div className="telemetry-divider">│</div>
-            <div className="telemetry-item">
-              <span className="telemetry-label">SELECTED</span>
-              <span className="telemetry-val selected-tag font-mono">
-                {selectedNodeId}
-              </span>
-            </div>
-          </>
-        )}
-      </div>
     </div>
   );
 }

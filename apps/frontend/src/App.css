@@ -54,14 +54,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 6px 14px;
+  gap: 6px;
+  padding: 5px 10px;
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 500;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease, opacity 0.12s ease;
   line-height: 1.4;
   white-space: nowrap;
   text-decoration: none;
@@ -74,17 +74,38 @@
   border: 1px solid transparent;
 }
 .ws-btn-primary:hover {
-  background-color: var(--primary-container);
+  opacity: 0.88;
 }
 
 .ws-btn-secondary {
-  background-color: var(--bg-surface-high);
+  background-color: var(--bg-surface-low);
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
 }
 .ws-btn-secondary:hover {
-  background-color: var(--bg-surface-highest);
+  background-color: var(--bg-surface-high);
   border-color: var(--border-active);
+}
+
+.ws-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ws-kbd {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 0 5px;
+  line-height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+.ws-btn-primary .ws-kbd {
+  border-color: color-mix(in srgb, var(--on-primary) 35%, transparent);
+  color: var(--on-primary);
+  opacity: 0.75;
 }
 
 .ws-btn-ghost {
@@ -1971,9 +1992,9 @@ body {
 }
 
 .codeai-main-container {
-  margin-left: 288px;
-  padding-top: 64px;
-  width: calc(100% - 288px);
+  margin-left: var(--sidebar-w);
+  padding-top: var(--header-h);
+  width: calc(100% - var(--sidebar-w));
   min-height: 100vh;
   box-sizing: border-box;
   background-color: var(--bg-canvas);
@@ -1983,7 +2004,7 @@ body {
 }
 
 .codeai-page-content {
-  padding: 32px 36px 64px;
+  padding: 20px 24px 48px;
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -2069,8 +2090,8 @@ body {
 /* Responsive Breakpoints for Workstation Shell */
 @media (max-width: 1024px) and (min-width: 769px) {
   .codeai-main-container {
-    margin-left: 72px;
-    width: calc(100% - 72px);
+    margin-left: var(--sidebar-w-collapsed);
+    width: calc(100% - var(--sidebar-w-collapsed));
   }
   .codeai-page-content {
     padding: 24px 20px 48px;
@@ -2140,4 +2161,5 @@ body {
 [data-theme="light"] .profile-row { border-bottom-color: var(--border-subtle); }
 [data-theme="light"] .profile-row span { color: var(--text-muted); }
 [data-theme="light"] .profile-row code { background: var(--bg-surface-container); color: var(--secondary); }
-[data-theme="light"] .profile-authenticated { color: var(--status-success); }
+[data-theme="light"] .profile-authenticated { color: var(--status-success); }
+

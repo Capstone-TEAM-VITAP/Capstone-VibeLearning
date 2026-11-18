@@ -17,7 +17,7 @@ export function applyTheme(theme) {
   document.documentElement.style.colorScheme = theme;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    meta.setAttribute("content", theme === "light" ? "#f8f7f4" : "#050505");
+    meta.setAttribute("content", theme === "light" ? "#ffffff" : "#050505");
   }
   if (theme === "light") {
     document.documentElement.classList.remove("dark");

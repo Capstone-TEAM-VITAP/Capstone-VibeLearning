@@ -1,91 +1,64 @@
 import "./RecentActivity.css";
 
-function RecentActivity({ activities = [], onViewAll }) {
-  function formatRelative(dateStr) {
-    if (!dateStr) return "—";
-    try {
-      const d = new Date(dateStr);
-      if (Number.isNaN(d.getTime())) return "—";
-      return d.toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      });
-    } catch {
-      return "—";
-    }
-  }
+function formatAgo(dateStr) {
+  if (!dateStr) return "—";
+  const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return "—";
+  const mins = Math.round((Date.now() - d.getTime()) / 60000);
+  if (mins < 1) return "now";
+  if (mins < 60) return `${mins}m`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h`;
+  const days = Math.round(hrs / 24);
+  if (days < 30) return `${days}d`;
+  return d.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+}
 
+function RecentActivity({ activities = [], onViewAll, limit = 6 }) {
   return (
-    <div className="recent-activity-card">
-      <div className="recent-activity-header">
-        <span className="recent-activity-title">Recent Repository Activity</span>
+    <section className="console-card activity-log">
+      <div className="console-card-head">
+        <h2 className="console-card-title">Recent activity</h2>
         {onViewAll && activities.length > 0 && (
-          <button
-            type="button"
-            className="ws-btn ws-btn-ghost"
-            style={{ fontSize: 11, padding: "4px 8px" }}
-            onClick={onViewAll}
-          >
-            View Repositories →
+          <button type="button" className="ws-btn ws-btn-ghost" onClick={onViewAll}>
+            View repositories
           </button>
         )}
       </div>
 
       {activities.length === 0 ? (
-        <p className="activity-empty">No recent repository activity</p>
+        <p className="activity-log-empty">No repository activity yet.</p>
       ) : (
-        <div className="recent-activity-list">
-          {activities.slice(0, 5).map((act, idx) => {
+        <ul className="activity-log-list">
+          {activities.slice(0, limit).map((act, idx) => {
             const sha = act.commitSha?.slice(0, 7) || act.sha?.slice(0, 7) || null;
+            const when = act.committedAt || act.createdAt;
+            const files = act.realFileCount ?? act.fileCount;
+            const adds = act.realAdditions ?? act.additions;
+            const dels = act.realDeletions ?? act.deletions;
             return (
-              <div
-                className="recent-activity-item"
-                key={act.id || act.commitSha || idx}
-              >
-                <div className="activity-left">
-                  <div className={`activity-badge ${act.type === "sync" ? "sync" : ""}`}>
-                    <span className="material-symbols-outlined">
-                      {act.type === "sync" ? "sync" : "commit"}
-                    </span>
-                  </div>
-
-                  <div className="activity-details">
-                    <span className="activity-message">
-                      {act.message || act.title || "Repository snapshot recorded"}
-                    </span>
-                    <div className="activity-meta">
-                      <span>{act.repositoryName || "Repository"}</span>
-                      {sha && <span className="activity-sha">{sha}</span>}
-                      <span>·</span>
-                      <span>{formatRelative(act.committedAt || act.createdAt)}</span>
-                    </div>
-                  </div>
+              <li key={act.id || act.commitSha || idx}>
+                <time dateTime={when || undefined} title={when ? new Date(when).toLocaleString() : ""}>
+                  {formatAgo(when)}
+                </time>
+                <div className="activity-log-body">
+                  <span className="activity-log-msg">
+                    {act.message || act.title || "Snapshot recorded"}
+                  </span>
+                  <span className="activity-log-meta">
+                    {act.repositoryName && <span>{act.repositoryName}</span>}
+                    {sha && <code>{sha}</code>}
+                    {files !== undefined && files !== null && <span>{files} files</span>}
+                    {adds !== undefined && adds !== null && <span className="add">+{adds}</span>}
+                    {dels !== undefined && dels !== null && <span className="del">−{dels}</span>}
+                  </span>
                 </div>
-
-                <div className="activity-right">
-                  {(act.realFileCount !== undefined || act.fileCount !== undefined) && (
-                    <div className="activity-stats">
-                      <span>{act.realFileCount ?? act.fileCount} files</span>
-                      {(act.realAdditions !== undefined || act.additions !== undefined) && (
-                        <span className="addition">
-                          +{act.realAdditions ?? act.additions}
-                        </span>
-                      )}
-                      {(act.realDeletions !== undefined || act.deletions !== undefined) && (
-                        <span className="deletion">
-                          -{act.realDeletions ?? act.deletions}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
-    </div>
+    </section>
   );
 }
 

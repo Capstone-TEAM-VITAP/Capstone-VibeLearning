@@ -23,7 +23,6 @@ import {
   Lightbulb,
   ListChecks,
   Pointer,
-  Sparkles,
   Terminal,
   Trophy,
   Workflow,
@@ -334,8 +333,10 @@ function LearningView({ getToken, selectedRepo, setView }) {
 
       <Card>
         <CardHeader>
-          <CardTitle>
-            <Sparkles size={16} />
+          <CardTitle className="learning-card-title">
+            <span className="learning-card-icon" aria-hidden="true">
+              <ListChecks size={15} />
+            </span>
             New quiz
           </CardTitle>
           <CardDescription>Pick a topic from this repository and generate grounded questions.</CardDescription>
@@ -400,8 +401,10 @@ function LearningView({ getToken, selectedRepo, setView }) {
 
       <Card>
         <CardHeader>
-          <CardTitle>
-            <GitCompare size={16} />
+          <CardTitle className="learning-card-title">
+            <span className="learning-card-icon" aria-hidden="true">
+              <GitCompare size={15} />
+            </span>
             What&apos;s changed
           </CardTitle>
           <CardDescription>

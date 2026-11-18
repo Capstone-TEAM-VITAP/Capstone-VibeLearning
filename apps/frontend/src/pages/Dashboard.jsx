@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/react";
 import {
-  Boxes,
   CircleDot,
-  CirclePlus,
   CircleX,
   Clock,
   FolderOpen,
@@ -14,7 +12,7 @@ import {
   Plus,
   RefreshCw,
   Settings,
-  Sparkles,
+  MessageSquareText,
   Terminal,
   Webhook,
   Workflow,
@@ -39,7 +37,8 @@ import RepositoryOverviewCard from "../components/RepositoryOverviewCard.jsx";
 import RecentActivity from "../components/RecentActivity.jsx";
 import ArchitectureOverview from "../components/ArchitectureOverview.jsx";
 import RepositoryTree from "../components/RepositoryTree.jsx";
-import IntelligenceSummary from "../components/IntelligenceSummary.jsx";
+import IntelligenceCharts from "../components/IntelligenceCharts.jsx";
+import AiSummaryPanel from "../components/AiSummaryPanel.jsx";
 import DependencyHealth from "../components/DependencyHealth.jsx";
 import CodeGraphView from "../components/CodeGraphView.jsx";
 import LearningView from "../components/LearningView.jsx";
@@ -331,6 +330,47 @@ function Dashboard() {
       ]
     : [];
 
+  // Change since the previous snapshot (only files are known per snapshot)
+  const previousSelectedSnapshot = [...selectedRepoSnapshots].sort(
+    (a, b) => new Date(b.committedAt || 0) - new Date(a.committedAt || 0),
+  )[1];
+  const metricDeltas = {
+    parsedFiles:
+      latestSelectedSnapshot?.realFileCount != null &&
+      previousSelectedSnapshot?.realFileCount != null
+        ? latestSelectedSnapshot.realFileCount - previousSelectedSnapshot.realFileCount
+        : null,
+  };
+
+  // Newest-first activity feed across all connected repositories
+  const repoNameById = Object.fromEntries(
+    repos.map((r) => [r.id, r.owner ? `${r.owner}/${r.name}` : r.name]),
+  );
+  const activityItems = [...snapshots]
+    .sort((a, b) => new Date(b.committedAt || 0) - new Date(a.committedAt || 0))
+    .map((snap) => ({
+      ...snap,
+      repositoryName: snap.repositoryName || repoNameById[snap.repositoryId],
+    }));
+
+  // Single-key shortcuts on the overview (shown as hints next to actions)
+  useEffect(() => {
+    if (view !== "overview") return undefined;
+    const keyMap = { n: "repos", r: "analysis", g: "graph", a: "assistant", i: "intelligence" };
+    function onKey(e) {
+      if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+      const t = e.target;
+      if (t && (t.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(t.tagName))) return;
+      const target = keyMap[e.key.toLowerCase()];
+      if (target) {
+        e.preventDefault();
+        setView(target);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [view]);
+
   const analysisStatus =
     activeGraph && activeGraph.schema_version === "1.0"
       ? "Analysis Complete"
@@ -377,6 +417,27 @@ function Dashboard() {
 
   const isIntelligenceView = ["intelligence", "architecture", "files", "dependencies"].includes(view);
 
+  // Each Repository Intelligence sub-page has its own title and focus
+  const INTEL_PAGES = {
+    intelligence: {
+      title: "Repository Intelligence",
+      desc: "AI summary and the key numbers from this repository's code graph.",
+    },
+    architecture: {
+      title: "Architecture",
+      desc: "How files are classified into roles and layers, and how those layers depend on each other.",
+    },
+    files: {
+      title: "Files",
+      desc: "Browse the repository tree and inspect any file's role, symbols and relationships.",
+    },
+    dependencies: {
+      title: "Dependencies",
+      desc: "External packages, the most depended-on files, and dependency health checks.",
+    },
+  };
+  const intelPage = INTEL_PAGES[view] || INTEL_PAGES.intelligence;
+
   return (
     <div className="codeai-workstation-shell">
       {/* Google Stitch Terminal Horizon Sidebar */}
@@ -415,283 +476,223 @@ function Dashboard() {
              ========================================================= */}
           {view === "overview" && (
             <div className="overview-container">
-              {/* Top Hero Section */}
+              {/* Title row */}
               <div className="overview-hero">
-                <span className="overview-eyebrow">
-                  <Terminal size={14} />
-                  Repository Intelligence
-                </span>
-                <h1 className="overview-title">Understand your codebase.</h1>
-                <p className="overview-subtitle">
-                  AI-powered repository intelligence for understanding, reviewing
-                  and learning unfamiliar software.
-                </p>
-
+                <div className="overview-hero-text">
+                  <h1 className="overview-title">Overview</h1>
+                  <p className="overview-subtitle">
+                    Understand, review and learn unfamiliar code.
+                  </p>
+                </div>
                 <div className="overview-hero-actions">
+                  <button
+                    type="button"
+                    className="ws-btn ws-btn-secondary"
+                    onClick={() => setView("assistant")}
+                  >
+                    <MessageSquareText size={14} />
+                    Ask AI
+                    <kbd className="ws-kbd">A</kbd>
+                  </button>
                   <button
                     type="button"
                     className="ws-btn ws-btn-primary"
                     onClick={() => setView("repos")}
                   >
-                    <CirclePlus size={16} />
-                    Connect Repository
-                  </button>
-
-                  <button
-                    type="button"
-                    className="ws-btn ws-btn-secondary"
-                    onClick={() => setView("analysis")}
-                  >
-                    <Sparkles size={16} />
-                    Ask AI
+                    <Plus size={14} />
+                    Connect repository
                   </button>
                 </div>
               </div>
 
-              {/* Four Compact Intelligence Metrics */}
-              <MetricStrip metrics={intelligenceMetrics} loading={loading} />
+              {/* Metric bar */}
+              <MetricStrip
+                metrics={intelligenceMetrics}
+                deltas={metricDeltas}
+                lastSnapshotAt={latestSelectedSnapshot?.committedAt || null}
+                loading={loading}
+              />
 
-              {/* Primary Repository Intelligence Card */}
+              {/* Primary repository */}
               {selectedRepo && (
                 <RepositoryOverviewCard
                   repo={selectedRepo}
                   status={analysisStatus || "Not analyzed"}
                   roles={detectedRoles}
+                  graphData={activeGraph}
                   onExploreIntelligence={() => setView("intelligence")}
                   onExploreGraph={() => setView("graph")}
                 />
               )}
 
-              {/* Connected Repositories Grid or Polished Empty State */}
-              <div className="overview-section">
-                <div className="overview-section-header">
-                  <span className="overview-section-title">
-                    Connected Repositories ({repos.length})
-                  </span>
-                  {repos.length > 0 && (
-                    <button
-                      type="button"
-                      className="ws-btn ws-btn-ghost"
-                      style={{ fontSize: 12 }}
-                      onClick={() => setView("repos")}
-                    >
-                      Manage All Repositories →
-                    </button>
-                  )}
-                </div>
+              <div className="overview-grid">
+                {/* Connected repositories */}
+                <section className="console-card">
+                  <div className="console-card-head">
+                    <h2 className="console-card-title">
+                      Connected repositories <small>{repos.length}</small>
+                    </h2>
+                    {repos.length > 0 && (
+                      <button
+                        type="button"
+                        className="ws-btn ws-btn-ghost"
+                        onClick={() => setView("repos")}
+                      >
+                        Manage all
+                      </button>
+                    )}
+                  </div>
 
-                {repos.length === 0 ? (
-                  <div className="overview-empty-repo">
-                    <div className="overview-empty-icon">
-                      <FolderOpen size={22} />
+                  {repos.length === 0 ? (
+                    <div className="overview-empty-repo">
+                      <FolderOpen size={20} />
+                      <h3>No repositories connected</h3>
+                      <p>Connect a GitHub repository to build its code graph.</p>
+                      <button
+                        type="button"
+                        className="ws-btn ws-btn-primary"
+                        onClick={() => setView("repos")}
+                      >
+                        <Plus size={14} />
+                        Connect repository
+                      </button>
                     </div>
-                    <h3>No repositories connected</h3>
-                    <p>
-                      Connect a GitHub repository to begin building its structural
-                      intelligence graph.
-                    </p>
-                    <button
-                      type="button"
-                      className="ws-btn ws-btn-primary"
-                      onClick={() => setView("repos")}
-                    >
-                      <CirclePlus size={16} />
-                      Connect Repository
-                    </button>
-                  </div>
-                ) : (
-                  <div className="overview-repo-grid">
-                    {repos.map((repo) => {
-                      const isSelected = repo.id === selectedRepo?.id;
-                      const repoSnaps = snapshots.filter(
-                        (s) => s.repositoryId === repo.id,
-                      );
-                      const latestSnap = [...repoSnaps].sort(
-                        (a, b) =>
-                          new Date(b.committedAt || 0) -
-                          new Date(a.committedAt || 0),
-                      )[0];
-                      const isAnalyzed = repoSnaps.length > 0;
-                      const isSyncing = syncingId === repo.id;
+                  ) : (
+                    <div className="console-table-wrap">
+                      <table className="console-table">
+                        <thead>
+                          <tr>
+                            <th>Repository</th>
+                            <th>Branch</th>
+                            <th>Status</th>
+                            <th>Snapshot</th>
+                            <th aria-label="Actions" />
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {repos.map((repo) => {
+                            const isSelected = repo.id === selectedRepo?.id;
+                            const repoSnaps = snapshots.filter(
+                              (snap) => snap.repositoryId === repo.id,
+                            );
+                            const latestSnap = [...repoSnaps].sort(
+                              (a, b) =>
+                                new Date(b.committedAt || 0) -
+                                new Date(a.committedAt || 0),
+                            )[0];
+                            const isAnalyzed = repoSnaps.length > 0;
+                            const isSyncing = syncingId === repo.id;
 
-                      return (
-                        <div
-                          key={repo.id}
-                          className={`overview-repo-card ${
-                            isSelected ? "selected" : ""
-                          }`}
-                        >
-                          <div className="overview-repo-header">
-                            <div className="overview-repo-info">
-                              <div className="overview-repo-icon">
-                                <Boxes size={16} />
-                              </div>
-                              <div className="overview-repo-text">
-                                <span className="overview-repo-name">
-                                  {repo.owner}/{repo.name}
-                                </span>
-                                <span className="overview-repo-meta">
-                                  <span>GitHub</span>
-                                  <span>·</span>
-                                  <span>{repo.defaultBranch || "main"}</span>
-                                </span>
-                              </div>
-                            </div>
+                            return (
+                              <tr key={repo.id} className={isSelected ? "selected" : ""}>
+                                <td>
+                                  <button
+                                    type="button"
+                                    className="console-link"
+                                    onClick={() => handleSelectRepository(repo)}
+                                    title="Make this the active repository"
+                                  >
+                                    {repo.owner}/{repo.name}
+                                  </button>
+                                </td>
+                                <td className="mono">{repo.defaultBranch || "main"}</td>
+                                <td>
+                                  <span className="console-status">
+                                    <span className={`console-dot ${isAnalyzed ? "ok" : ""}`} />
+                                    {isAnalyzed ? "Analyzed" : "Not analyzed"}
+                                  </span>
+                                </td>
+                                <td className="mono">
+                                  {latestSnap?.commitSha ? latestSnap.commitSha.slice(0, 7) : "—"}
+                                </td>
+                                <td>
+                                  <div className="console-row-actions">
+                                    <button
+                                      type="button"
+                                      className="ws-btn ws-btn-secondary"
+                                      onClick={() => {
+                                        handleSelectRepository(repo);
+                                        setView(isAnalyzed ? "repos" : "analysis");
+                                      }}
+                                    >
+                                      {isAnalyzed ? "Open" : "Analyze"}
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="ws-btn ws-btn-ghost"
+                                      onClick={() => handleSyncRepo(repo.id)}
+                                      disabled={isSyncing}
+                                      aria-label={isSyncing ? "Syncing" : "Sync repository"}
+                                      title="Sync from GitHub"
+                                    >
+                                      <RefreshCw
+                                        size={14}
+                                        style={{
+                                          animation: isSyncing ? "spin 1s linear infinite" : "none",
+                                        }}
+                                      />
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
 
-                            <span
-                              className={`overview-repo-status ${
-                                isAnalyzed ? "complete" : ""
-                              }`}
-                            >
-                              {isAnalyzed ? "Analysis Complete" : "Not analyzed"}
-                            </span>
-                          </div>
-
-                          <div className="overview-repo-commit-info">
-                            <span>Last snapshot:</span>
-                            <code>
-                              {latestSnap?.commitSha
-                                ? latestSnap.commitSha.slice(0, 7)
-                                : "—"}
-                            </code>
-                          </div>
-
-                          <div className="overview-repo-actions">
-                            <button
-                              type="button"
-                              className="ws-btn ws-btn-secondary"
-                              style={{ padding: "4px 10px", fontSize: 12 }}
-                              onClick={() => {
-                                handleSelectRepository(repo);
-                                setView("repos");
-                              }}
-                            >
-                              Open
-                            </button>
-
-                            <button
-                              type="button"
-                              className="ws-btn ws-btn-secondary"
-                              style={{ padding: "4px 10px", fontSize: 12 }}
-                              onClick={() => {
-                                handleSelectRepository(repo);
-                                setView("analysis");
-                              }}
-                            >
-                              Analyze
-                            </button>
-
-                            <button
-                              type="button"
-                              className="ws-btn ws-btn-ghost"
-                              style={{ padding: "4px 8px", fontSize: 12 }}
-                              onClick={() => handleSyncRepo(repo.id)}
-                              disabled={isSyncing}
-                            >
-                              <RefreshCw
-                                size={14}
-                                style={{
-                                  animation: isSyncing
-                                    ? "spin 1s linear infinite"
-                                    : "none",
-                                }}
-                              />
-                              {isSyncing ? "Syncing..." : "Sync"}
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* Recent Activity */}
-              <div className="overview-section">
+                {/* Recent activity */}
                 <RecentActivity
-                  activities={snapshots}
+                  activities={activityItems}
                   onViewAll={() => setView("repos")}
                 />
               </div>
 
-              {/* Quick Actions */}
-              <div className="overview-section">
-                <div className="overview-section-header">
-                  <span className="overview-section-title">Quick Actions</span>
+              {/* Quick actions */}
+              <section className="console-card">
+                <div className="console-card-head">
+                  <h2 className="console-card-title">Quick actions</h2>
                 </div>
-
-                <div className="overview-quick-actions-grid">
-                  <button
-                    type="button"
-                    className="quick-action-card"
-                    onClick={() => setView("repos")}
-                  >
-                    <span className="quick-action-icon">
-                      <FolderOpen size={20} />
-                    </span>
-                    <div className="quick-action-text">
-                      <span className="quick-action-label">Connect Repository</span>
-                      <span className="quick-action-badge">Active</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="quick-action-card"
-                    onClick={() => setView("analysis")}
-                  >
-                    <span className="quick-action-icon">
-                      <Wrench size={20} />
-                    </span>
-                    <div className="quick-action-text">
-                      <span className="quick-action-label">Analyze Snapshot</span>
-                      <span className="quick-action-badge">Active</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="quick-action-card"
-                    onClick={() => setView("graph")}
-                  >
-                    <span className="quick-action-icon">
-                      <Workflow size={20} />
-                    </span>
-                    <div className="quick-action-text">
-                      <span className="quick-action-label">Explore CodeGraph</span>
-                      <span className="quick-action-badge">Active</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="quick-action-card"
-                    onClick={() => setView("assistant")}
-                  >
-                    <span className="quick-action-icon">
-                      <Sparkles size={20} />
-                    </span>
-                    <div className="quick-action-text">
-                      <span className="quick-action-label">Ask AI</span>
-                      <span className="quick-action-badge">Phase 7</span>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    className="quick-action-card"
-                    onClick={() => setView("review")}
-                  >
-                    <span className="quick-action-icon">
-                      <GitPullRequest size={20} />
-                    </span>
-                    <div className="quick-action-text">
-                      <span className="quick-action-label">Code Review</span>
-                      <span className="quick-action-badge">Phase 8</span>
-                    </div>
-                  </button>
-                </div>
-              </div>
+                <ul className="quick-cmds">
+                  <li>
+                    <button type="button" onClick={() => setView("repos")}>
+                      <Plus size={15} />
+                      Connect repository
+                      <kbd className="ws-kbd">N</kbd>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" onClick={() => setView("analysis")}>
+                      <Wrench size={15} />
+                      Analyze snapshot
+                      <kbd className="ws-kbd">R</kbd>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" onClick={() => setView("graph")}>
+                      <Workflow size={15} />
+                      Explore CodeGraph
+                      <kbd className="ws-kbd">G</kbd>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" onClick={() => setView("assistant")}>
+                      <MessageSquareText size={15} />
+                      Ask AI
+                      <kbd className="ws-kbd">A</kbd>
+                    </button>
+                  </li>
+                  <li>
+                    <button type="button" onClick={() => setView("review")}>
+                      <GitPullRequest size={15} />
+                      Code review
+                      <span className="quick-cmds-soon">soon</span>
+                    </button>
+                  </li>
+                </ul>
+              </section>
             </div>
           )}
 
@@ -741,10 +742,8 @@ function Dashboard() {
                       <Terminal size={14} />
                       Repository Intelligence
                     </span>
-                    <h1 className="intel-hero-title">Repository Intelligence</h1>
-                    <p className="intel-hero-desc">
-                      Explore the structure, architecture, and relationships inside your codebase.
-                    </p>
+                    <h1 className="intel-hero-title">{intelPage.title}</h1>
+                    <p className="intel-hero-desc">{intelPage.desc}</p>
                   </div>
 
                   <div className="intel-hero-actions">
@@ -753,7 +752,7 @@ function Dashboard() {
                       className="ws-btn ws-btn-secondary"
                       onClick={() => setView("analysis")}
                     >
-                      <Sparkles size={16} />
+                      <MessageSquareText size={16} />
                       Ask AI
                     </button>
 
@@ -865,27 +864,49 @@ function Dashboard() {
                 </div>
               ) : (
                 <>
-                  {/* Real Graph IR Summary Metrics */}
-                  <IntelligenceSummary graphData={activeGraph} loading={graphLoading} />
+                  {view === "intelligence" && (
+                    <>
+                      {/* AI briefing for this commit (DeepSeek via OpenCode Go by default) */}
+                      <AiSummaryPanel
+                        getToken={getToken}
+                        repoId={selectedRepo.id}
+                        commitSha={latestSelectedSnapshot?.commitSha || null}
+                      />
+                      {/* Concrete counts from the graph as ranked bar charts */}
+                      <IntelligenceCharts graphData={activeGraph} />
+                    </>
+                  )}
 
-                  {/* Architecture Roles, Conceptual Layers & Pipeline */}
-                  <ArchitectureOverview
-                    graphData={activeGraph}
-                    selectedRole={selectedRoleFilter}
-                    onSelectRole={setSelectedRoleFilter}
-                    selectedLayer={selectedLayerFilter}
-                    onSelectLayer={setSelectedLayerFilter}
-                  />
+                  {view === "architecture" && (
+                    <>
+                      <IntelligenceCharts graphData={activeGraph} charts={["roles", "directories"]} />
+                      <ArchitectureOverview
+                        graphData={activeGraph}
+                        selectedRole={selectedRoleFilter}
+                        onSelectRole={setSelectedRoleFilter}
+                        selectedLayer={selectedLayerFilter}
+                        onSelectLayer={setSelectedLayerFilter}
+                      />
+                    </>
+                  )}
 
-                  {/* Repository Tree & File Intelligence Inspector */}
-                  <RepositoryTree
-                    graphData={activeGraph}
-                    selectedPath={selectedTreePath}
-                    onSelectFile={setSelectedTreePath}
-                  />
+                  {view === "files" && (
+                    <>
+                      <IntelligenceCharts graphData={activeGraph} charts={["languages", "symbolsPerFile"]} />
+                      <RepositoryTree
+                        graphData={activeGraph}
+                        selectedPath={selectedTreePath}
+                        onSelectFile={setSelectedTreePath}
+                      />
+                    </>
+                  )}
 
-                  {/* Dependency Overview & Deterministic Architecture Health */}
-                  <DependencyHealth graphData={activeGraph} />
+                  {view === "dependencies" && (
+                    <>
+                      <IntelligenceCharts graphData={activeGraph} charts={["packages", "mostImported"]} />
+                      <DependencyHealth graphData={activeGraph} />
+                    </>
+                  )}
                 </>
               )}
             </div>
