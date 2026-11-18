@@ -1,6 +1,6 @@
 # The CodeAI Paper, Explained Simply
 
-A plain-language guide to [CodeAI: When Does Code Structure Help?](codeai-hybrid.typ). Every number here comes from the paper.
+A plain-language guide to [CodeAI: When Does Code Structure Help?](Report.typ). Every number here comes from the paper.
 
 ## The short version
 

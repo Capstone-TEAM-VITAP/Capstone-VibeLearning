@@ -1,4 +1,4 @@
-// Condensed version of codeai-hybrid.typ (same title page and typography, fewer tables). Compile: typst compile research/paper/codeai-condensed.typ
+// Condensed version of Report.typ (same title page and typography, fewer tables). Compile: typst compile research/paper/Paper-CodeAI-When-Does-Code-Structure-Help.typ
 // Every number is produced by the scripts in research/ (Appendix C) and stored in research/out/*.md.
 // Tables: paper/tables.typ (make_tables.py). Figures: paper/figures (make_figures.py, make_diagrams.py).
 
@@ -202,7 +202,7 @@ Each flow question asks which file-to-file edges carry a behaviour (for example 
 
 == Metrics
 
-Hit\@1 is the share of questions whose first result is correct. MRR is the mean of 1/rank of the first correct file (0 if none appears in the cut-off). nDCG\@10 rewards correct files near the top, normalised by the best achievable ordering. For impact we report *capped* Recall\@10: correct files in the top 10 divided by $min(|I_q^*|, 10)$. Plain Recall\@10 cannot exceed $10 / |I_q^*|$, and 66 of 175 impact questions have more than ten affected files. For flows we report edge precision, recall and F1. Locate and importer metrics use a cut-off of $K = 7$, the number of files our chat feature passes to the model; the ranking of methods is the same at $K = 10$. Formal definitions and the commands that regenerate every number are in the full report (`research/paper/codeai-hybrid.pdf`).
+Hit\@1 is the share of questions whose first result is correct. MRR is the mean of 1/rank of the first correct file (0 if none appears in the cut-off). nDCG\@10 rewards correct files near the top, normalised by the best achievable ordering. For impact we report *capped* Recall\@10: correct files in the top 10 divided by $min(|I_q^*|, 10)$. Plain Recall\@10 cannot exceed $10 / |I_q^*|$, and 66 of 175 impact questions have more than ten affected files. For flows we report edge precision, recall and F1. Locate and importer metrics use a cut-off of $K = 7$, the number of files our chat feature passes to the model; the ranking of methods is the same at $K = 10$. Formal definitions and the commands that regenerate every number are in the full report (`research/paper/Report.pdf`).
 
 == Statistics
 

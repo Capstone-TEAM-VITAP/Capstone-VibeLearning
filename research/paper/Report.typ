@@ -1,4 +1,4 @@
-// Compile: typst compile research/paper/codeai-hybrid.typ
+// Compile: typst compile research/paper/Report.typ
 // Every number is produced by the scripts in research/ (Appendix D) and stored in research/out/*.md.
 // Tables: paper/tables.typ (make_tables.py). Figures: paper/figures (make_figures.py, make_diagrams.py).
 
@@ -450,7 +450,7 @@ cd research/py && export PYTHONPATH=../../apps/ai-service
 ../.venv-emb/Scripts/python run_accuracy.py                   # out/accuracy_tables.md
 ../.venv-emb/Scripts/python make_tables.py                    # paper/tables.typ, out/significance.md
 ../.venv-emb/Scripts/python make_figures.py && ../.venv-emb/Scripts/python make_diagrams.py
-cd ../.. && typst compile research/paper/codeai-hybrid.typ
+cd ../.. && typst compile research/paper/Report.typ
 ```
 
 Component locations: `apps/ai-service/src/repository/python_lang.py` (Python extraction), `resolver.py` (import resolution), `src/retrieval/filegraph.py`, `hybrid.py`, `lsa.py`, `pruner.py`; `research/py/dense.py` (neural ranker), `common.py` (comment stripping and its check, Holm), `oracle.py` (import and call oracles).
