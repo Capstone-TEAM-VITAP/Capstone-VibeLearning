@@ -358,3 +358,18 @@ describe("Repository AI Chat Service", () => {
     }
   });
 });
+
+describe("chat grounding prompt", () => {
+  it("lists the repository's real files and carries no example file paths", () => {
+    const prompt = buildSystemPrompt({
+      repo: { owner: "o", name: "stopspoti" },
+      snapshot: { commitSha: "b907e8edc4d191f87d27fc1e3a7ee9e7909981d5" },
+      context: { rolesSummary: {}, excerpts: [] },
+      repoFiles: ["stopspoti/main.py", "stopspoti/audio.py"],
+    });
+    assert.match(prompt, /ALL FILES IN THIS REPOSITORY \(2\)/);
+    assert.match(prompt, /stopspoti\/main\.py/);
+    assert.match(prompt, /stopspoti has no authentication/);
+    assert.doesNotMatch(prompt, /auth\.routes/);
+  });
+});

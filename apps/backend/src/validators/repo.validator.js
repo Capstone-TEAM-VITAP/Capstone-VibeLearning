@@ -44,3 +44,8 @@ export const diffQuerySchema = z.object({
   base: shaSchema.optional(),
   path: z.string().trim().min(1).max(500).optional(),
 });
+
+export const intelligenceSummarySchema = z.object({
+  commitSha: shaSchema,
+  refresh: z.boolean().optional(),
+});

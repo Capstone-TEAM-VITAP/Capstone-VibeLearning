@@ -12,7 +12,7 @@ import {
   Plus,
   RefreshCw,
   Settings,
-  Sparkles,
+  MessageSquareText,
   Terminal,
   Webhook,
   Workflow,
@@ -37,7 +37,8 @@ import RepositoryOverviewCard from "../components/RepositoryOverviewCard.jsx";
 import RecentActivity from "../components/RecentActivity.jsx";
 import ArchitectureOverview from "../components/ArchitectureOverview.jsx";
 import RepositoryTree from "../components/RepositoryTree.jsx";
-import IntelligenceSummary from "../components/IntelligenceSummary.jsx";
+import IntelligenceCharts from "../components/IntelligenceCharts.jsx";
+import AiSummaryPanel from "../components/AiSummaryPanel.jsx";
 import DependencyHealth from "../components/DependencyHealth.jsx";
 import CodeGraphView from "../components/CodeGraphView.jsx";
 import LearningView from "../components/LearningView.jsx";
@@ -416,6 +417,27 @@ function Dashboard() {
 
   const isIntelligenceView = ["intelligence", "architecture", "files", "dependencies"].includes(view);
 
+  // Each Repository Intelligence sub-page has its own title and focus
+  const INTEL_PAGES = {
+    intelligence: {
+      title: "Repository Intelligence",
+      desc: "AI summary and the key numbers from this repository's code graph.",
+    },
+    architecture: {
+      title: "Architecture",
+      desc: "How files are classified into roles and layers, and how those layers depend on each other.",
+    },
+    files: {
+      title: "Files",
+      desc: "Browse the repository tree and inspect any file's role, symbols and relationships.",
+    },
+    dependencies: {
+      title: "Dependencies",
+      desc: "External packages, the most depended-on files, and dependency health checks.",
+    },
+  };
+  const intelPage = INTEL_PAGES[view] || INTEL_PAGES.intelligence;
+
   return (
     <div className="codeai-workstation-shell">
       {/* Google Stitch Terminal Horizon Sidebar */}
@@ -468,7 +490,7 @@ function Dashboard() {
                     className="ws-btn ws-btn-secondary"
                     onClick={() => setView("assistant")}
                   >
-                    <Sparkles size={14} />
+                    <MessageSquareText size={14} />
                     Ask AI
                     <kbd className="ws-kbd">A</kbd>
                   </button>
@@ -657,7 +679,7 @@ function Dashboard() {
                   </li>
                   <li>
                     <button type="button" onClick={() => setView("assistant")}>
-                      <Sparkles size={15} />
+                      <MessageSquareText size={15} />
                       Ask AI
                       <kbd className="ws-kbd">A</kbd>
                     </button>
@@ -720,10 +742,8 @@ function Dashboard() {
                       <Terminal size={14} />
                       Repository Intelligence
                     </span>
-                    <h1 className="intel-hero-title">Repository Intelligence</h1>
-                    <p className="intel-hero-desc">
-                      Explore the structure, architecture, and relationships inside your codebase.
-                    </p>
+                    <h1 className="intel-hero-title">{intelPage.title}</h1>
+                    <p className="intel-hero-desc">{intelPage.desc}</p>
                   </div>
 
                   <div className="intel-hero-actions">
@@ -732,7 +752,7 @@ function Dashboard() {
                       className="ws-btn ws-btn-secondary"
                       onClick={() => setView("analysis")}
                     >
-                      <Sparkles size={16} />
+                      <MessageSquareText size={16} />
                       Ask AI
                     </button>
 
@@ -844,27 +864,49 @@ function Dashboard() {
                 </div>
               ) : (
                 <>
-                  {/* Real Graph IR Summary Metrics */}
-                  <IntelligenceSummary graphData={activeGraph} loading={graphLoading} />
+                  {view === "intelligence" && (
+                    <>
+                      {/* AI briefing for this commit (DeepSeek via OpenCode Go by default) */}
+                      <AiSummaryPanel
+                        getToken={getToken}
+                        repoId={selectedRepo.id}
+                        commitSha={latestSelectedSnapshot?.commitSha || null}
+                      />
+                      {/* Concrete counts from the graph as ranked bar charts */}
+                      <IntelligenceCharts graphData={activeGraph} />
+                    </>
+                  )}
 
-                  {/* Architecture Roles, Conceptual Layers & Pipeline */}
-                  <ArchitectureOverview
-                    graphData={activeGraph}
-                    selectedRole={selectedRoleFilter}
-                    onSelectRole={setSelectedRoleFilter}
-                    selectedLayer={selectedLayerFilter}
-                    onSelectLayer={setSelectedLayerFilter}
-                  />
+                  {view === "architecture" && (
+                    <>
+                      <IntelligenceCharts graphData={activeGraph} charts={["roles", "directories"]} />
+                      <ArchitectureOverview
+                        graphData={activeGraph}
+                        selectedRole={selectedRoleFilter}
+                        onSelectRole={setSelectedRoleFilter}
+                        selectedLayer={selectedLayerFilter}
+                        onSelectLayer={setSelectedLayerFilter}
+                      />
+                    </>
+                  )}
 
-                  {/* Repository Tree & File Intelligence Inspector */}
-                  <RepositoryTree
-                    graphData={activeGraph}
-                    selectedPath={selectedTreePath}
-                    onSelectFile={setSelectedTreePath}
-                  />
+                  {view === "files" && (
+                    <>
+                      <IntelligenceCharts graphData={activeGraph} charts={["languages", "symbolsPerFile"]} />
+                      <RepositoryTree
+                        graphData={activeGraph}
+                        selectedPath={selectedTreePath}
+                        onSelectFile={setSelectedTreePath}
+                      />
+                    </>
+                  )}
 
-                  {/* Dependency Overview & Deterministic Architecture Health */}
-                  <DependencyHealth graphData={activeGraph} />
+                  {view === "dependencies" && (
+                    <>
+                      <IntelligenceCharts graphData={activeGraph} charts={["packages", "mostImported"]} />
+                      <DependencyHealth graphData={activeGraph} />
+                    </>
+                  )}
                 </>
               )}
             </div>

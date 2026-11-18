@@ -507,3 +507,24 @@ svg.learning-empty-icon {
 .learning-explanation.bad svg {
   color: var(--status-warning);
 }
+
+/* Card titles: icon tile inline with the text */
+.learning-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.learning-card-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--bg-surface-container);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}

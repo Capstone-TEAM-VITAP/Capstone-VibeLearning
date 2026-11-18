@@ -105,6 +105,16 @@ export async function getSnapshotGraph(getToken, id, sha) {
   return body.data || body;
 }
 
+// --- Repository Intelligence: AI summary (cached per commit on the server) ---
+
+export async function getIntelligenceSummary(getToken, id, commitSha, { refresh = false } = {}) {
+  const body = await authedFetch(getToken, `/repos/${id}/intelligence/summary`, {
+    method: "POST",
+    body: JSON.stringify({ commitSha, refresh }),
+  });
+  return body.data;
+}
+
 // --- Repository AI Assistant ---
 
 export async function askRepoQuestion(getToken, id, message, history = []) {

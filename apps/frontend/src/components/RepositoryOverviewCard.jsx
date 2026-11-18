@@ -10,9 +10,25 @@ const STANDARD_LAYERS = [
   { name: "Testing", roles: ["TEST"] },
 ];
 
-function fileRole(node) {
-  const raw = node.architecture_role || node.metadata?.role;
-  return raw ? String(raw).toUpperCase() : null;
+// Roles live on `architecture:<path>:<ROLE>` nodes (files are classified_as
+// them); older graphs may carry the role on the file node itself.
+function roleByFilePath(nodes) {
+  const map = new Map();
+  for (const n of nodes) {
+    if (n.id?.startsWith("architecture:")) {
+      const role = String(n.metadata?.role || n.id.split(":").pop() || "").toUpperCase();
+      const path = n.metadata?.path || n.id.split(":").slice(1, -1).join(":");
+      if (role && path) map.set(path, role);
+    }
+  }
+  return map;
+}
+
+function fileRole(node, archRoles) {
+  const path = node.metadata?.path || node.id?.replace(/^file:/, "");
+  const raw = archRoles.get(path) || node.architecture_role || node.metadata?.role;
+  const role = raw ? String(raw).toUpperCase() : null;
+  return role && role !== "UNKNOWN" ? role : null;
 }
 
 function RepositoryOverviewCard({
@@ -30,14 +46,14 @@ function RepositoryOverviewCard({
   const roleSet = new Set(roles.map((r) => r.toUpperCase()));
 
   // Count files per tier from real file nodes (when the graph is loaded)
-  const fileNodes = Array.isArray(graphData?.nodes)
-    ? graphData.nodes.filter((n) => n.type === "file")
-    : [];
+  const allNodes = Array.isArray(graphData?.nodes) ? graphData.nodes : [];
+  const archRoles = roleByFilePath(allNodes);
+  const fileNodes = allNodes.filter((n) => n.type === "file");
   const totalFiles = fileNodes.length;
   const filesByRole = {};
   let unclassified = 0;
   for (const node of fileNodes) {
-    const role = fileRole(node);
+    const role = fileRole(node, archRoles);
     if (!role) {
       unclassified += 1;
       continue;

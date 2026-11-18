@@ -9,6 +9,7 @@ import {
   MarkerType,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { MessageSquareText } from "lucide-react";
 import CodeGraphNode from "./CodeGraphNode.jsx";
 import GraphNodeInspector from "./GraphNodeInspector.jsx";
 import Blocks from "./Blocks.jsx";
@@ -1019,7 +1020,7 @@ function CodeGraphContent({
           </button>
           <span className="cg-bar-divider" />
           <button className="ws-btn ws-btn-ghost" onClick={() => setView("analysis")} type="button">
-            <span className="material-symbols-outlined cg-btn-icon">smart_toy</span>
+            <MessageSquareText size={14} />
             Ask AI
           </button>
           <button className="ws-btn ws-btn-secondary" onClick={() => setView("repos")} type="button">

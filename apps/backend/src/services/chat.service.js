@@ -274,20 +274,22 @@ export async function findRelevantContextWithDense(graphIr, query, snapshotDir, 
 /**
  * Format system prompt with repository context for the LLM.
  */
-export function buildSystemPrompt({ repo, snapshot, context }) {
+export function buildSystemPrompt({ repo, snapshot, context, repoFiles = [] }) {
   const repoName = `${repo.owner}/${repo.name}`;
   const commit = snapshot.commitSha ? snapshot.commitSha.slice(0, 7) : "HEAD";
 
-  let prompt = `You are the expert Senior AI Software Architect for the GitHub repository "${repoName}" (commit ${commit}, branch ${repo.defaultBranch || "main"}).
-Your job is to answer the user's questions about this repository accurately, contextually, and clearly.
+  let prompt = `You are a senior engineer answering questions about the GitHub repository "${repoName}" (commit ${commit}, branch ${repo.defaultBranch || "main"}).
 
-GUIDELINES:
-1. Ground your answers strictly in the repository's architecture and source code provided below.
-2. When mentioning files, always use markdown backticks with full relative paths (e.g. \`src/routes/auth.routes.js\`) and include line numbers if available.
-3. CODE COMPLETENESS: When showing code, provide full, runnable, and syntactically complete code blocks. Never truncate functions, schemas, or exports mid-way. Always properly close all parentheses, brackets, and code block fences (\`\`\`).
-4. If a feature or file is not present in the repository, honestly state that it was not found rather than inventing it.
-5. Offer practical tips or examples if the user asks how to modify, extend, or add features to the codebase.
-6. COMPLETENESS & CLARITY: Ensure every step, file example, and explanation is 100% finished and complete. Do not leave any step or code block cut off or hanging. Keep explanations focused and clean.
+GROUNDING RULES (most important):
+1. Answer only from the material below: the file list, the architecture roles and the code excerpts. They describe THIS repository and nothing else.
+2. Mention only files that appear in the file list below. Never guess file names from what a "typical" project would contain.
+3. If the question is about something this repository does not have (for example authentication, a database, an API), say so plainly in the first sentence, e.g. "${repo.name} has no authentication." Then briefly say what the repository does have that is closest, citing real files.
+4. If the excerpts are not enough to answer, say what you could not see and which listed file would most likely contain it. Do not fill gaps with generic or "illustrative" implementations.
+
+ANSWER STYLE:
+- Write file paths in backticks exactly as they appear in the file list, with line numbers when the excerpts show them.
+- Only write new code when the user asks how to change, extend or add something. Then make the code complete and consistent with this repository's language and structure.
+- Keep answers focused and concise.
 
 === REPOSITORY ARCHITECTURAL ROLES ===
 `;
@@ -299,6 +301,12 @@ GUIDELINES:
     }
   } else {
     prompt += `No specific architecture roles pre-classified.\n`;
+  }
+
+  if (repoFiles.length > 0) {
+    const shown = repoFiles.slice(0, 400);
+    prompt += `\n=== ALL FILES IN THIS REPOSITORY (${repoFiles.length}) ===\n${shown.join("\n")}\n`;
+    if (repoFiles.length > shown.length) prompt += `(+${repoFiles.length - shown.length} more files not listed)\n`;
   }
 
   if (context.excerpts && context.excerpts.length > 0) {
@@ -499,22 +507,23 @@ export const chatService = {
     const snapshots = typeof snapshotRepository.findManyByRepositoryId === "function"
       ? await snapshotRepository.findManyByRepositoryId(repo.id)
       : (typeof snapshotRepository.listByRepo === "function" ? await snapshotRepository.listByRepo(repo.id) : []);
-    const latestSnapshot = snapshots[0] || {
+    // Use the newest snapshot that has a finished code graph (the newest
+    // snapshot may not be analyzed yet); fall back to the newest snapshot.
+    let latestSnapshot = snapshots[0] || {
       id: "none",
       commitSha: repo.lastSyncSha || "HEAD",
     };
-
-    // Retrieve Graph IR if snapshot has completed AnalysisJob
     let graphIr = null;
-    if (latestSnapshot.id !== "none") {
-      const job = await jobRepository.findBySnapshotId(latestSnapshot.id);
-      if (job?.resultJson) {
-        try {
-          const parsed = JSON.parse(job.resultJson);
-          graphIr = parsed.graph || parsed;
-        } catch {
-          graphIr = null;
-        }
+    for (const snap of snapshots) {
+      const job = await jobRepository.findBySnapshotId(snap.id);
+      if (!job?.resultJson) continue;
+      try {
+        const parsed = JSON.parse(job.resultJson);
+        graphIr = parsed.graph || parsed;
+        latestSnapshot = snap;
+        break;
+      } catch {
+        graphIr = null;
       }
     }
 
@@ -530,7 +539,12 @@ export const chatService = {
 
     // Search and extract grounded context
     const context = await findRelevantContextWithDense(graphIr, message, snapshotDir);
-    const systemPrompt = buildSystemPrompt({ repo, snapshot: latestSnapshot, context });
+    const repoFiles = (Array.isArray(graphIr?.nodes) ? graphIr.nodes : [])
+      .filter((n) => n.type === "file")
+      .map((n) => n.metadata?.path || n.label)
+      .filter(Boolean)
+      .sort();
+    const systemPrompt = buildSystemPrompt({ repo, snapshot: latestSnapshot, context, repoFiles });
 
     let answer = "";
     let activeModel = "offline-structural-intelligence";

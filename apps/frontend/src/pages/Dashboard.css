@@ -263,10 +263,8 @@
 .intel-workspace-hero {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-hairline);
+  gap: 8px;
+  margin-bottom: 14px;
 }
 
 .intel-hero-top {
@@ -280,7 +278,7 @@
 .intel-hero-title-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
 }
 
 .intel-hero-eyebrow {
@@ -293,21 +291,23 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--secondary);
+  display: none;
 }
 
 .intel-hero-title {
   font-family: var(--font-sans);
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
   margin: 0;
 }
 
 .intel-hero-desc {
   font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--text-secondary);
+  font-size: 12.5px;
+  color: var(--text-muted);
   line-height: 1.5;
   margin: 0;
   max-width: 620px;
@@ -316,16 +316,15 @@
 .intel-hero-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .intel-meta-cluster {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   flex-wrap: wrap;
-  padding-top: 6px;
 }
 
 .intel-meta-tag {
@@ -334,10 +333,10 @@
   gap: 6px;
   font-family: var(--font-mono);
   font-size: 11px;
-  background-color: var(--bg-surface-low);
-  border: 1px solid var(--border-hairline);
-  padding: 4px 10px;
-  border-radius: 6px;
+  background-color: var(--bg-surface-container);
+  border: 0;
+  padding: 2px 8px;
+  border-radius: 5px;
   color: var(--text-secondary);
 }
 
