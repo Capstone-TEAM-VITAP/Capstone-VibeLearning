@@ -61,8 +61,9 @@
   #set text(size: 9.5pt)
   #align(center, text(size: 11pt, weight: "bold")[Abstract])
   #v(2pt)
+CodeAI helps developers understand an unfamiliar codebase. CodeAI answers questions in chat. It creates quizzes based on a GitHub repository that is connected. Both of CodeAI's features first select the few files that a language model will look at. We ask what evidence should be used for each question: the words in a file, neural embeddings or the program's dependency graph. We tested nine file rankers, including CodeAI's original retriever, on 710 questions of three types (locate code, find direct importers, estimate change impact) across 19 JavaScript and Python repositories. Answer keys come from tools independent of our graph. Comments are removed before indexing. Five JavaScript repositories are held out. 18 declared comparisons are Holm-corrected. For locating code, combining BM25, neural and graph rankings gives the highest held-out mean reciprocal rank (MRR 0.58 compared to 0.32 for BM25). On importer questions, which mostly test parsing, the graph ranker reaches 0.97 compared to 0.68 for BM25; on change impact it leads BM25 (nDCG\@10 0.74 compared to 0.59), but not significantly. Adding the weak LSA ranker made our change-impact ranking of Python programs significantly worse: nDCG\@10 decreased by 0.11. As for the Graph Path Pruning method, it cut the number of returned dependency edges by 95%; however, the results were lower than expected. Applied to 25 held-out flow questions, it obtained an F1 of 0.20, while a simple top-3 baseline gave 0.30.
 
-CodeAI helps developers learn an unfamiliar codebase: it answers chat questions and generates quizzes grounded in a connected GitHub repository. Both features first choose the few files a language model will see. We ask which evidence that choice should use for which question: the words in a file, neural embeddings or the program's dependency graph. We compare nine file rankers, including CodeAI's original retriever, on 710 questions of three types (locate code, find direct importers, estimate change impact) over 19 JavaScript and Python repositories. Answer keys come from tools independent of our graph, comments are removed before indexing, five JavaScript repositories are held out, and 18 declared comparisons are Holm-corrected. For locating code, fusing BM25, neural and graph rankings gives the highest held-out mean reciprocal rank (MRR 0.58 against 0.32 for BM25). On importer questions, which largely test parsing, the graph ranker reaches 0.97 against 0.68 for BM25; on change impact it leads BM25 (nDCG\@10 0.74 against 0.59), but not significantly. Fusing in a weak LSA ranker made Python change-impact ranking significantly worse (−0.11 nDCG\@10). Graph Path Pruning, our method for returning the few dependency edges behind a behaviour, cut the returned edges by 95% but did not beat a top-3 baseline on 25 held-out flow questions (F1 0.20 against 0.30). A retriever rebuilt from these results raised CodeAI's held-out MRR from 0.43 to 0.58 for locating code and from 0.68 to 0.97 for importers. Because we chose that design after seeing the results, this confirms the design rather than testing it.
+On the other hand, the retriever we rebuilt from these results performed better on CodeAI's held-out data. In particular, the MRR for locating code rose from 0.43 to 0.58, while that for importers increased from 0.68 to 0.97. Note that we chose this design after seeing the experimental results, so these improvements confirm the design rather than test it independently.
 
 *Keywords:* repository-level code retrieval, empirical study, code graph, static analysis, dense retrieval, BM25, rank fusion.
   #v(4pt)
@@ -70,26 +71,29 @@ CodeAI helps developers learn an unfamiliar codebase: it answers chat questions 
 ]
 
 = Introduction
+CodeAI is a learning platform designed for developers who need to understand a codebase that they did not write themselves. A user connects a GitHub repository, which CodeAI's analysis service then transforms into a dependency graph. Users can ask questions via chat and take quizzes generated from the repository. Every answer is backed by references to the specific files from where the information was derived. These features work with the same process: first identifying a few files out of potentially hundreds to be read by an LLM, which then uses them to generate an appropriate answer. Since a model cannot cite or explain code it has not been given, this initial stage limits the quality of every answer and quiz question.
 
-CodeAI is a learning platform for developers who must understand a codebase they did not write. A user connects a GitHub repository; CodeAI's analysis service parses it into a dependency graph; the user then asks questions in a chat and takes quizzes generated from the repository, each answer citing the files it came from. Both features begin with the same retrieval step: from hundreds of files, pick the handful that a language model will read before it answers. A model cannot cite or explain code it was never shown, so this step bounds the quality of every answer and every quiz question.
+We focused on three kinds of questions learners ask: *where* is a feature implemented, *who* depends on this file, and *what* runs when a feature is used. Two families of evidence can answer them. Text-based rankers (keyword search or neural embeddings) read the contents of files, and structure-based rankers read the dependency graph that CodeAI's analyzer already builds. Recent research systems incorporate both and often make use of graph traversal techniques or graph-driven agents [18, 19, 20]; nonetheless, they rarely measure which family carries the signal for each kind of question.
 
-We focus on three kinds of question a learner asks: *where* is a feature implemented, *who* depends on this file, and *what* runs when a feature is used. Two families of evidence can answer them. Text-based rankers (keyword search or neural embeddings) read the contents of files. Structure-based rankers read the dependency graph that CodeAI's analyzer already builds. Recent research systems combine the two, often with graph traversal or graph-guided agents [18, 19, 20], but rarely measure which family carries the signal for which kind of question.
-
-This paper measures that for CodeAI. We set out to build a new method for the product: hybrid retrieval plus a graph-pruning step. Our own measurements showed that neither part delivered what we expected, so we report the study the measurements support. Every candidate ranker, together with the retriever CodeAI's chat and quizzes used before this study, is evaluated on the same questions, and the results guided an improved retriever that we built into CodeAI.
+This research measures that for CodeAI. The goal was to come up with a new technique for the product, which involves a hybrid retrieval process along with a graph pruning process. Our own measurements showed that neither of the two processes delivered what we expected; therefore, this paper reports the study that those measurements support. Every candidate
+ranker, together with the retriever CodeAI’s chat and 
+quizzes used before this study, is evaluated on the same 
+questions, and the results guided an improved retriever 
+that we built into CodeAI.
 
 *Research questions.*
-- *RQ1 (which evidence, for which question).* How do lexical, LSA, neural dense and graph rankers compare at locating code, finding direct importers and estimating change impact?
-- *RQ2 (fusion).* Does Reciprocal Rank Fusion of text and graph rankings beat the best single ranker?
-- *RQ3 (pruning).* Does query-conditioned Graph Path Pruning recover the few dependency edges that carry a behaviour better than unpruned traversal and simple baselines?
-- *RQ4 (instrument validity).* How accurate is the static analysis the graph rankers depend on, for JavaScript and Python?
-- *RQ5 (the product).* How does CodeAI's original retriever compare with these rankers, and how much does a retriever rebuilt from the results improve it?
+- *RQ1 (performance per question)*. What are the relative strengths of lexical, LSA, neural dense, and graph-based rankers at locating code, finding the direct importers, and estimating the change impact?
+- *RQ2 (fusion)*. Is the performance of Reciprocal Rank Fusion of text and graph-based ranking better than the best individual ranker?
+- *RQ3 (pruning)*. Does query-conditioned Graph Path Pruning recover the few dependency edges that carry a behaviour better than unpruned traversal and simple baselines?
+- *RQ4 (validity of the instrument)*. How accurate is the static analysis used by the graph-based rankers for JavaScript and Python?
+- *RQ5 (the product)*. How does the original CodeAI retriever perform compared to the above-mentioned rankers? How much does a retriever rebuilt from the findings improve it?
 
 *Contributions.*
-+ *A benchmark* of 710 retrieval questions over 19 repositories in two languages and 48 flow questions, with answer keys from tools independent of the system under test.
-+ *A controlled comparison* of nine rankers, including CodeAI's production retriever, on held-out repositories, with bootstrap intervals, paired permutation tests, Holm correction over a family of 18 tests and a repository-level robustness check.
-+ *Measured negative results* for rank fusion with a weak member and for graph path pruning, with fair baselines, ablations and a sensitivity analysis of every hand-set constant.
-+ *An open instrument.* The CodeAI analyzer (856 unit tests), validated against Python's `ast` for definitions, imports and cross-file calls.
-+ *An improved product.* CodeAI's chat and quiz retriever rebuilt from the results (version 2) and measured before and after on the same benchmark (@sec-implications).
++ *A benchmark* involving 710 retrieval questions spread out over 19 repositories in two programming languages and also containing 48 flow questions, with answer keys extracted from tools independent of the system being tested.
++ *A controlled comparison* experiment involving nine rankers, which includes CodeAI’s own production retriever, using held-out repositories, bootstrap confidence intervals, paired permutation tests, Holm correction over a family of 18 tests and a repository-level robustness check.
++ *Measured negative results* for rank fusion that involves adding a weak ranker and also for graph path pruning, which involved fair baselines, ablation study, and sensitivity analysis of all constants defined manually.
++ *An open instrument:* CodeAI analyzer (856 unit tests), validated against Python's `ast` module for definitions, imports and cross-file calls.
++ *A better product:* Chat/quiz retriever of CodeAI, re-built using the results (v2) and also assessed before and after on the same benchmark (@sec-implications).
 
 = Related Work
 
@@ -103,13 +107,15 @@ This paper measures that for CodeAI. We set out to build a new method for the pr
 
 = Problem Formulation
 
-CodeAI's analyzer builds a graph of files and symbols (the full report describes its node and edge types). All rankers in this study work on its file-level projection $G_F = (F, E_F)$, where $(u, v) in E_F$ if file $u$ imports, calls into, or architecturally depends on file $v$.
+The graph that is created by the CodeAI's analyzer consists of nodes and edges that represent files and symbols; the detailed report describes the exact type of nodes and edges used. In our research, all ranking algorithms work with the file-level projection, which is represented by $G_F = (F, E_F)$, where $(u, v) in E_F$ if file $u$ imports, calls into, or architecturally depends on file $v$.
 
-Given a natural-language question $q$:
-+ *Locate:* return a ranked list $hat(F)_q$ that places the file implementing the described behaviour high (MRR, Hit\@k).
-+ *Direct importers:* given a named file $x$, rank the files that import $x$ (MRR, Hit\@k).
-+ *Change impact:* given $x$, rank the files that depend on $x$ through up to four import steps (capped Recall\@10, nDCG\@10).
-+ *Flow reconstruction:* return a small edge set $hat(E)_q subset.eq E_F$, $|hat(E)_q| <= K_"max"$, matching the edges $E_q^*$ that carry the behaviour (edge F1).
+For a given natural-language question $q$, the problem consists of the following subtasks:
+- *Locate:* generate a ranked list $hat(F)_q$ favoring the file containing the implementation of the described behaviour, measured by MRR and Hit\@k.
+- *Direct importers:* given a named file $x$, rank the files importing $x$, measured by MRR and Hit\@k.
+- *Change impact:* given a named file $x$, rank the files dependent on $x$ in up to four import steps, measured by capped Recall\@10 and nDCG\@10.
+- *Flow reconstruction:* return a small edge set $hat(E)_q subset.eq E_F$ where $|hat(E)_q| <= K_"max"$, matching the set of edges $E_q^*$ carrying the behaviour (edge F1).
+
+
 
 = The Instrument: CodeAI
 
