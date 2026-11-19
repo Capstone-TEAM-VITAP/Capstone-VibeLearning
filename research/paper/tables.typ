@@ -66,7 +66,7 @@
 )
 
 #let leak-table = table(
-  columns: (2.3fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
+  columns: (3.6fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
   align: (left, center, center, center, center, center, center, center),
   stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),
   table.header([*Locate MRR*], [*BM25*], [*CodeAI v1*], [*LSA*], [*Dense*], [*Graph*], [*RRF LSA+graph*], [*RRF all three*]),

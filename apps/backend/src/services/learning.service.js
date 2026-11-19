@@ -66,11 +66,21 @@ export function buildLearningPack({ repo, snapshot, rolesSummary = {}, excerpts 
  */
 export function parseMcqResponse(text, knownPaths = []) {
   let parsed;
+  // Some models wrap the JSON in <think> blocks, fences or prose.
+  const cleaned = String(text).replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
+  const fenced = cleaned.match(/```(?:json)?\s*([\s\S]*?)```/);
+  const body = (fenced ? fenced[1] : cleaned).trim();
   try {
-    const fenced = String(text).match(/```(?:json)?\s*([\s\S]*?)```/);
-    parsed = JSON.parse((fenced ? fenced[1] : text).trim());
+    parsed = JSON.parse(body);
   } catch {
-    throw new BadRequestError("Question generation returned invalid JSON");
+    const start = body.search(/[[{]/);
+    const end = Math.max(body.lastIndexOf("]"), body.lastIndexOf("}"));
+    try {
+      if (start < 0 || end <= start) throw new Error("no JSON");
+      parsed = JSON.parse(body.slice(start, end + 1));
+    } catch {
+      throw new BadRequestError("Question generation returned invalid JSON");
+    }
   }
   const list = Array.isArray(parsed) ? parsed : parsed.questions;
   if (!Array.isArray(list) || !list.length) {
@@ -307,7 +317,9 @@ function presentQuestion(q) {
 }
 
 /** Call the first configured LLM provider (Groq first, same chain as chat). */
-async function callLlm(systemPrompt, userMessage, maxTokens = 2000) {
+// Reasoning models (e.g. openai/gpt-oss-*) spend part of max_tokens on hidden
+// reasoning before writing the answer; 2000 was cut off mid-JSON for 5 MCQs.
+async function callLlm(systemPrompt, userMessage, maxTokens = 8000) {
   const groqKey = process.env.GROQ_API_KEY;
   const grokKey = process.env.GROK_API_KEY || process.env.XAI_API_KEY;
   const openAiKey = process.env.OPENAI_API_KEY;
@@ -329,6 +341,8 @@ async function callLlm(systemPrompt, userMessage, maxTokens = 2000) {
         ],
         temperature: 0.2,
         max_tokens,
+        // Keep hidden reasoning short so the JSON answer fits the budget.
+        ...(/gpt-oss/i.test(model) ? { reasoning_effort: "low" } : {}),
       }),
     });
     if (!res.ok) {
