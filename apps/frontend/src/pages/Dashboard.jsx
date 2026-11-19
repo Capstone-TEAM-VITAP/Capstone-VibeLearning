@@ -43,6 +43,7 @@ import DependencyHealth from "../components/DependencyHealth.jsx";
 import CodeGraphView from "../components/CodeGraphView.jsx";
 import ApiMapView from "../components/ApiMapView.jsx";
 import LearningView from "../components/LearningView.jsx";
+import SettingsView from "../components/SettingsView.jsx";
 import "./Dashboard.css";
 
 const KNOWN_ROLES = [
@@ -966,13 +967,13 @@ function Dashboard() {
             </section>
           )}
 
-          {/* Settings Placeholder (Phase 10 Target) */}
+          {/* Settings View */}
           {view === "settings" && (
-            <PlaceholderView
-              title="Settings"
-              description="Coming in Phase 10: Workspace configuration, GitHub integration settings, AI provider parameters, and privacy controls."
-              icon="settings"
-              phase="Phase 10"
+            <SettingsView
+              getToken={getToken}
+              selectedRepo={selectedRepo}
+              repositories={repos}
+              onSelectRepository={handleSelectRepository}
             />
           )}
 

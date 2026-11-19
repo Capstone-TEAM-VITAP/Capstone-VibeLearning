@@ -633,3 +633,11 @@ def dense_rank(request: DenseRankRequest) -> dict[str, Any]:
     if index is None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="building" if building else "not_indexed")
     return {"paths": index.rank(request.query)[: request.top_k]}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    host = os.environ.get("AI_HOST", "127.0.0.1")
+    port = int(os.environ.get("AI_PORT", "8000"))
+    uvicorn.run("src.main:app", host=host, port=port, log_level="info")
+

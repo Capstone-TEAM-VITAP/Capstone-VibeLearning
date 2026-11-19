@@ -1,0 +1,57 @@
+# Unified Multi-Service Container for Google Cloud Run
+# Note: Root Dockerfile is used for build context: docker build -f infra/docker/Dockerfile.backend .
+
+FROM node:24-bookworm-slim AS runner
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    python3-venv \
+    git \
+    tar \
+    supervisor \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY apps/ai-service/requirements.txt /app/apps/ai-service/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    grep -Ev "^(pytest|#|$)" /app/apps/ai-service/requirements.txt > /tmp/prod-requirements.txt && \
+    pip install --no-cache-dir -r /tmp/prod-requirements.txt && \
+    rm /tmp/prod-requirements.txt
+
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml /app/
+COPY apps/backend/package.json /app/apps/backend/package.json
+
+RUN pnpm install --frozen-lockfile --filter backend...
+
+COPY apps/backend /app/apps/backend
+COPY apps/ai-service /app/apps/ai-service
+COPY infra /app/infra
+
+RUN find /app -name ".env" -type f -delete && \
+    find /app -name ".env.*" ! -name ".env.example" -type f -delete
+
+RUN mkdir -p /tmp/codeai-repos && chmod 777 /tmp/codeai-repos
+RUN chmod +x /app/infra/scripts/*.sh /app/infra/scripts/*.py 2>/dev/null || true
+
+ENV NODE_ENV=production \
+    PORT=8080 \
+    HOST=0.0.0.0 \
+    AI_SERVICE_URL=http://127.0.0.1:8000 \
+    GIT_CACHE_DIR=/tmp/codeai-repos \
+    CODEAI_ANALYSIS_ROOT=/tmp/codeai-repos \
+    PYTHONUNBUFFERED=1
+
+EXPOSE 8080
+
+ENTRYPOINT ["/app/infra/scripts/entrypoint.sh"]

@@ -22,6 +22,7 @@ import {
   repoIdParamSchema,
   snapshotParamSchema,
   syncRepoSchema,
+  updateRepoSchema,
 } from "../validators/repo.validator.js";
 
 const router = express.Router();
@@ -41,6 +42,13 @@ router.post("/connect", validate({ body: connectRepoSchema }), repoController.co
 
 // GET /api/v1/repos/:id — single connected repo (scoped to user)
 router.get("/:id", validate({ params: repoIdParamSchema }), repoController.getRepoById);
+
+// PATCH /api/v1/repos/:id — update repo settings (defaultBranch, projectId)
+router.patch(
+  "/:id",
+  validate({ params: repoIdParamSchema, body: updateRepoSchema }),
+  repoController.updateRepo
+);
 
 // DELETE /api/v1/repos/:id — disconnect (scoped to user)
 router.delete("/:id", validate({ params: repoIdParamSchema }), repoController.deleteRepo);
