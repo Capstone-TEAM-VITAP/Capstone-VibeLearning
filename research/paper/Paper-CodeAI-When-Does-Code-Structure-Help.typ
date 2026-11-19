@@ -3,7 +3,9 @@
 // Every number is produced by the scripts in research/ (Report.typ, Appendix D) and stored in research/out/*.md.
 // Tables: paper/tables.typ (make_tables.py). Figures: paper/figures (make_figures.py, make_diagrams.py).
 
-#set document(title: "CodeAI: When Does Code Structure Help? An Empirical Study of Lexical, Neural and Graph Retrieval for Repository Questions")
+#set document(
+  title: "CodeAI: When Does Code Structure Help? An Empirical Study of Lexical, Neural and Graph Retrieval for Repository Questions",
+)
 #set page(paper: "us-letter", margin: (x: 0.7in, y: 0.8in), numbering: "1", columns: 2)
 #set columns(gutter: 0.28in)
 #set text(font: "New Computer Modern", size: 10pt, lang: "en")
@@ -21,9 +23,20 @@
 #set enum(indent: 0.4em)
 #set figure(placement: auto)
 
-#import "tables.typ": v1-tests, repo-table, retrieval-heldout, retrieval-other, leak-table, overlap-table, flows-held-out, flows-held-out-compact, pruner-sensitivity, fusion-sweep, k-table, significance-table, product-tests, product-before-after, accuracy, n-dropped
+#import "tables.typ": (
+  accuracy, flows-held-out, flows-held-out-compact, fusion-sweep, k-table, leak-table, n-dropped, overlap-table,
+  product-before-after, product-tests, pruner-sensitivity, repo-table, retrieval-heldout, retrieval-other,
+  significance-table, v1-tests,
+)
 // Tables are wide (6-8 columns with intervals), so they span both columns.
-#let tbl(caption, body) = figure(body, caption: caption, kind: table, supplement: [Table], scope: "parent", placement: auto)
+#let tbl(caption, body) = figure(
+  body,
+  caption: caption,
+  kind: table,
+  supplement: [Table],
+  scope: "parent",
+  placement: auto,
+)
 // A figure that spans both columns.
 #let wide-figure(body, caption: none) = figure(body, caption: caption, scope: "parent", placement: auto)
 #let plain-table = (cols, head, ..rows) => table(
@@ -41,10 +54,8 @@
     columns: (auto, auto),
     column-gutter: 60pt,
     row-gutter: 8pt,
-    [*Thanmay Gowda B J* \ #text(size: 9pt)[23BCE7238]],
-    [*Shrijeet Ambastha* \ #text(size: 9pt)[23BCE8158]],
-    [*Bondge Shreeniwas Sanjay* \ #text(size: 9pt)[23BCE7176]],
-    [*Kundan Kumar Dubey* \ #text(size: 9pt)[23BCE8447]],
+    [*Thanmay Gowda B J* \ #text(size: 9pt)[23BCE7238]], [*Shrijeet Ambastha* \ #text(size: 9pt)[23BCE8158]],
+    [*Bondge Shreeniwas Sanjay* \ #text(size: 9pt)[23BCE7176]], [*Kundan Kumar Dubey* \ #text(size: 9pt)[23BCE8447]],
   )
   #v(6pt)
   #text(size: 9.5pt)[
@@ -61,11 +72,11 @@
   #set text(size: 9.5pt)
   #align(center, text(size: 11pt, weight: "bold")[Abstract])
   #v(2pt)
-CodeAI helps developers understand an unfamiliar codebase. CodeAI answers questions in chat. It creates quizzes based on a GitHub repository that is connected. Both of CodeAI's features first select the few files that a language model will look at. We ask what evidence should be used for each question: the words in a file, neural embeddings or the program's dependency graph. We tested nine file rankers, including CodeAI's original retriever, on 710 questions of three types (locate code, find direct importers, estimate change impact) across 19 JavaScript and Python repositories. Answer keys come from tools independent of our graph. Comments are removed before indexing. Five JavaScript repositories are held out. 18 declared comparisons are Holm-corrected. For locating code, combining BM25, neural and graph rankings gives the highest held-out mean reciprocal rank (MRR 0.58 compared to 0.32 for BM25). On importer questions, which mostly test parsing, the graph ranker reaches 0.97 compared to 0.68 for BM25; on change impact it leads BM25 (nDCG\@10 0.74 compared to 0.59), but not significantly. Adding the weak LSA ranker made our change-impact ranking of Python programs significantly worse: nDCG\@10 decreased by 0.11. As for the Graph Path Pruning method, it cut the number of returned dependency edges by 95%; however, the results were lower than expected. Applied to 25 held-out flow questions, it obtained an F1 of 0.20, while a simple top-3 baseline gave 0.30.
+  CodeAI helps developers understand an unfamiliar codebase. CodeAI answers questions in chat. It creates quizzes based on a GitHub repository that is connected. Both of CodeAI's features first select the few files that a language model will look at. We ask what evidence should be used for each question: the words in a file, neural embeddings or the program's dependency graph. We tested nine file rankers, including CodeAI's original retriever, on 710 questions of three types (locate code, find direct importers, estimate change impact) across 19 JavaScript and Python repositories. Answer keys come from tools independent of our graph. Comments are removed before indexing. Five JavaScript repositories are held out. 18 declared comparisons are Holm-corrected. For locating code, combining BM25, neural and graph rankings gives the highest held-out mean reciprocal rank (MRR 0.58 compared to 0.32 for BM25). On importer questions, which mostly test parsing, the graph ranker reaches 0.97 compared to 0.68 for BM25; on change impact it leads BM25 (nDCG\@10 0.74 compared to 0.59), but not significantly. Adding the weak LSA ranker made our change-impact ranking of Python programs significantly worse: nDCG\@10 decreased by 0.11. As for the Graph Path Pruning method, it cut the number of returned dependency edges by 95%; however, the results were lower than expected. Applied to 25 held-out flow questions, it obtained an F1 of 0.20, while a simple top-3 baseline gave 0.30.
 
-On the other hand, the retriever we rebuilt from these results performed better on CodeAI's held-out data. In particular, the MRR for locating code rose from 0.43 to 0.58, while that for importers increased from 0.68 to 0.97. Note that we chose this design after seeing the experimental results, so these improvements confirm the design rather than test it independently.
+  On the other hand, the retriever we rebuilt from these results performed better on CodeAI's held-out data. In particular, the MRR for locating code rose from 0.43 to 0.58, while that for importers increased from 0.68 to 0.97. Note that we chose this design after seeing the experimental results, so these improvements confirm the design rather than test it independently.
 
-*Keywords:* repository-level code retrieval, empirical study, code graph, static analysis, dense retrieval, BM25, rank fusion.
+  *Keywords:* repository-level code retrieval, empirical study, code graph, static analysis, dense retrieval, BM25, rank fusion.
   #v(4pt)
   #line(length: 100%, stroke: 0.5pt)
 ]
@@ -76,9 +87,9 @@ CodeAI is a learning platform designed for developers who need to understand a c
 We focused on three kinds of questions learners ask: *where* is a feature implemented, *who* depends on this file, and *what* runs when a feature is used. Two families of evidence can answer them. Text-based rankers (keyword search or neural embeddings) read the contents of files, and structure-based rankers read the dependency graph that CodeAI's analyzer already builds. Recent research systems incorporate both and often make use of graph traversal techniques or graph-driven agents [18, 19, 20]; nonetheless, they rarely measure which family carries the signal for each kind of question.
 
 This research measures that for CodeAI. The goal was to come up with a new technique for the product, which involves a hybrid retrieval process along with a graph pruning process. Our own measurements showed that neither of the two processes delivered what we expected; therefore, this paper reports the study that those measurements support. Every candidate
-ranker, together with the retriever CodeAI’s chat and 
-quizzes used before this study, is evaluated on the same 
-questions, and the results guided an improved retriever 
+ranker, together with the retriever CodeAI’s chat and
+quizzes used before this study, is evaluated on the same
+questions, and the results guided an improved retriever
 that we built into CodeAI.
 
 *Research questions.*
@@ -119,236 +130,292 @@ For a given natural-language question $q$, the problem consists of the following
 
 = The Instrument: CodeAI
 
-CodeAI has three layers (Figure 1). A static-analysis service turns a repository snapshot into a graph; a retrieval layer ranks files and prunes flow edges; the product's chat and quiz features retrieve files with a JavaScript retriever, which we evaluate before and after rebuilding it from the results (@sec-implications).
+CodeAI has three layers (Figure 1). The static analysis layer converts a repository snapshot into a graph. A retrieval layer ranks files and cuts edges. The chat and quiz features of CodeAI retrieve files using a JavaScript retriever, which is tested before and after rebuilding the codebase (@sec-implications).
 
-#figure(image("figures/architecture.png", width: 100%), caption: [CodeAI architecture. The analysis service (blue) produces a graph. The retrieval layer (green) builds four rankers on a file-level view of the graph and fuses them. Outputs (orange) are ranked files, flow edges, and CodeAI's chat and quizzes, whose retriever (v2) reuses the graph ranker and fusion.])
+#figure(
+  image("figures/architecture.png", width: 100%),
+  caption: [CodeAI architecture. The analysis service (blue) produces a graph. The retrieval layer (green) builds four rankers on a file-level view of the graph and fuses them. Outputs (orange) are ranked files, flow edges, and CodeAI's chat and quizzes, whose retriever (v2) reuses the graph ranker and fusion.],
+)
 
 == Parsing and Symbol Extraction
 
-Each file is parsed with Tree-sitter [8]. For *JavaScript and JSX*, function, class, method, variable and constant declarations and CommonJS/ES-module exports become symbols; `import` statements, single-string `require` calls, calls and references become relationships. For *Python*, `def`/`async def` (decorated or not) become functions, or methods when directly inside a class; `class` becomes a class with nesting tracked; module-level assignments become constants or variables; `import`, `from … import` (relative and `*`) and calls become relationships. Extraction is deterministic.
+The files are parsed using Tree-sitter [8]. In *JavaScript/JSX*, the functions, classes, methods, variables, and constants declarations, as well as CommonJS/ES-module exports, are recognized as symbols; the imports, single-string `require`s, calls, and references are considered as relationships. In *Python*, `def`/`async def` (with or without decorators) are regarded as functions (or methods if they are defined directly inside classes); classes are modeled with tracked nesting; the module level assignments are considered as constants/variables; the imports (including `from … import`, relative imports, and star imports), and the calls are considered as relationships.
 
 == Import and Call Resolution
 
-*JavaScript:* a relative specifier is joined to the importing folder and tried with common extensions and `index` files; bare packages are marked external and unmatched relative imports unresolved. *Python:* leading dots climb folders; an absolute dotted name is tried against the repository root and each ancestor folder, then matched against the end of every Python file path (this fallback was added after a first accuracy comparison; @sec-accuracy). *Calls* are linked to a symbol defined in the same file or imported by name.
+*JavaScript:* Resolution for relative specifiers is achieved by appending them to the importing directory and trying to resolve them using common file extensions and indices; bare modules are considered external and unresolved. *Python:* Dots at the beginning indicate going up directories; an absolute dotted name is resolved from the root of the repository to each succeeding parent directory and matched against the end of each Python file path (this was added after the first accuracy comparison was done; see @sec-accuracy). The function calls are connected to the symbol inside the file or imported by name.
 
 == Graph Construction
 
-Results are combined into a graph with stable identifiers (`file:<path>`, `symbol:<path>:<name>:<line>:<col>`), sorted so the same repository always yields the same graph, and exported as JSON. A rule-based role classifier labels files as route, controller, service and so on; most of the library repositories in this study receive no layered roles.
+The results are presented as a graph using stable ids (`file:<path>`, `symbol:<path>:<name>:<line>:<col>`) that are sorted in such a way that the graph generated by a particular repository remains the same all the time. Role classification is performed based on a set of rules where a file is marked as route, controller, service, and so on; but very few library repositories analyzed in this paper have layers of roles.
 
 == Rankers: Lexical, LSA, Neural Dense, Graph and Rank Fusion
 
-- *CodeAI v1:* the JavaScript retriever that CodeAI's chat and quiz generation used before this study (`rankFiles` in `apps/backend/src/services/retrieval.service.js`). It scores files with BM25 over file text and path and adds 0.25 times the best overlap between the question's words and a file's symbol names. We run the production code unmodified, in Node.js, on exactly the text the other rankers index.
-- *BM25* ($k_1 = 1.2$, $b = 0.75$) over identifier-aware tokens of file text and path (camelCase and snake_case split).
-- *LSA vectors:* TF-IDF followed by a 64-dimensional truncated SVD, cosine similarity. It is not a neural model; we keep it because it was the "semantic" ranker of our original design.
-- *Neural dense:* the pretrained `BAAI/bge-small-en-v1.5` sentence-embedding model [24] (33M parameters, CPU). Each file is split into windows of 40 non-empty lines prefixed with its path; a file's score is the best cosine similarity among its windows; queries use the model's retrieval prefix. Embedding all 19 repositories in both text conditions and running every question took 14 minutes on a laptop CPU.
-- *Graph:* if the question names a file and uses a dependency word (import, depend, affect, impact, break, use), files are ranked by reverse-import distance from that file, up to four steps. Otherwise files are ranked by the share of question words found in their path and symbol names, with half credit for direct neighbours of matches. The graph ranker never reads file contents.
-- *Fusions* use RRF, $"Score"(d) = sum_m w_m / (k_0 + r_m (d))$ with $k_0 = 60$: *RRF LSA + graph* ($w = 0.55, 0.45$; the fusion of our original design), *RRF dense + graph* (same weights), *RRF BM25 + dense + graph* (equal weights) and *RRF BM25 + graph* (equal weights). The last was added after the held-out run, as a control that fuses the graph with a weak but non-trivial text ranker; it is reported descriptively and is not in the test family.
+- *CodeAI v1:* The JavaScript search engine that was used by CodeAI's chat and quiz generation prior to this study (`rankFiles` in `apps/backend/src/services/retrieval.service.js`). It computes BM25 scores for each file based on its content and path and also adds the score of 0.25 multiplied by the best overlap of words from the question with symbols in the file. The same production code is used without modifications in Node.js.
+- *BM25* ($k_1 = 1.2$, $b = 0.75$) on identifier-aware tokens of file contents and file names (camelCase and snake_case separated).
+- *LSA vectors:* TF-IDF, followed by truncated SVD (64 dimensions). This is not a neural model. However, we still use it because it was the "semantic" ranker in our original design.
+- *Neural dense:* the pretrained sentence-embedding model `BAAI/bge-small-en-v1.5` [24] (33M parameters, CPU). The file is broken down into windows of 40 non-empty lines with its path as prefix; the score for a file is the best cosine similarity of its windows; queries use the retrieval prefix of the model. Embedding all 19 repositories in both text conditions and answering all questions took 14 minutes on CPU of a laptop.
+- *Graph ranking:* If the query contains a file name and uses any dependency word (import, depend, affect, impact, break, use), then the order of files will be based on the reverse-import distance to the named file, up to a distance of four at the most. In all other instances, the order will be determined by the number of query words contained in the paths and symbol names of the files, giving half credit to neighboring exact matches. It needs to be pointed out that the graph ranking algorithm does not examine the files' content.
+- *Fusions* use RRF, $"Score"(d) = sum_m w_m / (k_0 + r_m (d))$ with $k_0 = 60$: *RRF LSA + graph* ($w = 0.55, 0.45$; the fusion of our original design), *RRF dense + graph* (same weights), *RRF BM25 + dense + graph* (equal weights) and *RRF BM25 + graph* (equal weights). This final component was added after the held-out run; its function is as a control that combines the graph with a weak but non-trivial text ranker. It is presented purely descriptively and does not belong to the test suite.
 
-The LSA weights and $k_0$ were set before any evaluation; @sec-fusion reports how results move when they are varied.
+The values of the LSA weights and $k_0$ were calculated before any analysis was conducted; this will be covered in @sec-fusion.
 
 == Graph Path Pruning
 
-For flow questions, the pruner scores every non-test file edge for the question and greedily keeps a short connected chain (Figure 2, Algorithm 1). A file's *relevance* is either the share of question words in its path (*path* variant) or its reciprocal rank in a retrieval ranking, counted for the top 10 (*BM25* variant, our primary, and *fused* variant).
+In the case of flow-based problems, the pruner assigns a score to each of the non-test file edges of the problem and then keeps only a small, connected sequence of edges (Algorithm 1, Figure 2). The relevance of a file is calculated based either on the percentage of question terms appearing in the path (path version) or on its reciprocal rank in a search ranking (BM25 version, our main and fusion version).
 
-#wide-figure(image("figures/pruning_flow.png", width: 100%), caption: [The four steps of Graph Path Pruning. All constants were set by hand before the held-out run; @sec-pruning reports how sensitive the results are to each one.])
+#wide-figure(
+  image("figures/pruning_flow.png", width: 100%),
+  caption: [The four steps of Graph Path Pruning. All constants were set by hand before the held-out run; @sec-pruning reports how sensitive the results are to each one.],
+)
 
-#place(auto, scope: "parent", float: true, clearance: 1.2em)[#block(width: 100%, inset: (x: 8pt, y: 5pt), stroke: 0.6pt + luma(160), radius: 2pt, breakable: false)[
+#place(auto, scope: "parent", float: true, clearance: 1.2em)[#block(
+  width: 100%,
+  inset: (x: 8pt, y: 5pt),
+  stroke: 0.6pt + luma(160),
+  radius: 2pt,
+  breakable: false,
+)[
   #text(weight: "bold")[Algorithm 1: Query-conditioned Graph Path Pruning]
   #v(2pt)
   #show raw.where(block: true): set text(size: 7pt)
-```text
-Input : file graph G = (F, E), question q, K_max (default 3), relevance map rel, threshold T (default 2.0)
-Output: at most K_max edges
-1:  E' <- edges (u, v) in E where neither u nor v is a test file
-2:  [layer rules] primary/secondary <- controllers reached from a relevant route / relevant themselves
-3:  C <- []
-4:  for each edge e = (u, v) in E':
-5:      base <- 1.5 * rel(u) + 1.5 * rel(v);  if base = 0 then continue
-6:      s <- base + max over kinds of e of {depends_on: 2.0, calls: 1.5, imports: 0.5}
-7:      [layer rules] if e goes one layer down (route > controller > service > repository/model):
-8:          s <- s + 3.0, plus 5.0 / 4.5 / 2.5 for the route->controller and controller->service cases
-9:      if s >= T then C.append((s, e))
-10: S <- []
-11: while C is not empty and |S| < K_max:
-12:     pick the edge with the highest score, +2.0 if it connects to an edge in S (ties: alphabetical)
-13:     skip it if its reverse is already in S; otherwise append it to S
-14: return S
-```
+  ```text
+  Input : file graph G = (F, E), question q, K_max (default 3), relevance map rel, threshold T (default 2.0)
+  Output: at most K_max edges
+  1:  E' <- edges (u, v) in E where neither u nor v is a test file
+  2:  [layer rules] primary/secondary <- controllers reached from a relevant route / relevant themselves
+  3:  C <- []
+  4:  for each edge e = (u, v) in E':
+  5:      base <- 1.5 * rel(u) + 1.5 * rel(v);  if base = 0 then continue
+  6:      s <- base + max over kinds of e of {depends_on: 2.0, calls: 1.5, imports: 0.5}
+  7:      [layer rules] if e goes one layer down (route > controller > service > repository/model):
+  8:          s <- s + 3.0, plus 5.0 / 4.5 / 2.5 for the route->controller and controller->service cases
+  9:      if s >= T then C.append((s, e))
+  10: S <- []
+  11: while C is not empty and |S| < K_max:
+  12:     pick the edge with the highest score, +2.0 if it connects to an edge in S (ties: alphabetical)
+  13:     skip it if its reverse is already in S; otherwise append it to S
+  14: return S
+  ```
 ]]
 
-The layer rules (lines 2, 7 and 8) only fire on edges between files that the role classifier places in adjacent layers of a web application. @sec-pruning shows that on the held-out flows no candidate edge qualifies, so these lines are inert there by construction.
+Layer-specific rules (lines 2, 7, and 8) can be applied only to the edges between the files that belong to the adjacent layers of a web application according to the role classifier. As demonstrated in @sec-pruning, there is not a single edge in the held out flows satisfying the requirements, making those lines meaningless by definition.
 
 = Experimental Design
 
 == Repositories and Splits
 
-*JS development (3):* `hackathon-starter`, `koa`, `react-redux-realworld-example-app`, used while designing the rankers and the pruner. *JS post-hoc test (7):* `express`, `hapi`, `axios`, `react-boilerplate`, `node-fetch`, `passport`, `connect`, looked at before the final design and reported with development as "post-hoc JS (10)". *JS held-out (5):* `request`, `winston`, `mocha`, `redux-saga`, `body-parser`, not used for any design decision (confirmatory). *Python (4):* `requests`, `click`, `flask`, `httpx`. The Python repositories were not used to design the rankers, but they are not blind either: the Python import resolver was fixed after an accuracy comparison on them (@sec-accuracy), and they carry 21 of the 25 held-out flow questions. We therefore treat Python retrieval results as a second test group, not as confirmatory. Commits are pinned in `research/repos.json`. The repositories were chosen by us, not sampled at random, and are mostly libraries rather than layered web applications.
+*Development JS (3):* `hackathon-starter`, `koa`, `react-redux-realworld-example-app`, used during the design of the rankers and pruner. *Post-hoc JS tests (7):* `express`, `hapi`, `axios`, `react-boilerplate`, `node-fetch`, `passport`, `connect`; considered before the design and reported separately as development oriented "post-hoc JS (10)." *Held-out JS (5):* `request`, `winston`, `mocha`, `redux-saga`, `body-parser`; not used in any design decisions (confirmatory). *Python (4):* `requests`, `click`, `flask`, `httpx`. The Python repositories were not used in the ranker design; nonetheless, they are not blind either -- the Python import resolver was corrected based on its accuracy on them (@sec-accuracy), and they account for 21 out of the 25 held-out flow questions. Python retrieval outcomes are therefore considered the second test set, not confirmatory. Commits are pinned in `research/repos.json`. Repositories were chosen by the authors and not randomly sampled, and are largely composed of libraries, not layered web applications.
 
 == Retrieval Questions <sec-questions>
 
 Answer keys come from oracles that do not use our Tree-sitter graph (@tab-questions).
 
-#tbl([The three retrieval question types, with an example, how the answer key is built and the number of questions per group.])[#plain-table(
+#tbl(
+  [The three retrieval question types, with an example, how the answer key is built and the number of questions per group.],
+)[#plain-table(
   (1.15fr, 2.5fr, 2.4fr, 1.6fr),
   ([*Question type*], [*Example*], [*Answer key*], [*Questions (held-out JS / post-hoc JS / Python)*]),
-  [Locate], ["Convert a data object to FormData" (the first sentence of a JSDoc comment or docstring, with the function name absent)], [The file containing that comment. Duplicated sentences are dropped.], [79 / 144 / 120],
-  [Direct importers], ["Which files import lib/request.js?"], [Files that import it: regular expressions over comment-free source (JS), `ast` (Python).], [48 / 85 / 59],
-  [Change impact], ["Which files are affected if lib/utils.js changes?"], [Files depending on it through up to four import steps (3 to 30 files, tests excluded).], [37 / 78 / 60],
+  [Locate],
+  ["Convert a data object to FormData" (the first sentence of a JSDoc comment or docstring, with the function name absent)],
+  [The file containing that comment. Duplicated sentences are dropped.],
+  [79 / 144 / 120],
+  [Direct importers],
+  ["Which files import lib/request.js?"],
+  [Files that import it: regular expressions over comment-free source (JS), `ast` (Python).],
+  [48 / 85 / 59],
+  [Change impact],
+  ["Which files are affected if lib/utils.js changes?"],
+  [Files depending on it through up to four import steps (3 to 30 files, tests excluded).],
+  [37 / 78 / 60],
 )] <tab-questions>
 
-*Comment removal.* Locate questions are taken from comments, so, following standard practice for comment-derived code-search queries [27], we remove all `//` and `/* */` comments (with a small lexer that respects strings, template literals and regular-expression literals) and all Python `#` comments and docstrings before any text ranker indexes a file. A check that normalises case and punctuation then confirms that no question's text appears in its answer file. It flagged #n-dropped question, whose "sentence" was in fact a fragment of code, and that question was dropped, leaving 343 locate questions and 710 in total. An earlier version of this evaluation indexed comments; #link(<app-comments>)[the appendix on indexing comments] reports how much that changed the results.
+*Comment removal.* Appropriate questions to be located from comments are formed on the basis of comments; thus, in accordance with standard practices for comment-derived code search queries [27], all `//` and `/* */` comments are removed by means of lightweight lexer taking strings, template literals, and regular expression literals into account. Moreover, all Python `#` comments and docstrings are removed prior to the text indexing performed by any ranker. Then normalization which includes case and punctuation standardization confirms that there is no text of question in the corresponding answer file. Thus, #n-dropped question was detected, the text of whose "sentence" consisted only of the piece of code; this question was excluded, resulting in 343 location questions and 710 questions altogether. There was an evaluation version which indexed comments; #link(<app-comments>)[the appendices dedicated to comment indexing] describe how this change affects the results.
 
-Importer and impact questions name a file and ask about import relations. Their answer key is derived from the same relation the graph ranker walks (through different tools), so for these two types the graph ranker is close to a lookup and its score mainly measures parsing accuracy. We report them to check that the retriever uses structure when a question calls for it; a high graph score on them says little about the ranker's design.
+Importer and impact questions locate a file and ask about importing dependencies. Answer keys to such questions are built on the same relationship as the graph ranker (other tools can be used instead). Therefore, the graph ranker is a kind of lookup in these two cases, where the score mainly shows parsing precision. We include such questions into reports to verify whether the retriever uses structural information where appropriate. The high graph score for these questions does not give us much information on the ranker's architecture.
 
 == Flow Questions
 
-Each flow question asks which file-to-file edges carry a behaviour (for example "How are user sessions stored in signed cookies?") and has two or three correct edges, each confirmed to exist by the independent import oracle. A *dev* set of 23 questions (this project's backend and `hackathon-starter`) was used for error analysis while the pruner was designed. A *held-out* set of 25 questions (21 on the four Python repositories, 4 on `koa`, `express` and `hapi`) was written before any content-based pruner variant was run on it. One of us wrote both the questions and the pruner; no second annotator checked them.
+The questions in the flow category determine the file-to-file edges that represent a certain behavior (for instance, "How are user sessions stored in signed cookies?") and have between two to three edges that correctly answer the question, and all those edges are independently verified as existing by the import oracle. A development set that contained 23 questions (related to the backend and `hackathon-starter` of this project) was used for the purposes of conducting an error analysis when designing the pruner. A test set containing 25 questions (21 of which came from the four Python projects, while the other 4 were from `koa`, `express`, and `hapi`) was created before running any of the content-based pruners on the data.
 
 == Methods Compared
 
-*Retrieval:* a seeded random ranking (floor), CodeAI v1 and the eight rankers of Section 4.4. CodeAI v2, built after these results, is evaluated in @sec-implications.
+*Retrieval:* a seeded random ranking (floor), CodeAI v1, along with eight rankers introduced in Section 4.4. CodeAI v2, an improvement based on these findings, will be presented in @sec-implications.
 
-*Flows:* a random 3-edge floor; three unpruned baselines (2-hop traversal from the top 3 path-matching files, the same traversal from the top 3 BM25 files, and the pruner's own candidate pool, i.e. every edge touching a BM25 top-10 file); two simple top-3 baselines (by path words and by BM25); the pruner with path, BM25 (primary) and fused relevance; and ablations. The 2-hop traversal of our earlier report searched from different seed files than the pruner; the BM25-seeded traversal and the candidate pool give the unpruned comparison the same evidence the pruner has.
+*Flows:* a stochastic 3-edge floor; three unpruned baselines (2-hop traversal using the top 3 path matching files, 2-hop traversal using the top 3 BM25 files, and candidate pool of the pruner, i.e., all edges whose endpoint file is a top-10 BM25 file); two simple top-3 baselines (path words and BM25 based); the pruner using path, BM25 (primary), and fusion relevance; and ablation versions thereof. The 2-hop traversal based on our previous paper uses seeds which differ from that of the pruner; the latter two give an unpruned baseline which have the same evidential basis as the pruner.
 
 == Metrics
 
-Hit\@1 is the share of questions whose first result is correct. MRR is the mean of 1/rank of the first correct file (0 if none appears in the cut-off). nDCG\@10 rewards correct files near the top, normalised by the best achievable ordering. For impact we report *capped* Recall\@10: correct files in the top 10 divided by $min(|I_q^*|, 10)$. Plain Recall\@10 cannot exceed $10 / |I_q^*|$, and 66 of 175 impact questions have more than ten affected files. For flows we report edge precision, recall and F1. Locate and importer metrics use a cut-off of $K = 7$, the number of files our chat feature passes to the model; the full report (`research/paper/Report.pdf`, Appendix B.2) shows the ranking of methods is the same at $K = 10$, and gives formal definitions and the commands that regenerate every number.
+Hit\@1 is the ratio of questions that have the first result correct. MRR is the mean of reciprocal of the rank of the first correct file with zero value when there is no correct file within the cutoff. nDCG\@10 gives the correct file that is located close to the top of the ranking and is normalized by the best order.
+
+In the case of impact assessment, we use cRecall\@10, defined as the ratio of the correct files among the top 10 divided by $min(|I_q^*|, 10)$. Plain Recall\@10 is upper bounded by $10 / |I_q^*|$ and 66 out of 175 impact-related questions have more than 10 affected files.
+
+Edge precision, edge recall and F1 score are reported for flow-based metrics. For the locate and importer metrics, we use a cutoff of $K = 7$, equal to the number of files our chat sends to the model. As seen from the full report (`research/paper/Report.pdf`, Appendix B.2), the ranking of methods does not change at $K = 10$ and formal definitions and commands for reproduction of all the results are provided.
 
 == Statistics
 
-Intervals are 95% bootstrap percentile intervals over questions (2,000 resamples for retrieval tables, 5,000 for flows and differences). Paired differences are tested with a sign-flip permutation test (exact for 18 or fewer non-zero differences, otherwise 20,000 seeded draws). A *p-value* here is the probability, if the two methods were in fact equally good, of seeing an average difference at least as large in absolute value as the one observed (a two-sided test). Bootstrap and permutation draws use fixed seeds, given in `research/py/common.py`. Because we run many comparisons, we fixed one family of 18 paired tests (@tab-sig) after the held-out run and before writing this paper, and control the family-wise error rate with the Holm–Bonferroni procedure [28]. We call a difference significant only if its Holm-adjusted p-value is below 0.05. Results marked *post hoc* were chosen after seeing held-out results and are exploratory.
+The intervals are 95% bootstrap percentile intervals based on questions (2,000 resamples for retrieval tables, 5,000 for flows and differences). The paired differences are analyzed with a sign-flip permutation test (exact for 18 or fewer nonzero differences; otherwise, 20,000 seeded draws). A p-value is the probability, assuming the null hypothesis of equal performance between the two methods, of observing an average absolute difference at least as large as observed (two-tailed). Seeded draws are used both for bootstraps and permutations and are defined in `research/py/common.py`. Due to the multiple tests performed, one family of tests was defined pre-hoc with 18 paired tests (see @tab-sig) after the holdout experiment but before manuscript writing, and family-wise error rates are controlled by applying Holm–Bonferroni procedure [28]. Differences are considered significant if the p-value adjusted by Holm-Bonferroni correction is smaller than 0.05. Tests labeled as *post hoc* are selected based on the held out results and are exploratory.
 
-*Questions are not independent.* Questions from the same repository share code style, naming and graph shape, and the held-out locate questions are unevenly spread (30, 30, 12, 6 and 1 per repository). Intervals and tests over questions therefore overstate the evidence for claims about repositories in general. For each key comparison we also report in how many repositories the mean favours each method and a 95% interval that resamples whole repositories (@tab-repo). With five repositories, a sign test can never reach p < 0.05 (the smallest two-sided p is 0.0625), so the repository-level results are a check on direction and consistency, not a second significance test.
+*Questions are not independent:* questions from the same repository have the same code style, naming conventions, and graph structure, and the held out locate questions are imbalanced (30, 30, 12, 6, and 1 question per repository). Therefore, the intervals and tests performed across questions can exaggerate evidence regarding general statements about repositories. For each key comparison, we additionally report, across repositories, the number of repositories where the average score favors each method and the 95% interval based on resampling repositories (@tab-repo). As there are five repositories, a sign test cannot achieve $p < 0.05$ (the lowest two-tailed p value is 0.0625); therefore, the repository level results serve as a directional and consistency test, but not a secondary test for significance.
 
 = Results
 
 == Retrieval Across Question Types (RQ1)
 
-#tbl([Retrieval on the five held-out JavaScript repositories, comments removed. Bold green marks the best value per column. #super[c]Recall\@10 is capped: divided by $min(|"answer"|, 10)$.])[
+#tbl(
+  [Retrieval on the five held-out JavaScript repositories, comments removed. Bold green marks the best value per column. #super[c]Recall\@10 is capped: divided by $min(|"answer"|, 10)$.],
+)[
   #retrieval-heldout
 ] <tab-heldout>
 
-#tbl([The same comparison on the 10 development and post-hoc JavaScript repositories and on the four Python repositories, comments removed.])[
+#tbl(
+  [The same comparison on the 10 development and post-hoc JavaScript repositories and on the four Python repositories, comments removed.],
+)[
   #retrieval-other
 ] <tab-other>
 
-#wide-figure(image("figures/retrieval_js.png", width: 100%), caption: [Held-out JavaScript, comments removed (mean and 95% bootstrap interval). Text meaning and names help for locate; the graph dominates import questions; on impact, fusions that include the graph score highest, but no impact comparison survives correction.])
+#wide-figure(
+  image("figures/retrieval_js.png", width: 100%),
+  caption: [Held-out JavaScript, comments removed (mean and 95% bootstrap interval). Text meaning and names help for locate; the graph dominates import questions; on impact, fusions that include the graph score highest, but no impact comparison survives correction.],
+)
 
-*Locate.* Neural and structural signals both beat keyword matching (@tab-heldout). The neural dense ranker beats BM25 on held-out JS (+0.178 MRR, Holm p = 0.015) and on Python (+0.191, Holm p = 0.0009) and beats LSA (+0.251). The fusion of BM25, dense and graph is the best locate method in all three groups (0.58, 0.69, 0.61) and beats BM25 by +0.260 on held-out JS (Holm p = 0.0009). Its margin over dense alone (+0.08 held-out) is descriptive only. Across repositories (@tab-repo), the fusion's lead over BM25 holds in every held-out repository but one tie, and the neural ranker's lead over BM25 holds in all four Python repositories. On held-out JavaScript the neural lead is less general: it holds in the three repositories with 72 of the 79 locate questions and reverses on `body-parser` (6 questions) and `request` (1), and the interval over repositories includes zero. CodeAI's original retriever (v1, 0.43) is better than plain BM25 thanks to its symbol-name bonus, but below the neural ranker and the fusion.
+*Locate.* Neural and structural signals perform better than keywords (@tab-heldout). The neural dense ranker beats BM25 on JavaScript questions held-out (+0.178 MRR, Holm p = 0.015) and Python (+0.191, Holm p = 0.0009) questions, and outperforms LSA (+0.251). Fusion of BM25, dense, and graph ranking is the best ranking strategy among all three categories (0.58, 0.69, 0.61), and beats BM25 by +0.260 on held-out JavaScript (Holm p = 0.0009). The difference from dense alone (+0.08 on held-out) is descriptive. For each of the repositories (@tab-repo), fusion beats BM25 on all held-out repositories with one exception, while the neural ranker beats BM25 on all Python repositories. The neural advantage on held-out JavaScript is less general: it is observed on three repositories with 72 out of 79 locate questions, while it is reversed in `body-parser` (6 questions) and `request` (1 question), the difference between the two having an interval which contains zero. The original CodeAI retriever (v1, 0.43) is better than plain BM25 because of the symbol-name bonus, but still falls behind both the neural ranker and fusion.
 
-*Direct importers.* The graph ranker is near-perfect (0.97 held-out, 1.00 on the other groups) and beats BM25 by +0.294 (Holm p = 0.0009). Fusion lowers it (RRF LSA + graph −0.100, not significant after correction), because the text rankers push non-importers up. As noted in @sec-questions, this is mostly a check that the import graph is correct.
+*Direct importers.* The graph ranker achieves near perfection (0.97 held-out, 1.00 on the other two groups) and beats BM25 by +0.294 (Holm p = 0.0009). Fusion decreases this gap (RRF LSA − graph = −0.100; not significant after correction) since text rankers boost non-importers. As pointed out in @sec-questions, this result confirms the correctness of the import graph.
 
-*Change impact.* Graph-based rankings beat text-only ones (held-out nDCG\@10 0.74 for the graph against 0.59 for BM25 and 0.27 for dense), but the held-out sample (37 questions) is too small for that difference to survive correction (raw p = 0.083). The graph leads in four of the five held-out repositories but trails on `redux-saga` (15 questions). Neural embeddings are of little use here: files that depend on `utils.js` need not resemble it.
+*Change impact.* Graph-based rankings beat text-only rankings (held-out nDCG\@10: 0.74 for the graph, 0.59 for BM25, and 0.27 for dense), although the small size of the held-out dataset (37 questions) is not enough for the difference to be significant (p = 0.083). Graphs beat BM25 on four held-out repositories but lag behind on `redux-saga` (15 questions). Neural embeddings have little value here since the files depending on `utils.js` are not required to be similar to it.
 
-#tbl([Locate MRR by how many of the question's words occur in the comment-free answer file (all 343 locate questions, split into thirds). BM25 needs shared words; the dense and graph rankers degrade more gracefully, and fusion is best at every level.])[
+#tbl(
+  [Locate MRR by how many of the question's words occur in the comment-free answer file (all 343 locate questions, split into thirds). BM25 needs shared words; the dense and graph rankers degrade more gracefully, and fusion is best at every level.],
+)[
   #overlap-table
 ] <tab-overlap>
 
-*Why BM25 loses.* @tab-overlap splits the locate questions by lexical overlap. When few of the question's words remain in the answer file, BM25's MRR is 0.16, while dense (0.38), graph (0.41) and the fused ranking (0.50) still find the file. Where overlap is high, BM25 catches up with dense (0.58 each), but fusion is still best (0.77). Combining names (identifiers and file paths) with learned meaning therefore helps at every level of word overlap.
+*Why BM25 loses.* @tab-overlap demonstrates locate question classification based on lexical similarity. While BM25 has an MRR of 0.16 where only a small set of words from the question is present in the file, dense (0.38), graph (0.41), and fusion ranking (0.50) models retain their ability to find the file. However, under the scenario of a high lexical similarity, BM25 reaches the performance of dense representation model (both have MRR of 0.58), but the fusion technique still performs better than others (0.77). This means that the combination of the name (identifier and path) with learned semantics is always valuable.
 
 == Rank Fusion (RQ2) <sec-fusion>
 
-Fusion is the best locate method in every group. It helps only when each member is useful for the question type, and a weak member with a high weight can make it worse:
-- For importers, every fusion is below the graph ranker alone, because text rankers add noise to a near-exact answer.
-- On Python change impact, fusing the graph with the weak LSA ranker is *significantly worse* than the graph alone over questions (−0.107 nDCG\@10, Holm p = 0.0009), while fusing it with the neural ranker is better (0.84 against 0.78; not in the test family). Over repositories the LSA loss appears in three of four, and its interval includes zero (@tab-repo).
-- The BM25 + graph control separates "fusion with a weak member" from "LSA is weak". BM25 alone is far below the graph on impact (0.59 against 0.74 held-out), yet fusing the two gives the highest held-out impact score we measured (0.91 against 0.74 for the graph alone), stays within 0.02 of the graph elsewhere (0.89 against 0.91 post-hoc JS, 0.79 against 0.78 Python), matches the graph on held-out importers (0.97) and reaches 0.55 locate MRR without a neural model. These comparisons are post hoc and untested, but they suggest that the loss reflects LSA itself rather than fusion.
-- Varying the LSA weight (0.2 to 0.8) and $k_0$ (10, 60, 200) on the held-out set shows that our pre-set LSA weight of 0.55 was among the worst settings: at $k_0 = 60$, lowering it to 0.2 raises locate MRR from 0.380 to 0.411, importer MRR from 0.873 to 0.955 and impact nDCG\@10 from 0.831 to 0.856. We did not retune, because the sweep uses the held-out data.
+The most efficient localization approach is considered to be the fusion among all members in each group. The efficiency of this technique depends on the efficiency of each member concerning the particular question type since the presence of an ineffective member that has a high weight can damage the performance:
+- For importers, every fusion under consideration is lower than the graph ranker in isolation, as text rankers add noise due to their approximation to the exact answer.
+- For Python change impact, the fusion of the graph with the weak LSA ranker provides significantly worse performance than the graph alone on the held-out questions (−0.107 nDCG\@10, Holm p = 0.0009). On the contrary, fusion with the neural ranker improves the performance (0.84 versus 0.78; not in the test family).
+- The LSA loss is observed in three out of four groups across the repositories (@tab-repo).
+- The BM25 + graph control makes the distinction between "fusion with a weak member" and "LSA is weak." BM25 alone has much lower impact than the graph (0.59 versus 0.74 on held-out data); nevertheless, the combination of these techniques leads to the highest observed impact on the held-out data (0.91 versus 0.74 for the graph alone). The impact is close to the graph everywhere else (0.89 versus 0.91 post-hoc JS, 0.79 versus 0.78 for Python), agrees with the graph on held-out importers (0.97) and provides 0.55 locate MRR without a neural model. The comparison between these techniques suggests that the observed loss is due to LSA itself rather than the fusion process.
+- Analysis of the variations of the LSA weight (0.2 to 0.8) and $k_0$ (10, 60, 200) on the held-out dataset shows that the pre-set LSA weight (0.55) was one of the least efficient values: when $k_0 = 60$, the reduction of this value to 0.2 increases the locate MRR from 0.380 to 0.411, importer MRR from 0.873 to 0.955 and impact nDCG\@10 from 0.831 to 0.856. Retuning was not performed, since this sweep uses held-out data.
 
 == Graph Path Pruning (RQ3) <sec-pruning>
 
-#tbl([Flow reconstruction on the 25 held-out flows. "Empty outputs" is the number of questions with no edges returned. Precision, recall and F1 are averaged over questions.])[
+#tbl(
+  [Flow reconstruction on the 25 held-out flows. "Empty outputs" is the number of questions with no edges returned. Precision, recall and F1 are averaged over questions.],
+)[
   #flows-held-out-compact
 ]
 
-#wide-figure(image("figures/flows.png", width: 100%), caption: [Held-out flow reconstruction. Left: F1 with 95% bootstrap interval (hatched bars are post hoc). Right: edges returned per question. Pruning removes about 95% of the candidate edges but does not beat the simple top-3 baselines.])
+#wide-figure(
+  image("figures/flows.png", width: 100%),
+  caption: [Held-out flow reconstruction. Left: F1 with 95% bootstrap interval (hatched bars are post hoc). Right: edges returned per question. Pruning removes about 95% of the candidate edges but does not beat the simple top-3 baselines.],
+)
 
-*Against fair unpruned baselines.* The pruner's candidate pool contains 86% of the correct edges but 36.9 edges per question (F1 0.146). The primary pruner (relevance from BM25, declared before the held-out run) keeps 1.9 of them (95% fewer) and reaches F1 0.200, a gain of +0.054 that is not significant (p = 0.46). Traversal from the same BM25 seeds is worse than the pool (F1 0.064, 33.3 edges), so the pruner is better than traversal (+0.136, raw p = 0.052, Holm p = 0.47).
+*Against fair unpruned baselines.* The pool of edges that the pruner considers consists of 86% of the true edges, yet it produces 36.9 edges per question (F1 = 0.146). The primary pruner, which considers the relevance of edges from BM25, keeps only 1.9 edges out of the pool (95% pruned) and reaches F1 = 0.200, which is +0.054 more, which is not statistically significant (p = 0.46). Traversal starting from the same seeds of BM25 is weaker than the pool (F1 = 0.064, 33.3 edges), so the pruner wins +0.136 over traversal (raw p = 0.052, corrected p = 0.47).
 
-*Against simple baselines.* The primary pruner is below "top 3 edges by path words" (−0.100) and "top 3 by BM25" (−0.056). Neither difference is significant, but both point against pruning.
+*Against simple baselines.* The primary pruner is inferior to "top 3 edges by path words" and "top 3 by BM25" baselines, losing −0.100 and −0.056, correspondingly. Though neither of those losses is statistically significant, both suggest an inclination against pruning.
 
-*Empty outputs.* The primary pruner returned no edges on 8 of 25 held-out questions. Reciprocal-rank relevance is at most 1 and usually well below it, so for most edges $1.5 times (r_u + r_v)$ plus the import bonus of 0.5 stays below the fixed threshold of 2.0. Setting the threshold to 0, a post-hoc fix, removes all but one empty output and raises F1 to 0.285, which is still not better than top 3 by BM25 (+0.029, p = 0.63). The fused-relevance variant (F1 0.353, post hoc) is the best flow method we measured, but its advantage over top 3 by BM25 (+0.097, raw p = 0.031) does not survive correction (Holm p = 0.34).
+*Empty outputs.* The primary pruner has produced zero edges for 8 out of 25 questions of the held-out set. As the reciprocal rank relevance is not greater than 1 (and usually much smaller), then, in most cases, $1.5 times (r_u + r_v)$ + import bonus of 0.5 is less than the fixed threshold 2.0. When the threshold is lowered to 0 (post hoc change), 7 out of 8 empty outputs are eliminated and F1 becomes 0.285, which is yet lower than the "top 3 by BM25" baseline (gain +0.029, p = 0.63). The variant with fused relevance (F1 = 0.353, post hoc) is the best-flow algorithm examined; still, it wins over top 3 by BM25 by +0.097 (raw p = 0.031) only, while this advantage disappears after the Holm correction (p = 0.34).
 
-*The layer rules.* The clearest evidence comes from the dev set, where the layer rules can fire: on 19 of 23 dev questions (203 of 701 candidate edges) they apply, and removing them *raises* F1 from 0.267 to 0.290. On the held-out set they cannot fire: no candidate edge in the held-out flows connects two files in adjacent layers (0 of 923 candidate edges, 0 of 25 questions), so the held-out set tests only the layer-free core of Algorithm 1, and the "no layer rules" ablation is identical to the full pruner. Removing the continuity bonus also raises held-out F1 (0.264 against 0.200).
+*Layer rules.* The strongest evidence is provided by the development set, when layer rules are applicable. They are triggered in 19 of 23 questions (203 of 701 edges); their exclusion raises F1 from 0.267 to 0.290. In the held-out set, layer rules are never triggered (none of 923 candidate edges, 0 of 25 questions are in adjacent layers), so held-out questions test only the layer-free part of Algorithm 1, so "no layer rules" ablation is the same as the full pruner. Exclusion of the continuity bonus also increases the F1 score of the held-out set (0.264 vs. 0.200).
 
-*Constants.* We halved and doubled every constant of Algorithm 1 one at a time. The four layer constants and the continuity bonus leave the held-out score unchanged (0.200), and the relevance and edge-kind weights move it only between 0.171 and 0.227. The threshold matters most: halving it gives 0.243, and doubling it gives 0.000. No single change makes the pruner beat the top-3 baselines.
+*Constants.* Each of four layer constants and continuity bonus of Algorithm 1 were independently increased/decreased twice (doubled/halved). The layer constants and continuity bonus do not affect the held-out score (0.200); relevance and edge kind weights can move the score in the range 0.171 -- 0.227. Threshold affects the score the most -- the score becomes 0.243 when it is halved and 0.000 when it is doubled. None of those changes help the pruner to beat the baselines.
 
 == Instrument Accuracy (RQ4) <sec-accuracy>
 
-#tbl([How well the analyzer reproduces independent reference tools. "Found" is the share of reference items the analyzer also reports; "correct when reported" is the share of its output the reference confirms. #super[s]Precision for calls is measured on the analyzer's edges inside the oracle's scope: a name imported with `from m import name` and called directly.])[
+#tbl(
+  [How well the analyzer reproduces independent reference tools. "Found" is the share of reference items the analyzer also reports; "correct when reported" is the share of its output the reference confirms. #super[s]Precision for calls is measured on the analyzer's edges inside the oracle's scope: a name imported with `from m import name` and called directly.],
+)[
   #accuracy
 ]
 
-The definition check is the weakest of the four, because two Python parsers mostly agree on where `def` and `class` statements are. The import and call checks test resolution, which is where static analyzers usually fail. Python import recall per repository is 0.922 (`requests`), 0.983 (`click`), 0.963 (`flask`) and 1.000 (`httpx`). The first Python resolver found only 0.637 of import links, because it missed packages in a separate source tree (for example `src/click` imported from `examples/`). We added suffix matching after that comparison, so the 0.968 figure is not a blind result. Cross-file call edges were checked for the first time for this paper. They recover 96.4% of 357 direct calls of `from`-imported functions and classes, with no false edges in that scope. Calls through module attributes (`m.f()`), JavaScript calls and the role classifier remain unchecked. The remaining JavaScript import misses are mostly `export … from` re-exports, which the graph stores as exports.
+Definition checking is the weakest component of the four because there is substantial agreement between the two Python parsers about the positions of the `def` and `class` statements. However, import and call checks analyze resolution, where static analyzers often fall short. The import recall scores for `requests`, `click`, `flask`, and `httpx` repositories are 0.922, 0.983, 0.963, and 1.000, respectively. The original Python resolver had 0.637 recall of import links due to skipped package imports from another source tree (such as `src/click` importing from `examples/`). After comparing the results, suffix matching was introduced and thus the 0.968 score became meaningful. For the first time cross-file call edges were investigated here, recovering 96.4% of 357 call edges from the imported functions and classes with no false edges found in that set. The call via module attributes (`m.f()`), JavaScript calls, and the role classifier have not been verified yet. The left-over JavaScript import misses mostly occur for `export … from` re-exports which are shown as exports in the graph.
 
 == Robustness Across Repositories
 
-#tbl([Key comparisons over questions and over repositories (comments removed). "Repositories where A > B" compares per-repository means. The interval over repositories resamples whole repositories (5,000 draws); bold green marks an interval that excludes zero. With four or five repositories these intervals are wide and unstable; they show direction, not significance.])[
+#tbl(
+  [Table 7 contains important differences between questions and between repositories (comments removed). "Repositories where A > B" category compares mean per repository. Repository interval is calculated based on resampling the whole repository (5,000 draws). Green bold text signifies an interval which does not contain zero. When we have four or five repositories, these intervals are usually large and unstable; they point towards the direction but not statistical significance.],
+)[
   #repo-table
 ] <tab-repo>
 
-Three results hold up at the repository level: three-way fusion over BM25 for locate, the graph over BM25 for importers (all five repositories), and the neural ranker over BM25 on Python (all four). The CodeAI v2 gains over v1 also hold. Two do not: the neural ranker's held-out lead over BM25 (and over LSA) rests on the three largest held-out repositories, and the LSA-fusion loss on Python appears in three of four repositories with an interval that includes zero.
+The following results remain at the repository level: (1) three-way fusion outperforms BM25 for locate, (2) the graph outperforms BM25 for importers in all five repositories, and (3) the neural ranker outperforms BM25 for Python in all four repositories. CodeAI v2 improvements over CodeAI v1 remain. The following results are not robust: (1) the neural ranker holds an edge over BM25 (and LSA) only based on three largest held-out repositories, and (2) LSA-fusion outperforms BM25 in three out of four repositories with zero included in the interval.
 
 == Statistical Significance
 
-#tbl([The declared family of 18 paired tests (comments removed; held-out JS unless marked Python; flows on the 25 held-out questions). Difference is A minus B averaged over questions. Bold green marks Holm-adjusted p < 0.05. Rows marked post hoc are included so that they are corrected, not because they were planned.])[
+#tbl(
+  [The declared family of 18 paired tests (comments removed; held-out JS unless marked Python; flows on the 25 held-out questions). Difference is A minus B averaged over questions. Bold green marks Holm-adjusted p < 0.05. Rows marked post hoc are included so that they are corrected, not because they were planned.],
+)[
   #significance-table
 ] <tab-sig>
 
-Six of 18 comparisons survive correction. All of them are retrieval results: dense over BM25 and over LSA for locate, three-way fusion over BM25 for locate, graph over BM25 for importers, and LSA-graph fusion *below* the graph on Python impact. None of the seven flow comparisons survives, including the two that had raw p-values below 0.05.
+Of the eighteen tests conducted, six of them survive multiple testing corrections. All these comparisons relate to retrieval efficiency: dense representations are better than BM25 and are also better than LSA in locate retrieval; tri-fusion is better than BM25 in locate retrieval; graph-based techniques are better than BM25 in importers; and LSA-graph fusion is worse than graph-based techniques in Python impact. No comparison related to flow survives multiple testing corrections; two of which even had raw p-values less than 0.05.
 
 == Answers to the Research Questions
 
-- *RQ1.* For importer questions, which largely test parsing, the graph is near-perfect and far ahead of text rankers; for change impact it leads, but not significantly. For locating code, the useful signals are learned meaning (neural embeddings) and names (the graph ranker's path and symbol matching). Apart from LSA, plain keyword search is the weakest non-random ranker.
-- *RQ2.* Fusing BM25, neural and graph rankings gives the highest locate score we measured. Fusing the graph with LSA at high weight can be worse than the graph alone, while fusing it with BM25 stays within 0.02 of the graph or above it, so the risk appears to lie mainly in the weak member rather than in fusion. No fusion beat the graph on importer questions.
-- *RQ3.* No. Graph Path Pruning cuts the output by 95% relative to its candidate pool. In the form we declared in advance, it does not beat simple top-3 baselines, its layer rules are inert on held-out data, and no flow comparison survives correction.
-- *RQ4.* The analyzer reproduces Python definitions exactly and resolves 96.8% of Python imports, 98.5% of JavaScript imports and 96.4% of direct Python cross-file calls.
-- *RQ5.* CodeAI's original retriever scored significantly below the strongest declared ranker on every question type (@tab-v1, post hoc). The rebuilt retriever (graph routing for importer questions, text, graph and neural fusion for the rest) matches the strongest ranker on locate and importer questions (held-out MRR 0.43 to 0.58 and 0.68 to 0.97) but not on change impact (nDCG\@10 0.78, against 0.91 for the BM25 + graph control; @sec-implications).
+- *RQ1.* Regarding importer-related questions, which are focused on evaluating parsing abilities, the graph demonstrates nearly perfect performance and significantly outperforms any text-based rankers. As for change impact evaluation, the graph is winning but not significantly. Signals important for locate task include learned semantics with the help of neural embeddings and naming information (more specifically, the path and symbol matching used by the graph ranker). Other than LSA, plain keyword search is the worst non-random ranker.
+- *RQ2.* Fusion of BM25, neural, and graph rankings gives the highest locate score achieved by us. Combining the graph with high-weight LSA can be sometimes worse than the graph itself, while fusion with BM25 always stays within 0.02 of the graph or beats it, which shows that the primary danger lies in the weak component, and not in the fusion process itself. No fusion configuration outperforms the graph on importer questions.
+- *RQ3.* Graph Path Pruning reduces the set of results by 95% in comparison to the candidate set size. As specified by the predefined formulation, it fails to beat the top-3 baselines, with its layer rules inactive on held-out questions, and no flow comparison staying significant after correction.
+- *RQ4.* Analyzer perfectly reproduces Python definitions and successfully resolves 96.8% of Python imports, 98.5% of JavaScript imports and 96.4% of direct Python cross-file calls.
+- *RQ5.* Retriever built by us was significantly weaker than the strongest declared ranker across all question types (see @tab-v1, post hoc). Our rebuilt retriever (using graph routing on importer questions, and text, graph and neural fusion otherwise) reaches the performance of the strongest ranker on locate and importer questions (held-out MRR 0.43-0.58 and 0.68-0.97 respectively), but not on change impact (nDCG\@10 = 0.78, while 0.91 for the control condition -- BM25 + graph; see @sec-implications).
 
 = From Research to Product: CodeAI v2 (RQ5) <sec-implications>
 
-CodeAI's chat and quiz generation both retrieve files through one function, so its quality is the retrieval quality users get. Before this study that function (*v1*) was BM25 with a symbol-name bonus. On held-out JavaScript it located code with MRR 0.43, better than plain BM25 (0.32). On import and impact questions, however, it did no better than BM25, because it never used the dependency graph that CodeAI's own analyzer builds.
+The chat and quizzes' generation of CodeAI rely on a single retrieval function and thus have the retrieval quality and system quality coincide from the user's perspective. Before this study, the retrieval function (*v1*) used BM25 supplemented with symbol name bonus. With v1, on the held-out JavaScript data, the MRR was 0.43 vs 0.32 for the bare BM25, which means that the function helped CodeAI find code. However, for import and impact-type questions, there was no such effect as the method did not use the dependency graph created by CodeAI's own analyzer.
 
-*What we changed.* We rebuilt the retriever (*v2*) from the results of Section 6:
-+ *Importer questions use the graph.* A question that names a file and asks who imports, depends on or uses it is answered by the graph ranker's reverse-dependency ranking.
-+ *Every other question uses fusion.* Change-impact and general questions get Reciprocal Rank Fusion of the v1 text ranking, the graph ranking and, when available, the neural embedding ranking.
-+ *Neural ranking is optional.* The AI service embeds a snapshot in the background the first time a question is asked about it, and answers later questions from that index. If the model is not installed, the index is not ready or the call takes longer than 2.5 s, v2 ranks without it.
-+ *LSA and Graph Path Pruning are left out*, because neither helped in Section 6.
+*What was changed.* The retriever (*v2*) was developed according to the results described in Section 6:
++ *Importer questions:* The graph is used. Questions, where a particular file is mentioned and its importers, dependencies, or usage are asked, are answered using the reverse dependency ranking by the graph ranker.
++ *Other questions:* Fusion is used. Change-impact and general questions are answered using Reciprocal Rank Fusion (RRF) of the v1 text ranking, the graph ranking, and the neural embedding ranking if available.
++ *Neural ranking:* Optional. The AI service creates an embedding of a snapshot in the background during the first question regarding the item in the snapshot and answers subsequent questions based on that index. If the neural model is not available, if the index is unavailable or if the execution exceeds 2.5 seconds, v2 ranks without neural ranking.
++ *Excluded components:* Latent Semantic Analysis (LSA) and Graph Path Pruning were not used since none of them provided any improvement in Section 6.
 
-The graph ranker and RRF were ported to JavaScript (`apps/backend/src/services/graph-retrieval.service.js`). The neural ranker is one implementation (`apps/ai-service/src/retrieval/dense.py`), shared by the product and by this study's harness. We evaluated the production code itself, unmodified, on the same questions.
+*Implementation details.* The graph ranker and RRF were implemented in JavaScript (`apps/backend/src/services/graph-retrieval.service.js`). The neural ranker is one of the implementations (`apps/ai-service/src/retrieval/dense.py`) and is common for both the product and this study's experiments. The production code, without changes, was tested on the same question sets.
 
-#tbl([CodeAI's retriever before (v1) and after (v2) this study, comments removed, with the best research ranker for each question type. "v2, no embeddings" is v2 when the optional neural model is not installed. Bold green marks the best CodeAI version per row.])[
+#tbl(
+  [CodeAI's retriever before (v1) and after (v2) this study, comments removed, with the best research ranker for each question type. "v2, no embeddings" is v2 when the optional neural model is not installed. Bold green marks the best CodeAI version per row.],
+)[
   #product-before-after
 ] <tab-product-ba>
 
-#tbl([CodeAI v1 against the strongest ranker of the declared comparisons for each question type, held-out JavaScript. Added after the study; its own Holm family of three.])[
+#tbl(
+  [CodeAI v1 against the strongest ranker of the declared comparisons for each question type, held-out JavaScript. Added after the study; its own Holm family of three.],
+)[
   #v1-tests
 ] <tab-v1>
 
-#tbl([CodeAI v2 (deployed) against v1 on held-out JavaScript. The v2 design was chosen after seeing the results of Section 6 on these repositories, so this is a confirmation of the chosen design, not an unbiased test. Holm correction is applied within these three tests.])[
+#tbl(
+  [CodeAI v2 (deployed) against v1 on held-out JavaScript. The v2 design was chosen after seeing the results of Section 6 on these repositories, so this is a confirmation of the chosen design, not an unbiased test. Holm correction is applied within these three tests.],
+)[
   #product-tests
 ] <tab-product>
 
-*Results.* On held-out JavaScript, v2 raises MRR from 0.43 to 0.58 for locating code and from 0.68 to 0.97 for importers, and raises nDCG\@10 from 0.58 to 0.78 for change impact (@tab-product-ba). All three gains are significant (@tab-product). v2 matches the best research ranker on locate and importer questions in every group. On change impact it does not: the BM25 + graph control reaches 0.91 on held-out repositories against 0.78 for v2. This suggests routing impact questions to that fusion. We did not change v2, because that choice would again be made on the same data. Before the rebuild, v1 was significantly behind the strongest declared ranker for every question type (@tab-v1). These three tests were added after the study and form their own Holm family. The v2 − v1 gains also hold over repositories: each interval over repositories excludes zero (@tab-repo). One result runs against the v2 design. On held-out JavaScript change-impact questions, adding the neural ranking lowered nDCG\@10 from 0.83 to 0.78; on Python it raised it from 0.80 to 0.83. We kept the design as declared rather than tune it on the same data again.
+*Results.* On the held-out JavaScript data, v2 improves the MRR for locating code from 0.43 to 0.58 and for importer identification from 0.68 to 0.97 and increases nDCG\@10 for change impact from 0.58 to 0.78 (see @tab-product-ba). All three improvements are statistically significant (@tab-product). In terms of locating and importer categories, v2 equals the best research-based ranker among all groups. As far as the change impact category goes, however, it does not beat the baseline of BM25 + graph with MRR equal to 0.91 on the held-out repositories compared to 0.78 for v2. Thus, redirecting impact questions to that fusion is suggested. No modification was applied to v2, because whatever alternative will be based on the same evidence. Before the upgrade, v1 lagged behind the strongest stated ranker for all types of questions (@tab-v1). These three tests were introduced after the experiment and form an independent Holm family. The improvements of v2 over v1 hold for all repositories: all intervals between repositories do not contain zero (@tab-repo). There is one discrepancy with respect to the design of v2. For JavaScript change impact questions on the held out set, adding the neural ranking led to the decrease in nDCG\@10 score from 0.83 to 0.78; for Python -- to increase from 0.80 to 0.83. The design stayed as stated rather than fine-tuned on the same data.
 
-*Caveat.* These are retrieval scores. Whether v2 produces better chat answers, better quiz questions or faster learning still needs a study of the language model's output and of learners (@sec-limitations).
+*Caveat.* These are retrieval scores. Whether v2 provides better chat answers, better quiz questions, faster learning will have to be assessed through evaluation of the outputs of the language model and of the learners (@sec-limitations).
 
 = Threats to Validity
 
-*Construct validity.* Locate questions are comment sentences, which describe behaviour in the author's words and may still favour text rankers over open-ended developer questions. Importer and impact answer keys share the import relation with the graph ranker. Flow answers are one person's judgement, made by the person who designed the pruner.
+*Construct validity.* Locate questions work as comment sentences to describe behavior according to the author's terminology and can still favor text rankers against open-ended developer questions. The importer and impact answer keys have the same import relationship with the graph ranker. Flow answers represent the judgment of an individual, generated by the designer of the pruner.
 
-*Internal validity.* Several choices were made after seeing results: the Python suffix-matching resolver, the content-based pruner (after dev-set error analysis), the fused-relevance and threshold-0 pruner variants (after the held-out run), and this study's framing. Comment removal was added after an earlier, comment-indexed version of the evaluation (see #link(<app-comments>)[the appendix on indexing comments]); it changes the conclusions against our original method, not in its favour. CodeAI v2 was designed after seeing the held-out results, so its before-and-after gain confirms the chosen design rather than testing it on unseen repositories. The Python retrieval figures in our earlier report were not reproducible from the committed graphs; all numbers here are regenerated from the scripts at the stated commits.
+*Internal validity.* There were several design decisions made based on the results analysis: Python suffix matching resolver, content-based pruner (error analysis on development set), fused relevance and threshold-0 pruner variations (held-out run), and this study framing. Comment deletion was included after the previous version of the evaluation using comments indexing (see #link(<app-comments>)[the appendix on indexing comments]); this change leads conclusions contrary to our initial approach, rather than in support. CodeAI v2 was created after the held-out results; thus, the measured prior-to-post improvement confirms the chosen design rather than tests the design on unseen repositories. Our prior report Python retrieval figures were not reproducible from the committed graphs; all figures presented here are regenerated from the scripts at the mentioned commits.
 
-*External validity.* 19 repositories chosen by us, mostly JavaScript and Python libraries, with at most a few hundred files each. We test one small general-purpose embedding model, so our conclusions about neural rankers are about that model; larger code-specific models may widen the dense ranker's lead or help on change impact.
+*External validity.* Nineteen repositories were chosen by the authors, mainly JavaScript and Python libraries, each containing up to a few hundred files. We use a single small general purpose embedding model; therefore, the conclusions about the neural rankers relate to this model, and large code-specific models can increase the dense ranker's advantage or improve the ranker's performance on change impact.
 
-*Statistical validity.* Held-out samples are small (37 to 79 retrieval questions per type, 25 flows) and come from five repositories, so tests over questions treat correlated questions as independent; @tab-repo reports the repository-level view, under which the neural ranker's held-out lead over BM25 is no longer clear. Holm correction controls false positives but lowers power, so "not significant" often means "not enough data", not "no effect".
+*Statistical validity.* There were small number of held-out samples (37 to 79 retrieval questions per type, 25 flows) from only five repositories, so the tests performed over questions assume independence of correlated questions. @tab-repo shows the repository-level picture where there is no held-out advantage of the neural ranker over BM25 anymore. Holm correction prevents false positives but decreases statistical power, so "not significant" sometimes means not enough data rather than the absence of the effect.
 
 = Limitations and Future Work <sec-limitations>
 
-We measure retrieval, not answers: the next step is to give a language model the top-$k$ files from each ranker and grade its answers and citations. Locate questions should be rewritten by developers who have not read the code, and a second person should annotate a larger flow set that includes layered web applications. We tested one small general-purpose embedding model; the next comparisons are a code-trained embedding model and agentic graph exploration such as LocAgent [20]. The role classifier, JavaScript call resolution and Python attribute calls are still unchecked. For pruning, relevance should be normalised so that a fixed threshold works for rank-based scores, and the fused-relevance variant should be tested on newly written flow questions.
+We test for retrieval effectiveness and not for the correctness of the final answer: in the next stage, we evaluate a language model fed with the top-$k$ documents from each ranker and test their answers and citations. Localization should be done by developers that have not seen the source code, while a second annotator should control the increased set of flows, that covers layered web applications. We tested one small general purpose embedding model; future evaluations include comparison with an embedding model that has been trained with the source code and agentic graph exploration techniques like LocAgent [20]. The role classifier, Javascript calls resolving, and Python attribute calls are not confirmed yet. We should normalize relevancy for pruning and test a fused relevancy version on new question flows.
 
 = Conclusion
 
-We set out to improve how CodeAI finds the code its chat answers and quizzes are built on. In our measurements, the dependency graph is the best evidence for finding importers (a task close to a lookup of that graph), leads without significance for estimating change impact, and helps locate code through file and function names. For locating code, a small neural embedding model beats keyword matching (+0.18 MRR on held-out JavaScript, +0.19 on Python), and fusing it with BM25 and the graph gives the highest score. The one significant loss from fusion came from giving a weak member, LSA, a high weight. Fusing the graph with BM25 instead gave the best held-out change-impact ranking we measured. Our graph-pruning method, as designed in advance, did not beat simple baselines. We rebuilt CodeAI's retriever from these findings: version 2 routes importer questions to the dependency graph and fuses text, graph and neural rankings for the rest. On held-out repositories this lifts locating code from 0.43 to 0.58 MRR, finding importers from 0.68 to 0.97, and change-impact ranking from 0.58 to 0.78 nDCG\@10. We release the benchmark, the analyzer and all negative results at #link("https://github.com/Capstone-TEAM-VITAP/Capstone-VibeLearning")[`github.com/Capstone-TEAM-VITAP/Capstone-VibeLearning`].
+The goal of our work is to improve the ability of CodeAI to localize code that forms the base of its chat answers and quizzes. According to our evaluations, the dependency graph is the most reliable feature for importer identification (the task that is very similar to graph lookup), does not provide any predictive power for change impact estimation and allows localizing code using file and function identifiers. For code localization, a small neural embedding model is more accurate than keyword matching (+0.18 MRR for JavaScript and +0.19 for Python). Fusion of this model with BM25 and dependency graph gives the best performance overall. The only degradation from fusion that we observe is when one of the components is too weak, e.g., Latent Semantic Analysis (LSA). On the other hand, fusion of the graph with BM25 provides the best held-out ranking for change impact.
+
+Our predesigned graph pruning technique did not give better results than simple baselines. Therefore, the retriever of CodeAI was redesigned as Version 2: importer questions are handled by the dependency graph, and textual, graph-based and neural rankings are fused for the rest of the queries. As a result, there is an improvement in code localization (from 0.43 to 0.58 MRR), importer identification (from 0.68 to 0.97), and change impact ranking (from 0.58 to 0.78 nDCG\@10) on held-out repositories. The benchmark, the analyzer, and all negative results are publicly available at #link("https://github.com/Capstone-TEAM-VITAP/Capstone-VibeLearning")[`github.com/Capstone-TEAM-VITAP/Capstone-VibeLearning`].
 
 #heading(numbering: none)[References]
 #set text(size: 8.6pt)
@@ -386,7 +453,7 @@ We set out to improve how CodeAI finds the code its chat answers and quizzes are
 #set text(size: 10pt)
 #heading(numbering: none)[Appendix: Effect of Indexing Comments] <app-comments>
 
-An earlier version of this evaluation indexed files with their comments. Because locate questions are taken from comments, the question text then appeared word for word in the answer file for 340 of 344 questions, and keyword search could match it directly. @tab-comments compares locate MRR in the two settings. BM25 drops from 0.85–0.92 to 0.32–0.44 when comments are removed; the graph ranker reads only names and is unchanged. All results in the main text use the corrected setting (comments removed).
+Previous versions of this evaluation indexed files based on their associated comments. Given that the questions are generated from the comments, the relevant question text was then copied verbatim into the answer file for 340 out of 344 questions, allowing exact matching of keywords. @tab-comments compares the MRRs of locate based on the two different setups. In the absence of comments, the performance of BM25 goes down from 0.85–0.92 to 0.32–0.44, whereas the performance of graph ranker, working only on names, is unaffected.
 
 #tbl([Locate MRR with comments indexed (earlier, flawed setting) and removed (setting used in this paper).])[
   #leak-table
