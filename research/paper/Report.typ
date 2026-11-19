@@ -62,6 +62,10 @@
   table.header(..head), ..rows,
 )
 
+// A bold label on its own line ("Contributions.") is kept on the same page
+// as the content that follows it, so it never sits alone at a page bottom.
+#let run-head(body) = block(sticky: true, above: 1.2em, below: 0.7em, strong(body))
+
 #let front-heading(title, outlined: true) = heading(numbering: none, outlined: outlined)[#title]
 
 // Table of contents in the sample's four-column layout.
@@ -242,14 +246,14 @@ This report measures that for CodeAI. We set out to build a new method for the p
 
 The objectives of this project are to answer five research questions and to carry the answers back into the CodeAI product.
 
-*Research questions.*
+#run-head[Research questions.]
 - *RQ1 (which evidence, for which question).* How do lexical, LSA, neural dense and graph rankers compare at locating code, finding direct importers and estimating change impact?
 - *RQ2 (fusion).* Does Reciprocal Rank Fusion of text and graph rankings beat the best single ranker?
 - *RQ3 (pruning).* Does query-conditioned Graph Path Pruning recover the few dependency edges that carry a behaviour better than unpruned traversal and simple baselines?
 - *RQ4 (instrument validity).* How accurate is the static analysis the graph rankers depend on, for JavaScript and Python?
 - *RQ5 (the product).* How does CodeAI's original retriever compare with these rankers, and how much does a retriever rebuilt from the results improve it?
 
-*Contributions.*
+#run-head[Contributions.]
 + *A benchmark* of 710 retrieval questions over 19 repositories in two languages and 48 flow questions, with answer keys from tools independent of the system under test.
 + *A controlled comparison* of nine rankers, including CodeAI's production retriever, on held-out repositories, with bootstrap intervals, paired permutation tests, Holm correction over a family of 18 tests and a repository-level robustness check.
 + *Measured negative results* for rank fusion with a weak member and for graph path pruning, with fair baselines, ablations and a sensitivity analysis of every hand-set constant.
