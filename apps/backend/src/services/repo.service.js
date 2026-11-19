@@ -13,6 +13,7 @@ import gitService, {
   ensureSnapshotTree,
   getChangedFiles,
   getCommitMeta,
+  getCommitStats,
   getMirrorDir,
   getSnapshotDiff,
   listRecentCommits,
@@ -23,6 +24,23 @@ import gitService, {
 
 /** Past states recorded per sync so Learning ranges have history to quiz on. */
 const HISTORY_BACKFILL_LIMIT = 20;
+
+const EMPTY_STATS = { fileCount: 0, additions: 0, deletions: 0 };
+
+/** Best-effort snapshot totals; zeros if git cannot answer. */
+async function snapshotStats(repositoryId, headSha, baseSha) {
+  try {
+    return await getCommitStats(repositoryId, headSha, baseSha);
+  } catch (err) {
+    console.warn("Snapshot stats skipped:", headSha, err.message);
+    return EMPTY_STATS;
+  }
+}
+
+/** Rows saved before stats were computed on create carry all zeros. */
+export function needsStats(snapshot) {
+  return !snapshot.fileCount && !snapshot.additions && !snapshot.deletions;
+}
 
 
 /**
@@ -93,9 +111,7 @@ export const repoService = {
             message: row.message,
             authorName: row.authorName,
             committedAt: row.committedAt,
-            fileCount: 0,
-            additions: 0,
-            deletions: 0,
+            ...(await snapshotStats(repo.id, row.commitSha, row.baseSha)),
           });
           backfilled += 1;
         } catch {
@@ -148,10 +164,13 @@ export const repoService = {
       const snapshot = await snapshotRepository.create({
         repositoryId: repo.id,
         commitSha: meta.commitSha,
+        // baseSha stays null so the first analysis covers the whole tree;
+        // the stats describe the commit itself (vs its parent).
         baseSha: null,
         message: meta.message,
         authorName: meta.authorName,
         committedAt: meta.committedAt,
+        ...(await snapshotStats(repo.id, meta.commitSha, null)),
       });
       analysisService.enqueueAndDispatch(repo, snapshot);
       const history = await this.backfillHistory(repo, { headSha: meta.commitSha });
@@ -257,7 +276,34 @@ export const repoService = {
   async listSnapshots(clerkUserId, repositoryId) {
     const { repo } = await this._requireRepo(clerkUserId, repositoryId);
     const snapshots = await snapshotRepository.findManyByRepositoryId(repo.id);
+    await this._repairSnapshotStats(repo, snapshots);
     return { snapshots, total: snapshots.length };
+  },
+
+  /**
+   * Fill in totals for rows recorded with zero stats (older connects and
+   * history backfills). Mutates the list in place; best-effort, so a
+   * missing mirror leaves the rows as they were.
+   */
+  async _repairSnapshotStats(repo, snapshots) {
+    const stale = snapshots.filter(needsStats);
+    if (!stale.length) return;
+    // Recorded commits are already in the local mirror; only clone when it
+    // is missing, so listing never pays for a network fetch otherwise.
+    if (!fs.existsSync(getMirrorDir(repo.id))) {
+      try {
+        await ensureMirror({ repositoryId: repo.id, repoUrl: repo.repoUrl, defaultBranch: repo.defaultBranch });
+      } catch (err) {
+        console.warn("Snapshot stats repair skipped:", err.message);
+        return;
+      }
+    }
+    for (const snapshot of stale) {
+      const stats = await snapshotStats(repo.id, snapshot.commitSha, snapshot.baseSha);
+      if (needsStats(stats)) continue;
+      await snapshotRepository.updateStats(snapshot.id, stats).catch(() => null);
+      Object.assign(snapshot, stats);
+    }
   },
 
   /** Lightweight changed-file list (no hunks) for the Changed Files step. */
