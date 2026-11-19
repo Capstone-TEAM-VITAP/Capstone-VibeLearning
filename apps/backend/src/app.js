@@ -44,10 +44,7 @@ app.use(
   })
 );
 
-// Clerk authentication middleware
-app.use(clerkMiddleware());
-
-// Health check
+// Health check (public, before auth)
 app.get("/api/v1/health", (req, res) => {
   res.json({
     success: true,
@@ -56,6 +53,9 @@ app.get("/api/v1/health", (req, res) => {
     },
   });
 });
+
+// Clerk authentication middleware
+app.use(clerkMiddleware());
 
 // API Routes
 app.use("/api/v1/auth", authRoutes);

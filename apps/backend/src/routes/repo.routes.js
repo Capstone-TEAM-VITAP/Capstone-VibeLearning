@@ -7,6 +7,7 @@ import { chatController } from "../controllers/chat.controller.js";
 import { intelligenceController } from "../controllers/intelligence.controller.js";
 import { learningController } from "../controllers/learning.controller.js";
 import { repoController } from "../controllers/repo.controller.js";
+import { routeController } from "../controllers/route.controller.js";
 import { chatMessageSchema } from "../validators/chat.validator.js";
 import {
   generateDiffLearningSchema,
@@ -91,6 +92,27 @@ router.get(
   "/:id/snapshots/:sha/graph",
   validate({ params: snapshotParamSchema }),
   repoController.getSnapshotGraph
+);
+
+// GET /api/v1/repos/:id/snapshots/:sha/routes — list discovered routes for snapshot
+router.get(
+  "/:id/snapshots/:sha/routes",
+  validate({ params: snapshotParamSchema }),
+  routeController.listRoutes
+);
+
+// GET /api/v1/repos/:id/snapshots/:sha/routes/summary — route metrics summary
+router.get(
+  "/:id/snapshots/:sha/routes/summary",
+  validate({ params: snapshotParamSchema }),
+  routeController.getRouteSummary
+);
+
+// GET /api/v1/repos/:id/snapshots/:sha/routes/:routeId — single route details
+router.get(
+  "/:id/snapshots/:sha/routes/:routeId",
+  validate({ params: snapshotParamSchema }),
+  routeController.getRouteById
 );
 
 // POST /api/v1/repos/:id/chat — ask a repository-grounded AI question

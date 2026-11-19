@@ -128,6 +128,64 @@ export const aiService = {
   },
 
   /**
+   * Request API & Route Map analysis of a local repository snapshot from the AI Service.
+   *
+   * @param {string} repositoryPath Absolute or relative path to the local repository.
+   * @param {string} [repositoryName] Optional explicit repository name.
+   * @returns {Promise<object>} The route analysis response with summary and routes.
+   */
+  async analyzeRoutes(repositoryPath, repositoryName) {
+    if (!repositoryPath || typeof repositoryPath !== "string" || !repositoryPath.trim()) {
+      throw new BadRequestError("repositoryPath is required");
+    }
+
+    const baseUrl = this.getBaseUrl();
+    const timeoutMs = this.getTimeoutMs();
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    let res;
+    try {
+      res = await fetch(`${baseUrl}/api/routes/analyze`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          repository_path: repositoryPath.trim(),
+          repo_name: repositoryName || undefined,
+        }),
+        signal: controller.signal,
+      });
+    } catch (err) {
+      if (err.name === "AbortError") {
+        throw new GatewayTimeoutError("AI service request timed out");
+      }
+      throw new ServiceUnavailableError("AI service unavailable");
+    } finally {
+      clearTimeout(timer);
+    }
+
+    let payload;
+    try {
+      payload = await res.json();
+    } catch {
+      throw new BadGatewayError("Failed to parse JSON response from AI service");
+    }
+
+    if (!res.ok) {
+      const detail = payload?.detail || payload?.message || "AI service route analysis failed";
+      const sanitized = typeof detail === "string" ? detail.replace(/[a-zA-Z]:\\[\w\\.-]+/g, "<path>") : "Route analysis failed";
+      if (res.status === 404) throw new NotFoundError(sanitized);
+      if (res.status === 400) throw new BadRequestError(sanitized);
+      throw new BadGatewayError(`AI service error (${res.status}): ${sanitized}`);
+    }
+
+    return payload;
+  },
+
+  /**
    * Neural (embedding) file ranking for a question, from the AI service's optional /dense endpoints.
    *
    * Best effort by design: returns `null` whenever neural ranking cannot help right now (not installed,

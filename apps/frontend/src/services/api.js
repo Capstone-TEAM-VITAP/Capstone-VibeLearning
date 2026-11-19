@@ -105,6 +105,30 @@ export async function getSnapshotGraph(getToken, id, sha) {
   return body.data || body;
 }
 
+// --- API & Route Map Intelligence ---
+
+export async function getSnapshotRoutes(getToken, id, sha, filters = {}) {
+  const params = new URLSearchParams();
+  if (filters.method) params.set("method", filters.method);
+  if (filters.status) params.set("status", filters.status);
+  if (filters.controller) params.set("controller", filters.controller);
+  if (filters.search) params.set("search", filters.search);
+  if (filters.refresh) params.set("refresh", "true");
+  const query = params.toString() ? `?${params.toString()}` : "";
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/routes${query}`);
+  return body.data;
+}
+
+export async function getSnapshotRoutesSummary(getToken, id, sha) {
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/routes/summary`);
+  return body.data;
+}
+
+export async function getSnapshotRouteById(getToken, id, sha, routeId) {
+  const body = await authedFetch(getToken, `/repos/${id}/snapshots/${sha}/routes/${encodeURIComponent(routeId)}`);
+  return body.data;
+}
+
 // --- Repository Intelligence: AI summary (cached per commit on the server) ---
 
 export async function getIntelligenceSummary(getToken, id, commitSha, { refresh = false } = {}) {
