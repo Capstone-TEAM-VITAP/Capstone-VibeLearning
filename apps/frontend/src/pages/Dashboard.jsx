@@ -41,6 +41,7 @@ import IntelligenceCharts from "../components/IntelligenceCharts.jsx";
 import AiSummaryPanel from "../components/AiSummaryPanel.jsx";
 import DependencyHealth from "../components/DependencyHealth.jsx";
 import CodeGraphView from "../components/CodeGraphView.jsx";
+import ApiMapView from "../components/ApiMapView.jsx";
 import LearningView from "../components/LearningView.jsx";
 import "./Dashboard.css";
 
@@ -934,13 +935,13 @@ function Dashboard() {
             />
           )}
 
-          {/* API Map Placeholder */}
+          {/* API & Route Map View */}
           {view === "apimap" && (
-            <PlaceholderView
-              title="API & Route Map"
-              description="Coming next: Automatic HTTP endpoint discovery, controller mapping, and route-level code intelligence."
-              icon="api"
-              phase="Phase 5"
+            <ApiMapView
+              repository={selectedRepo}
+              snapshot={latestSelectedSnapshot}
+              graphData={graphData}
+              getToken={getToken}
             />
           )}
 

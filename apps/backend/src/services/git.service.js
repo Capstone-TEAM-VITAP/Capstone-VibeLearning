@@ -317,14 +317,54 @@ export async function getSnapshotDiff(repositoryId, baseSha, headSha, paths = []
 }
 
 /**
- * Extract or locate an isolated directory containing the exact files for a commit SHA.
+ * Check recursively whether a directory contains at least one actual file.
+ * Prevents considering an empty directory tree (e.g. from interrupted extraction) as valid.
  */
-export async function ensureSnapshotTree(repositoryId, commitSha) {
+function hasSnapshotFiles(dir) {
+  try {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.isFile() && entry.name !== ".codeai_snapshot_ready") {
+        return true;
+      }
+      if (entry.isDirectory()) {
+        if (hasSnapshotFiles(path.join(dir, entry.name))) {
+          return true;
+        }
+      }
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Extract or locate an isolated directory containing the exact files for a commit SHA.
+ * Validates presence of source files and completion marker; re-extracts if empty or force=true.
+ */
+export async function ensureSnapshotTree(repositoryId, commitSha, { force = false } = {}) {
+  // Fallback: if repositoryId is itself a directory path (e.g. for mock/test environments)
+  if (typeof repositoryId === "string" && fs.existsSync(repositoryId) && fs.statSync(repositoryId).isDirectory()) {
+    return repositoryId;
+  }
+
   const dir = getMirrorDir(repositoryId);
   const snapshotDir = path.join(getCacheDir(), "snapshots", String(repositoryId), String(commitSha));
+  const markerPath = path.join(snapshotDir, ".codeai_snapshot_ready");
 
-  if (fs.existsSync(snapshotDir) && fs.readdirSync(snapshotDir).length > 0) {
+  // Check if existing snapshot is intact, verified by marker and contains actual files
+  if (!force && fs.existsSync(snapshotDir) && fs.existsSync(markerPath) && hasSnapshotFiles(snapshotDir)) {
     return snapshotDir;
+  }
+
+  // If corrupted, incomplete, missing marker, has 0 files, or force-refreshed: clean up
+  if (fs.existsSync(snapshotDir)) {
+    try {
+      fs.rmSync(snapshotDir, { recursive: true, force: true });
+    } catch {
+      // ignore cleanup errors
+    }
   }
 
   // If the mirror directory exists as a bare git repository
@@ -334,6 +374,8 @@ export async function ensureSnapshotTree(repositoryId, commitSha) {
     try {
       await runGit(["--git-dir", dir, "archive", "--format=tar", "-o", tarPath, commitSha]);
       await execFileAsync("tar", ["-xf", tarPath, "-C", snapshotDir]);
+      // Write completion marker to mark extraction complete
+      fs.writeFileSync(markerPath, `${commitSha}\n`, "utf8");
     } catch (err) {
       // Clean up partially extracted snapshot
       try {
@@ -351,12 +393,12 @@ export async function ensureSnapshotTree(repositoryId, commitSha) {
         }
       }
     }
-    return snapshotDir;
-  }
 
-  // Fallback: if mirror doesn't exist, check if repositoryId is itself a directory path (e.g. for mock/test environments)
-  if (fs.existsSync(repositoryId) && fs.statSync(repositoryId).isDirectory()) {
-    return repositoryId;
+    if (!hasSnapshotFiles(snapshotDir)) {
+      throw new BadRequestError(`Snapshot tree for commit ${commitSha} was extracted but contains no files.`);
+    }
+
+    return snapshotDir;
   }
 
   throw new BadRequestError(`Repository mirror not found for repository ${repositoryId}`);

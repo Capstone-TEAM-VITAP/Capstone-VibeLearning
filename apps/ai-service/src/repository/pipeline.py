@@ -33,6 +33,7 @@ from .models import FileInfo
 from .parser import UnsupportedLanguageError, parse_source
 from .relationships import Relationship, extract_relationships
 from .resolver import ResolvedRelationship, resolve_imports
+from .routes import RouteMapResult, discover_routes
 from .scanner import scan_repository
 from .symbols import Symbol, extract_symbols
 
@@ -77,6 +78,7 @@ class RepositoryAnalysisResult:
     architecture: RepositoryArchitecture
     graph: CodeGraph
     ir: dict[str, Any]
+    routes: RouteMapResult | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -234,6 +236,20 @@ def analyze_repository(
     except Exception as err:
         raise RepositoryAnalysisError(f"Architecture classification failed: {err}") from err
 
+    # Step 4.5: Discover API Routes & Endpoints
+    route_result: RouteMapResult | None = None
+    try:
+        route_result = discover_routes(
+            files=files_list,
+            symbols=all_symbols,
+            relationships=all_relationships,
+            resolved_relationships=resolved_relationships,
+            architecture=architecture,
+            repo_path=path_obj,
+        )
+    except Exception as err:
+        logger.warning("Route discovery encountered non-fatal error: %s", err)
+
     # Step 5: Build unified CodeGraph (M7)
     try:
         graph = build_code_graph(
@@ -243,6 +259,7 @@ def analyze_repository(
             resolved_relationships=resolved_relationships,
             architecture=architecture,
             repo_name=final_repo_name,
+            routes=route_result,
         )
     except GraphValidationError as err:
         raise RepositoryAnalysisError(f"CodeGraph construction validation failed: {err}") from err
@@ -264,4 +281,5 @@ def analyze_repository(
         architecture=architecture,
         graph=graph,
         ir=ir,
+        routes=route_result,
     )

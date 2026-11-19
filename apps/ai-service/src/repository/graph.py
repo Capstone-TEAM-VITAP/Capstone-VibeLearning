@@ -88,6 +88,10 @@ class NodeType(str, Enum):
     EXTERNAL = "external"
     UNRESOLVED = "unresolved"
 
+    # API & Route Map extensions
+    API_ENDPOINT = "api_endpoint"
+    DATABASE_MODEL = "database_model"
+
 
 class EdgeType(str, Enum):
     """Semantic category of a CodeGraph directed edge."""
@@ -99,6 +103,13 @@ class EdgeType(str, Enum):
     REFERENCES = "references"
     CLASSIFIED_AS = "classified_as"
     DEPENDS_ON = "depends_on"
+
+    # API & Route Map extensions
+    ROUTES_TO = "routes_to"
+    HANDLED_BY = "handled_by"
+    USES_MIDDLEWARE = "uses_middleware"
+    CALLS_SERVICE = "calls_service"
+    ACCESSES_MODEL = "accesses_model"
 
 
 # Mappings from prior milestone models to NodeType
@@ -162,6 +173,19 @@ def make_external_node_id(module_path: str) -> str:
 def make_unresolved_node_id(module_path: str) -> str:
     """Return deterministic ID for an unresolved reference node."""
     return f"unresolved:{module_path}"
+
+
+def make_api_endpoint_node_id(method: str, path: str) -> str:
+    """Return deterministic ID for an API endpoint node."""
+    norm_path = "/" + path.strip("/") if path.strip("/") else "/"
+    return f"endpoint:{method.upper()}:{norm_path}"
+
+
+def make_database_model_node_id(model_name: str, path: str | None = None) -> str:
+    """Return deterministic ID for a database model node."""
+    if path:
+        return f"db_model:{path}:{model_name}"
+    return f"db_model:{model_name}"
 
 
 def make_edge_id(
@@ -418,6 +442,7 @@ def build_code_graph(
     repo_name: str = "root",
     include_repo_node: bool = True,
     validate: bool = True,
+    routes: Any = None,
 ) -> CodeGraph:
     """
     Construct an immutable, deterministic CodeGraph from M1–M6 analysis outputs.
@@ -1006,7 +1031,205 @@ def build_code_graph(
                 )
 
     # -----------------------------------------------------------------------
-    # 7. Final Validation & CodeGraph Construction
+    # 7. API & Route Map Integration (Section 5)
+    # -----------------------------------------------------------------------
+    routes_list_to_add: Sequence[Any] = ()
+    if routes is not None:
+        if hasattr(routes, "routes"):
+            routes_list_to_add = routes.routes
+        elif isinstance(routes, (list, tuple)):
+            routes_list_to_add = routes
+
+    for r in routes_list_to_add:
+        # 1. API_ENDPOINT Node
+        ep_id = make_api_endpoint_node_id(r.http_method, r.http_endpoint)
+        if ep_id not in nodes_map:
+            add_node(
+                GraphNode(
+                    id=ep_id,
+                    node_type=NodeType.API_ENDPOINT,
+                    label=f"{r.http_method} {r.http_endpoint}",
+                    metadata=_to_sorted_metadata(
+                        {
+                            "endpoint": r.http_endpoint,
+                            "method": r.http_method,
+                            "path": r.route_path,
+                            "source_file": r.source_file,
+                            "start_line": r.start_line,
+                            "status": r.status,
+                        }
+                    ),
+                )
+            )
+
+        # 2. Edge: Route source file -> API_ENDPOINT (ROUTES_TO)
+        src_file_id = make_file_node_id(r.source_file)
+        if src_file_id in nodes_map:
+            routes_to_edge_id = make_edge_id(
+                src_file_id, EdgeType.ROUTES_TO, ep_id, r.start_line, r.start_column
+            )
+            if routes_to_edge_id not in edges_map:
+                add_edge(
+                    GraphEdge(
+                        id=routes_to_edge_id,
+                        edge_type=EdgeType.ROUTES_TO,
+                        source_id=src_file_id,
+                        target_id=ep_id,
+                        metadata=_to_sorted_metadata(
+                            {"method": r.http_method, "endpoint": r.http_endpoint}
+                        ),
+                    )
+                )
+
+        # 3. Controller node & HANDLED_BY edge
+        ctrl_node_id = None
+        if r.controller and r.controller.name != "unresolved":
+            if r.controller.file_path and r.controller.start_line:
+                cand_sym_id = make_symbol_node_id(
+                    r.controller.file_path,
+                    r.controller.function_name,
+                    r.controller.start_line,
+                    r.controller.start_column or 0,
+                )
+                if cand_sym_id in nodes_map:
+                    ctrl_node_id = cand_sym_id
+
+            if not ctrl_node_id:
+                ctrl_node_id = f"controller:{r.controller.file_path or r.source_file}:{r.controller.name}"
+                if ctrl_node_id not in nodes_map:
+                    add_node(
+                        GraphNode(
+                            id=ctrl_node_id,
+                            node_type=NodeType.CONTROLLER,
+                            label=r.controller.name,
+                            metadata=_to_sorted_metadata(
+                                {
+                                    "file_path": r.controller.file_path or r.source_file,
+                                    "function_name": r.controller.function_name,
+                                    "name": r.controller.name,
+                                    "status": r.controller.status,
+                                }
+                            ),
+                        )
+                    )
+
+            handled_by_edge_id = make_edge_id(ep_id, EdgeType.HANDLED_BY, ctrl_node_id)
+            if handled_by_edge_id not in edges_map:
+                add_edge(
+                    GraphEdge(
+                        id=handled_by_edge_id,
+                        edge_type=EdgeType.HANDLED_BY,
+                        source_id=ep_id,
+                        target_id=ctrl_node_id,
+                        metadata=_to_sorted_metadata({"controller": r.controller.name}),
+                    )
+                )
+
+        # 4. Middleware nodes & USES_MIDDLEWARE edges
+        for mw in r.middleware:
+            mw_node_id = f"middleware:{mw.source_file or 'inline'}:{mw.name}"
+            if mw_node_id not in nodes_map:
+                add_node(
+                    GraphNode(
+                        id=mw_node_id,
+                        node_type=NodeType.MIDDLEWARE,
+                        label=mw.name,
+                        metadata=_to_sorted_metadata(
+                            {
+                                "is_inline": mw.is_inline,
+                                "name": mw.name,
+                                "source_file": mw.source_file or r.source_file,
+                                "status": mw.status,
+                            }
+                        ),
+                    )
+                )
+            mw_edge_id = make_edge_id(ep_id, EdgeType.USES_MIDDLEWARE, mw_node_id)
+            if mw_edge_id not in edges_map:
+                add_edge(
+                    GraphEdge(
+                        id=mw_edge_id,
+                        edge_type=EdgeType.USES_MIDDLEWARE,
+                        source_id=ep_id,
+                        target_id=mw_node_id,
+                        metadata=_to_sorted_metadata({"middleware": mw.name}),
+                    )
+                )
+
+        # 5. Service nodes & CALLS_SERVICE edges (from controller)
+        if ctrl_node_id:
+            for svc in r.service_dependencies:
+                svc_node_id = f"service:{svc.file_path or 'unresolved'}:{svc.service_name}"
+                if svc_node_id not in nodes_map:
+                    add_node(
+                        GraphNode(
+                            id=svc_node_id,
+                            node_type=NodeType.SERVICE,
+                            label=svc.service_name,
+                            metadata=_to_sorted_metadata(
+                                {
+                                    "file_path": svc.file_path or "",
+                                    "service_name": svc.service_name,
+                                    "status": svc.status,
+                                }
+                            ),
+                        )
+                    )
+                svc_edge_id = make_edge_id(ctrl_node_id, EdgeType.CALLS_SERVICE, svc_node_id)
+                if svc_edge_id not in edges_map:
+                    add_edge(
+                        GraphEdge(
+                            id=svc_edge_id,
+                            edge_type=EdgeType.CALLS_SERVICE,
+                            source_id=ctrl_node_id,
+                            target_id=svc_node_id,
+                            metadata=_to_sorted_metadata(
+                                {
+                                    "method": svc.method_name or "",
+                                    "service": svc.service_name,
+                                }
+                            ),
+                        )
+                    )
+
+                # 6. Model nodes & ACCESSES_MODEL edges (from service)
+                for mdl in r.model_dependencies:
+                    mdl_node_id = make_database_model_node_id(mdl.model_name, mdl.file_path)
+                    if mdl_node_id not in nodes_map:
+                        add_node(
+                            GraphNode(
+                                id=mdl_node_id,
+                                node_type=NodeType.DATABASE_MODEL,
+                                label=mdl.model_name,
+                                metadata=_to_sorted_metadata(
+                                    {
+                                        "file_path": mdl.file_path or "",
+                                        "model_name": mdl.model_name,
+                                        "operation": mdl.operation or "",
+                                        "status": mdl.status,
+                                    }
+                                ),
+                            )
+                        )
+                    mdl_edge_id = make_edge_id(svc_node_id, EdgeType.ACCESSES_MODEL, mdl_node_id)
+                    if mdl_edge_id not in edges_map:
+                        add_edge(
+                            GraphEdge(
+                                id=mdl_edge_id,
+                                edge_type=EdgeType.ACCESSES_MODEL,
+                                source_id=svc_node_id,
+                                target_id=mdl_node_id,
+                                metadata=_to_sorted_metadata(
+                                    {
+                                        "model": mdl.model_name,
+                                        "operation": mdl.operation or "",
+                                    }
+                                ),
+                            )
+                        )
+
+    # -----------------------------------------------------------------------
+    # 8. Final Validation & CodeGraph Construction
     # -----------------------------------------------------------------------
     return CodeGraph(
         nodes=tuple(nodes_map.values()),
