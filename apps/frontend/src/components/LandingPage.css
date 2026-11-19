@@ -255,6 +255,11 @@
   border-color: rgba(255, 255, 255, 0.24);
 }
 
+.landing-btn-secondary-icon {
+  color: var(--text-muted, #a1a1aa);
+  transition: color 0.15s ease;
+}
+
 .landing-tech-stack-row {
   display: flex;
   align-items: center;
@@ -834,6 +839,11 @@
   color: #ffffff;
 }
 
+.landing-footer-static-item {
+  font-size: 13px;
+  color: var(--text-muted, #a1a1aa);
+}
+
 .landing-footer-bottom {
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -899,4 +909,346 @@
     gap: 12px;
     align-items: flex-start;
   }
+}
+
+/* =========================================================
+   8. LIGHT MODE HIGH-CONTRAST ACCESSIBILITY THEME
+   Ensures WCAG AA/AAA compliance across all landing sections
+   ========================================================= */
+
+/* Canvas & Background */
+[data-theme="light"] .landing-wrapper,
+.light .landing-wrapper {
+  background-color: #ffffff;
+  color: #18181b;
+}
+
+[data-theme="light"] .landing-grid-bg,
+.light .landing-grid-bg {
+  background-image: 
+    radial-gradient(ellipse 70% 50% at 50% -10%, rgba(99, 102, 241, 0.12), rgba(6, 182, 212, 0.08) 40%, transparent 80%),
+    radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+
+/* 1. Navigation Bar */
+[data-theme="light"] .landing-nav,
+.light .landing-nav {
+  background-color: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid #e4e4e7;
+}
+
+[data-theme="light"] .landing-brand-text,
+.light .landing-brand-text {
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-brand-badge,
+.light .landing-brand-badge {
+  background-color: rgba(79, 70, 229, 0.08);
+  border: 1px solid rgba(79, 70, 229, 0.25);
+  color: #4338ca;
+}
+
+[data-theme="light"] .landing-nav-link,
+.light .landing-nav-link {
+  color: #52525b;
+}
+
+[data-theme="light"] .landing-nav-link:hover,
+.light .landing-nav-link:hover {
+  color: #09090b;
+}
+
+/* 2. Hero Section */
+[data-theme="light"] .landing-pill-badge,
+.light .landing-pill-badge {
+  background-color: #f4f4f5;
+  border-color: #e4e4e7;
+  color: #27272a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .landing-pill-sparkle,
+.light .landing-pill-sparkle {
+  color: #0284c7;
+}
+
+[data-theme="light"] .landing-hero-title,
+.light .landing-hero-title {
+  color: #09090b;
+}
+
+/* High-contrast hero gradient text: Deep indigo 950 -> Indigo 700 -> Sky 600 */
+[data-theme="light"] .landing-gradient-text,
+.light .landing-gradient-text {
+  background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 45%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+[data-theme="light"] .landing-hero-desc,
+.light .landing-hero-desc {
+  color: #4b5563;
+}
+
+/* Primary Button in Light Mode: Solid dark ink with white text */
+[data-theme="light"] .landing-btn-primary,
+.light .landing-btn-primary {
+  background: #09090b;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .landing-btn-primary:hover,
+.light .landing-btn-primary:hover {
+  background-color: #27272a;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+/* Secondary Button in Light Mode: Crisp white card with subtle border */
+[data-theme="light"] .landing-btn-secondary,
+.light .landing-btn-secondary {
+  background-color: #ffffff;
+  color: #18181b;
+  border: 1px solid #d4d4d8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .landing-btn-secondary:hover,
+.light .landing-btn-secondary:hover {
+  background-color: #f4f4f5;
+  border-color: #a1a1aa;
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-btn-secondary-icon,
+.light .landing-btn-secondary-icon {
+  color: #52525b;
+}
+
+[data-theme="light"] .landing-tech-stack-row,
+.light .landing-tech-stack-row {
+  color: #52525b;
+}
+
+/* Hero Terminal Exterior (Maintains dark IDE inside, softens outer boundary) */
+[data-theme="light"] .landing-terminal-window,
+.light .landing-terminal-window {
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .landing-terminal-glow,
+.light .landing-terminal-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.16), rgba(6, 182, 212, 0.1) 50%, transparent 80%);
+}
+
+/* 3. Features Section */
+[data-theme="light"] .landing-section-eyebrow,
+.light .landing-section-eyebrow {
+  color: #0369a1;
+}
+
+[data-theme="light"] .landing-section-title,
+.light .landing-section-title {
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-section-desc,
+.light .landing-section-desc {
+  color: #4b5563;
+}
+
+[data-theme="light"] .landing-feature-card,
+.light .landing-feature-card {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .landing-feature-card:hover,
+.light .landing-feature-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .landing-feature-card::before,
+.light .landing-feature-card::before {
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.08), transparent);
+}
+
+[data-theme="light"] .landing-feature-title,
+.light .landing-feature-title {
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-feature-desc,
+.light .landing-feature-desc {
+  color: #4b5563;
+}
+
+[data-theme="light"] .landing-feature-tag,
+.light .landing-feature-tag {
+  background-color: #f4f4f5;
+  border: 1px solid #e4e4e7;
+  color: #4b5563;
+}
+
+/* Feature Card Colored Icon Badges in Light Mode */
+[data-theme="light"] .card-indigo .landing-feature-icon-wrapper,
+.light .card-indigo .landing-feature-icon-wrapper {
+  color: #4338ca;
+  background: rgba(79, 70, 229, 0.08);
+  border-color: rgba(79, 70, 229, 0.22);
+}
+
+[data-theme="light"] .card-cyan .landing-feature-icon-wrapper,
+.light .card-cyan .landing-feature-icon-wrapper {
+  color: #0369a1;
+  background: rgba(2, 132, 199, 0.08);
+  border-color: rgba(2, 132, 199, 0.22);
+}
+
+[data-theme="light"] .card-purple .landing-feature-icon-wrapper,
+.light .card-purple .landing-feature-icon-wrapper {
+  color: #6b21a8;
+  background: rgba(147, 51, 234, 0.08);
+  border-color: rgba(147, 51, 234, 0.22);
+}
+
+[data-theme="light"] .card-emerald .landing-feature-icon-wrapper,
+.light .card-emerald .landing-feature-icon-wrapper {
+  color: #15803d;
+  background: rgba(22, 163, 74, 0.08);
+  border-color: rgba(22, 163, 74, 0.22);
+}
+
+[data-theme="light"] .card-amber .landing-feature-icon-wrapper,
+.light .card-amber .landing-feature-icon-wrapper {
+  color: #b45309;
+  background: rgba(217, 119, 6, 0.08);
+  border-color: rgba(217, 119, 6, 0.22);
+}
+
+[data-theme="light"] .card-rose .landing-feature-icon-wrapper,
+.light .card-rose .landing-feature-icon-wrapper {
+  color: #be123c;
+  background: rgba(225, 29, 72, 0.08);
+  border-color: rgba(225, 29, 72, 0.22);
+}
+
+/* 4. How It Works Pipeline */
+[data-theme="light"] .landing-step-card,
+.light .landing-step-card {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .landing-step-number,
+.light .landing-step-number {
+  color: #0369a1;
+}
+
+[data-theme="light"] .landing-step-icon,
+.light .landing-step-icon {
+  background-color: rgba(2, 132, 199, 0.08);
+  color: #0369a1;
+}
+
+[data-theme="light"] .landing-step-title,
+.light .landing-step-title {
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-step-desc,
+.light .landing-step-desc {
+  color: #4b5563;
+}
+
+/* 5. Product Preview Showcase (Maintains dark IDE canvas inside) */
+[data-theme="light"] .landing-preview-showcase,
+.light .landing-preview-showcase {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 6. Academic Research Card */
+[data-theme="light"] .landing-research-card,
+.light .landing-research-card {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.06) 0%, rgba(6, 182, 212, 0.04) 100%), #ffffff;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.06);
+}
+
+[data-theme="light"] .landing-research-badge,
+.light .landing-research-badge {
+  background-color: rgba(2, 132, 199, 0.08);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  color: #0369a1;
+}
+
+[data-theme="light"] .landing-research-title,
+.light .landing-research-title {
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-research-desc,
+.light .landing-research-desc {
+  color: #4b5563;
+}
+
+[data-theme="light"] .landing-metric-box,
+.light .landing-metric-box {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .landing-metric-value,
+.light .landing-metric-value {
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-metric-label,
+.light .landing-metric-label {
+  color: #52525b;
+}
+
+/* 7. Footer */
+[data-theme="light"] .landing-footer,
+.light .landing-footer {
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .landing-footer-brand-desc,
+.light .landing-footer-brand-desc {
+  color: #4b5563;
+}
+
+[data-theme="light"] .landing-footer-col-title,
+.light .landing-footer-col-title {
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-footer-link,
+.light .landing-footer-link {
+  color: #52525b;
+}
+
+[data-theme="light"] .landing-footer-link:hover,
+.light .landing-footer-link:hover {
+  color: #09090b;
+}
+
+[data-theme="light"] .landing-footer-static-item,
+.light .landing-footer-static-item {
+  color: #52525b;
+}
+
+[data-theme="light"] .landing-footer-bottom,
+.light .landing-footer-bottom {
+  border-top-color: #e2e8f0;
+  color: #64748b;
 }

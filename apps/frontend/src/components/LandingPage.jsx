@@ -134,7 +134,7 @@ export default function LandingPage() {
                 </SignUpButton>
 
                 <a href="#features" className="landing-btn-secondary">
-                  <Terminal className="w-4 h-4 text-zinc-400" />
+                  <Terminal className="w-4 h-4 landing-btn-secondary-icon" />
                   Explore Features
                 </a>
               </div>
@@ -810,11 +810,11 @@ export default function LandingPage() {
               <div>
                 <h5 className="landing-footer-col-title">Architecture</h5>
                 <ul className="landing-footer-links">
-                  <li><span className="text-zinc-400">Tree-sitter AST (v0.25)</span></li>
-                  <li><span className="text-zinc-400">CodeGraph IR (v1.0)</span></li>
-                  <li><span className="text-zinc-400">Express 5 ESM Backend</span></li>
-                  <li><span className="text-zinc-400">FastAPI AI Microservice</span></li>
-                  <li><span className="text-zinc-400">Prisma 8 ORM (PostgreSQL)</span></li>
+                  <li><span className="landing-footer-static-item">Tree-sitter AST (v0.25)</span></li>
+                  <li><span className="landing-footer-static-item">CodeGraph IR (v1.0)</span></li>
+                  <li><span className="landing-footer-static-item">Express 5 ESM Backend</span></li>
+                  <li><span className="landing-footer-static-item">FastAPI AI Microservice</span></li>
+                  <li><span className="landing-footer-static-item">Prisma 8 ORM (PostgreSQL)</span></li>
                 </ul>
               </div>
 
@@ -823,10 +823,10 @@ export default function LandingPage() {
                 <h5 className="landing-footer-col-title">Academic Capstone</h5>
                 <ul className="landing-footer-links">
                   <li><a href="#about" className="landing-footer-link">arXiv Research Paper</a></li>
-                  <li><span className="text-zinc-400">Reproducible Benchmark Harness</span></li>
-                  <li><span className="text-zinc-400">Deterministic RRF Ranking</span></li>
-                  <li><span className="text-zinc-400">Google Cloud Run Unified Container</span></li>
-                  <li><span className="text-zinc-400">Clerk JWT Authentication</span></li>
+                  <li><span className="landing-footer-static-item">Reproducible Benchmark Harness</span></li>
+                  <li><span className="landing-footer-static-item">Deterministic RRF Ranking</span></li>
+                  <li><span className="landing-footer-static-item">Google Cloud Run Unified Container</span></li>
+                  <li><span className="landing-footer-static-item">Clerk JWT Authentication</span></li>
                 </ul>
               </div>
             </div>
