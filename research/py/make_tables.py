@@ -104,7 +104,7 @@ def retrieval_table(rows, groups, counts_in_header=None) -> str:
 def leak_table(rows) -> str:
     groups = [("Held-out JS", "test2"), ("Post-hoc JS", ("dev", "test")), ("Python", "python")]
     sysl = [("bm25", "BM25"), ("product", "CodeAI v1"), ("lsa", "LSA"), ("dense", "Dense"), ("graph", "Graph"), ("hybrid-lsa", "RRF LSA+graph"), ("bm25+dense+graph", "RRF all three")]
-    lines = ["table(", f"  columns: (2.3fr, {', '.join(['1fr'] * len(sysl))}),", "  align: (left, " + ", ".join(["center"] * len(sysl)) + "),",
+    lines = ["table(", f"  columns: (3.6fr, {', '.join(['1fr'] * len(sysl))}),", "  align: (left, " + ", ".join(["center"] * len(sysl)) + "),",
              "  stroke: 0.4pt + luma(170), inset: (x: 4pt, y: 3.5pt),",
              "  table.header([*Locate MRR*], " + ", ".join(f"[*{l}*]" for _, l in sysl) + "),"]
     for gname, sp in groups:

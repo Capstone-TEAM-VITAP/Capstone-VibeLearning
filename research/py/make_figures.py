@@ -40,7 +40,7 @@ def mean_ci(xs: list[float], b: int = 2000, seed: int = 1) -> tuple[float, float
 
 
 def retrieval_figure(rows: list[dict], pred, title: str, fname: str) -> None:
-    panels = [("locate", "mrr", "Locate (MRR)"), ("dependency", "mrr", "Dependency (MRR)"), ("impact", "ndcg@10", "Impact (nDCG@10)")]
+    panels = [("locate", "mrr", "Locate (MRR)"), ("dependency", "mrr", "Direct importers (MRR)"), ("impact", "ndcg@10", "Impact (nDCG@10)")]
     systems = ["random", "bm25", "product", "product-v2-dense", "lsa", "dense", "graph", "hybrid-lsa", "bm25+dense+graph"]
     fig, axes = plt.subplots(1, 3, figsize=(7.4, 2.8), sharey=True)
     for ax, (typ, metric, label) in zip(axes, panels):
