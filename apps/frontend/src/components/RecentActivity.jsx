@@ -36,6 +36,8 @@ function RecentActivity({ activities = [], onViewAll, limit = 6 }) {
             const files = act.realFileCount ?? act.fileCount;
             const adds = act.realAdditions ?? act.additions;
             const dels = act.realDeletions ?? act.deletions;
+            // All zeros means the stats are unknown, not an empty commit
+            const hasStats = Boolean(files || adds || dels);
             return (
               <li key={act.id || act.commitSha || idx}>
                 <time dateTime={when || undefined} title={when ? new Date(when).toLocaleString() : ""}>
@@ -48,9 +50,9 @@ function RecentActivity({ activities = [], onViewAll, limit = 6 }) {
                   <span className="activity-log-meta">
                     {act.repositoryName && <span>{act.repositoryName}</span>}
                     {sha && <code>{sha}</code>}
-                    {files !== undefined && files !== null && <span>{files} files</span>}
-                    {adds !== undefined && adds !== null && <span className="add">+{adds}</span>}
-                    {dels !== undefined && dels !== null && <span className="del">−{dels}</span>}
+                    {hasStats && <span>{files ?? 0} files</span>}
+                    {hasStats && <span className="add">+{adds ?? 0}</span>}
+                    {hasStats && <span className="del">−{dels ?? 0}</span>}
                   </span>
                 </div>
               </li>

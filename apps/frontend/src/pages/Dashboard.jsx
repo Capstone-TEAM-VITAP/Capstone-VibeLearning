@@ -22,8 +22,6 @@ import {
   getCurrentUser,
   listRepos,
   listSnapshots,
-  getChangedFiles,
-  getDiff,
   getSnapshotGraph,
   syncRepo,
 } from "../services/api.js";
@@ -134,46 +132,17 @@ function Dashboard() {
           try {
             const repoSnapshots = await listSnapshots(getToken, repo.id);
 
+            // The backend stores per-snapshot totals (and fills in rows
+            // saved before it did), so no per-snapshot diff calls here.
             for (const snapshot of repoSnapshots) {
-              try {
-                const files = await getChangedFiles(
-                  getToken,
-                  repo.id,
-                  snapshot.commitSha,
-                  snapshot.baseSha,
-                );
-
-                let diffData = null;
-                try {
-                  diffData = await getDiff(
-                    getToken,
-                    repo.id,
-                    snapshot.commitSha,
-                    snapshot.baseSha,
-                  );
-                } catch (error) {
-                  console.warn("Could not load diff:", snapshot.commitSha, error);
-                }
-
-                allSnapshots.push({
-                  ...snapshot,
-                  repositoryId: repo.id,
-                  repositoryName: `${repo.owner}/${repo.name}`,
-                  realFileCount: files?.fileCount || files?.files?.length || 0,
-                  realAdditions: diffData?.additions ?? snapshot.additions ?? 0,
-                  realDeletions: diffData?.deletions ?? snapshot.deletions ?? 0,
-                });
-              } catch (error) {
-                console.warn("Could not load snapshot details:", error);
-                allSnapshots.push({
-                  ...snapshot,
-                  repositoryId: repo.id,
-                  repositoryName: `${repo.owner}/${repo.name}`,
-                  realFileCount: snapshot.fileCount || 0,
-                  realAdditions: snapshot.additions || 0,
-                  realDeletions: snapshot.deletions || 0,
-                });
-              }
+              allSnapshots.push({
+                ...snapshot,
+                repositoryId: repo.id,
+                repositoryName: `${repo.owner}/${repo.name}`,
+                realFileCount: snapshot.fileCount || 0,
+                realAdditions: snapshot.additions || 0,
+                realDeletions: snapshot.deletions || 0,
+              });
             }
           } catch (error) {
             console.warn("Could not load snapshots for repo:", repo.id, error);

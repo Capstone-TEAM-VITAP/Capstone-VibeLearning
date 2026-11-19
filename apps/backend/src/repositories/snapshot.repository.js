@@ -33,6 +33,10 @@ export const snapshotRepository = {
       deletions: data.deletions ?? 0,
     });
   },
+
+  async updateStats(id, { fileCount, additions, deletions }) {
+    return db.orm.public.RepoSnapshot.where({ id }).update({ fileCount, additions, deletions });
+  },
 };
 
 export default snapshotRepository;

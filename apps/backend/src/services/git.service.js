@@ -293,6 +293,47 @@ export async function getChangedFiles(repositoryId, baseSha, headSha) {
 }
 
 /**
+ * Totals from `git diff --numstat` output. Binary files ("-\t-\tpath")
+ * count as changed files with no line counts. Pure function.
+ * @returns {{ fileCount: number, additions: number, deletions: number }}
+ */
+export function parseNumstat(output) {
+  let fileCount = 0;
+  let additions = 0;
+  let deletions = 0;
+  for (const line of String(output || "").split("\n")) {
+    const [add, del, ...rest] = line.split("\t");
+    if (!rest.length || !rest.join("\t").trim()) continue;
+    fileCount += 1;
+    additions += Number.parseInt(add, 10) || 0;
+    deletions += Number.parseInt(del, 10) || 0;
+  }
+  return { fileCount, additions, deletions };
+}
+
+/**
+ * Changed-file and line totals for a snapshot, without hunks.
+ * Compares against baseSha when given, otherwise against the commit's
+ * first parent (empty tree for a root commit), so a snapshot with no
+ * recorded base still reports what that commit itself changed.
+ */
+export async function getCommitStats(repositoryId, headSha, baseSha = null) {
+  const dir = getMirrorDir(repositoryId);
+  let from = baseSha && baseSha !== headSha ? baseSha : null;
+  if (!from) {
+    from = await runGit(["--git-dir", dir, "rev-parse", "--verify", "--quiet", `${headSha}^`])
+      .then(({ stdout }) => stdout.trim() || EMPTY_TREE_SHA)
+      .catch(() => EMPTY_TREE_SHA);
+  }
+  try {
+    const { stdout } = await runGit(["--git-dir", dir, "diff", "--numstat", "--no-renames", from, headSha]);
+    return parseNumstat(stdout);
+  } catch (err) {
+    throw toGitError(err, `Unable to compute stats for ${headSha}`);
+  }
+}
+
+/**
  * Full diff (hunks + totals) between two commits.
  */
 export async function getSnapshotDiff(repositoryId, baseSha, headSha, paths = []) {
@@ -419,6 +460,8 @@ export default {
   planHistoryBackfill,
   getChangedFiles,
   getSnapshotDiff,
+  getCommitStats,
+  parseNumstat,
   ensureSnapshotTree,
 };
 
