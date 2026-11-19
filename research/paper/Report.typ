@@ -376,31 +376,31 @@ We set out to improve how CodeAI finds the code its chat answers and quizzes are
 #heading(numbering: none)[References]
 
 + S. Robertson and H. Zaragoza, "The probabilistic relevance framework: BM25 and beyond," _Foundations and Trends in Information Retrieval_, vol. 3, no. 4, pp. 333–389, 2009.
-+ G. V. Cormack, C. L. A. Clarke and S. Buettcher, "Reciprocal rank fusion outperforms Condorcet and individual rank learning methods," in _Proc. 32nd ACM SIGIR_, pp. 758–759, 2009.
++ G. V. Cormack, C. L. A. Clarke and S. Büttcher, "Reciprocal rank fusion outperforms Condorcet and individual rank learning methods," in _Proc. 32nd ACM SIGIR_, pp. 758–759, 2009.
 + P. Lewis et al., "Retrieval-augmented generation for knowledge-intensive NLP tasks," in _Advances in Neural Information Processing Systems 33_, 2020.
-+ F. Zhang et al., "RepoCoder: Repository-level code completion through iterative retrieval and generation," in _Proc. EMNLP_, 2023.
++ F. Zhang et al., "RepoCoder: Repository-level code completion through iterative retrieval and generation," in _Proc. EMNLP_, pp. 2471–2484, 2023.
 + T. Liu, C. Xu and J. McAuley, "RepoBench: Benchmarking repository-level code auto-completion systems," in _Proc. ICLR_, 2024.
 + S. Deerwester, S. T. Dumais, G. W. Furnas, T. K. Landauer and R. Harshman, "Indexing by latent semantic analysis," _Journal of the American Society for Information Science_, vol. 41, no. 6, pp. 391–407, 1990.
 + B. Efron and R. J. Tibshirani, _An Introduction to the Bootstrap_. Chapman and Hall/CRC, 1994.
-+ Tree-sitter, an incremental parsing system for programming tools, https://tree-sitter.github.io/tree-sitter/.
++ Tree-sitter, an incremental parsing system for programming tools, https://tree-sitter.github.io/tree-sitter/ (accessed Nov. 2026).
 + B. Rozière et al., "Code Llama: Open foundation models for code," arXiv:2308.12950, 2023.
 + R. Li et al., "StarCoder: May the source be with you!," _Transactions on Machine Learning Research_, 2023.
 + M. Chen et al., "Evaluating large language models trained on code," arXiv:2107.03374, 2021.
-+ D. Guo et al., "DeepSeek-Coder: When the large language model meets programming," arXiv:2401.14196, 2024.
++ D. Guo et al., "DeepSeek-Coder: When the large language model meets programming – The rise of code intelligence," arXiv:2401.14196, 2024.
 + N. F. Liu et al., "Lost in the middle: How language models use long contexts," _Transactions of the ACL_, vol. 12, pp. 157–173, 2024.
 + V. Karpukhin et al., "Dense passage retrieval for open-domain question answering," in _Proc. EMNLP_, pp. 6769–6781, 2020.
-+ R. Bairi et al., "CodePlan: Repository-level coding using LLMs and planning," _Proc. ACM on Software Engineering_, vol. 1, FSE, 2024.
++ R. Bairi et al., "CodePlan: Repository-level coding using LLMs and planning," _Proc. ACM on Software Engineering_, vol. 1, no. FSE, pp. 675–698, 2024.
 + F. Yamaguchi, N. Golde, D. Arp and K. Rieck, "Modeling and discovering vulnerabilities with code property graphs," in _IEEE Symposium on Security and Privacy_, pp. 590–604, 2014.
 + J. Ferrante, K. J. Ottenstein and J. D. Warren, "The program dependence graph and its use in optimization," _ACM TOPLAS_, vol. 9, no. 3, pp. 319–349, 1987.
-+ S. Ouyang et al., "RepoGraph: Enhancing AI software engineering with repository-level code graph," in _Proc. ICLR_, 2025 (arXiv:2410.14684).
++ S. Ouyang et al., "RepoGraph: Enhancing AI software engineering with repository-level code graph," in _Proc. ICLR_, 2025.
 + X. Liu et al., "CodexGraph: Bridging large language models and code repositories via code graph databases," in _Proc. NAACL_, pp. 142–160, 2025.
-+ Z. Chen et al., "LocAgent: Graph-guided LLM agents for code localization," arXiv:2503.09089, 2025.
-+ Z. Z. Wang et al., "CodeRAG-Bench: Can retrieval augment code generation?," in _Findings of NAACL_, 2025 (arXiv:2406.14497).
-+ X. Li et al., "CoIR: A comprehensive benchmark for code information retrieval models," arXiv:2407.02883, 2024.
-+ N. Reimers and I. Gurevych, "Sentence-BERT: Sentence embeddings using Siamese BERT-networks," in _Proc. EMNLP-IJCNLP_, 2019.
-+ S. Xiao et al., "C-Pack: Packed resources for general Chinese embeddings," in _Proc. ACM SIGIR_, 2024 (arXiv:2309.07597).
++ Z. Chen et al., "LocAgent: Graph-guided LLM agents for code localization," in _Proc. 63rd Annual Meeting of the ACL (Long Papers)_, pp. 8697–8727, 2025.
++ Z. Z. Wang et al., "CodeRAG-Bench: Can retrieval augment code generation?," in _Findings of NAACL_, 2025.
++ X. Li et al., "CoIR: A comprehensive benchmark for code information retrieval models," in _Proc. 63rd Annual Meeting of the ACL (Long Papers)_, pp. 22074–22091, 2025.
++ N. Reimers and I. Gurevych, "Sentence-BERT: Sentence embeddings using Siamese BERT-networks," in _Proc. EMNLP-IJCNLP_, pp. 3980–3990, 2019.
++ S. Xiao et al., "C-Pack: Packed resources for general Chinese embeddings," in _Proc. 47th ACM SIGIR_, pp. 641–649, 2024.
 + C. E. Jimenez et al., "SWE-bench: Can language models resolve real-world GitHub issues?," in _Proc. ICLR_, 2024.
-+ C. S. Xia, Y. Deng, S. Dunn and L. Zhang, "Agentless: Demystifying LLM-based software engineering agents," arXiv:2407.01489, 2024.
++ C. S. Xia, Y. Deng, S. Dunn and L. Zhang, "Demystifying LLM-based software engineering agents," _Proc. ACM on Software Engineering_, vol. 2, no. FSE, pp. 801–824, 2025.
 + H. Husain, H.-H. Wu, T. Gazit, M. Allamanis and M. Brockschmidt, "CodeSearchNet challenge: Evaluating the state of semantic code search," arXiv:1909.09436, 2019.
 + S. Holm, "A simple sequentially rejective multiple test procedure," _Scandinavian Journal of Statistics_, vol. 6, no. 2, pp. 65–70, 1979.
 
