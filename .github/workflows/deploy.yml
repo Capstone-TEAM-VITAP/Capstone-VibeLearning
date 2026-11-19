@@ -1,0 +1,106 @@
+name: Deploy CodeAI to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: beaming-age-395816
+  REGION: asia-south1
+  REPOSITORY: asia-south1-docker.pkg.dev/beaming-age-395816/codeai
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker authentication
+        run: gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
+
+      - name: Build backend image
+        run: |
+          docker build \
+            -f Dockerfile \
+            -t "$REPOSITORY/codeai-backend:$GITHUB_SHA" \
+            -t "$REPOSITORY/codeai-backend:latest" \
+            .
+
+      - name: Build frontend image
+        run: |
+          PUBLISHABLE_KEY=$(gcloud secrets versions access latest \
+            --secret=clerk-publishable-key \
+            --project="$PROJECT_ID")
+
+          echo "::add-mask::$PUBLISHABLE_KEY"
+
+          docker build \
+            -f infra/docker/Dockerfile.frontend \
+            --build-arg VITE_API_URL=https://codeai-backend-417242568167.asia-south1.run.app/api/v1 \
+            --build-arg VITE_CLERK_PUBLISHABLE_KEY="$PUBLISHABLE_KEY" \
+            -t "$REPOSITORY/codeai-frontend:$GITHUB_SHA" \
+            -t "$REPOSITORY/codeai-frontend:latest" \
+            .
+
+      - name: Push images to Artifact Registry
+        run: |
+          docker push "$REPOSITORY/codeai-backend:$GITHUB_SHA"
+          docker push "$REPOSITORY/codeai-backend:latest"
+
+          docker push "$REPOSITORY/codeai-frontend:$GITHUB_SHA"
+          docker push "$REPOSITORY/codeai-frontend:latest"
+
+      - name: Deploy backend to Cloud Run
+        run: |
+          gcloud run deploy codeai-backend \
+            --image="$REPOSITORY/codeai-backend:$GITHUB_SHA" \
+            --region="$REGION" \
+            --project="$PROJECT_ID" \
+            --service-account=codeai-run@beaming-age-395816.iam.gserviceaccount.com \
+            --port=8080 \
+            --cpu=4 \
+            --memory=6Gi \
+            --update-env-vars="NODE_ENV=production,CORS_ORIGINS=https://codeai-frontend-417242568167.asia-south1.run.app,GROQ_MODEL=openai/gpt-oss-120b,OPENCODE_MODEL=deepseek-v4.1-flash,OPENCODE_BASE_URL=https://opencode.ai/zen/go/v1,OPENCODE_REASONING_EFFORT=medium" \
+            --update-secrets="DATABASE_URL=codeai-database-url:latest,CLERK_SECRET_KEY=clerk-secret-key:latest,CLERK_PUBLISHABLE_KEY=clerk-publishable-key:latest,GROQ_API_KEY=groq-api-key:latest,OPENCODE_API_KEY=opencode-api-key:latest" \
+            --allow-unauthenticated \
+            --quiet
+
+      - name: Deploy frontend to Cloud Run
+        run: |
+          gcloud run deploy codeai-frontend \
+            --image="$REPOSITORY/codeai-frontend:$GITHUB_SHA" \
+            --region="$REGION" \
+            --project="$PROJECT_ID" \
+            --port=8080 \
+            --cpu=1 \
+            --memory=512Mi \
+            --allow-unauthenticated \
+            --quiet
+
+      - name: Show deployed service URLs
+        run: |
+          gcloud run services describe codeai-frontend \
+            --region="$REGION" \
+            --format="value(status.url)"
+
+          gcloud run services describe codeai-backend \
+            --region="$REGION" \
+            --format="value(status.url)"
