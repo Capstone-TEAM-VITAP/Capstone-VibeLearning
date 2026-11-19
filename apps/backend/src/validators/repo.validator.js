@@ -34,6 +34,11 @@ export const connectRepoSchema = z.object({
   accessToken: z.string().trim().min(1).max(1000).optional(),
 });
 
+export const updateRepoSchema = z.object({
+  defaultBranch: z.string().trim().min(1).max(255).optional(),
+  projectId: z.string().uuid({ message: "Invalid project ID format. Must be a valid UUID." }).optional().nullable(),
+});
+
 export const syncRepoSchema = z.object({
   ref: z.string().trim().min(1).max(255).optional(),
   baseSha: shaSchema.optional().nullable(),

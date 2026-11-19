@@ -68,6 +68,52 @@ export async function deleteRepo(getToken, id) {
   return true;
 }
 
+export async function updateRepo(getToken, id, payload) {
+  const body = await authedFetch(getToken, `/repos/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+  return body.data;
+}
+
+// --- Workspace & Global Settings ---
+
+export async function getSettings(getToken) {
+  const body = await authedFetch(getToken, "/settings");
+  return body.data;
+}
+
+export async function updateSettings(getToken, payload) {
+  const body = await authedFetch(getToken, "/settings", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+  return body.data;
+}
+
+// --- Projects / Workspaces ---
+
+export async function getProjects(getToken) {
+  const body = await authedFetch(getToken, "/projects");
+  return body.data;
+}
+
+export async function createProject(getToken, payload) {
+  const body = await authedFetch(getToken, "/projects", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return body.data;
+}
+
+export async function updateProject(getToken, id, payload) {
+  const body = await authedFetch(getToken, `/projects/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+  return body.data;
+}
+
 export async function listSnapshots(getToken, id) {
   const body = await authedFetch(getToken, `/repos/${id}/snapshots`);
   return body.data;

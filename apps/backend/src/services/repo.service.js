@@ -58,6 +58,12 @@ export const repoService = {
     return repo;
   },
 
+  async updateRepo(clerkUserId, repositoryId, data) {
+    const { user, repo } = await this._requireRepo(clerkUserId, repositoryId);
+    await repositoryRepository.update(repo.id, user.id, data);
+    return repositoryRepository.findByIdAndUserId(repo.id, user.id);
+  },
+
   /**
    * Record past commits as snapshot rows so Learning base/head pickers
    * have history beyond the latest sync. Best-effort: never fails sync.

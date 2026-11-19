@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import repoRoutes from "./routes/repo.routes.js";
 import webhookRoutes from "./routes/webhook.routes.js";
+import settingsRoutes from "./routes/settings.routes.js";
 import { notFoundHandler, errorHandler } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -44,12 +45,41 @@ app.use(
   })
 );
 
-// Health check (public, before auth)
-app.get("/api/v1/health", (req, res) => {
-  res.json({
-    success: true,
+// Health check (public, before auth) - verifies both Express backend and FastAPI AI service
+app.get(["/health", "/api/v1/health"], async (req, res) => {
+  const aiServiceUrl = (process.env.AI_SERVICE_URL || "http://127.0.0.1:8000").replace(/\/+$/, "");
+  let aiServiceStatus = "unknown";
+  let aiError = null;
+
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 2500);
+    const aiRes = await fetch(`${aiServiceUrl}/health`, {
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timer));
+
+    if (aiRes.ok) {
+      aiServiceStatus = "ok";
+    } else {
+      aiServiceStatus = `error (status ${aiRes.status})`;
+    }
+  } catch (err) {
+    aiServiceStatus = "unavailable";
+    aiError = err.message || "Connection refused";
+  }
+
+  const isHealthy = aiServiceStatus === "ok";
+  const statusCode = isHealthy ? 200 : 503;
+
+  return res.status(statusCode).json({
+    success: isHealthy,
     data: {
-      status: "healthy",
+      status: isHealthy ? "healthy" : "degraded",
+      services: {
+        backend: "ok",
+        aiService: aiServiceStatus,
+      },
+      ...(aiError ? { error: aiError } : {}),
     },
   });
 });
@@ -62,6 +92,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/projects", projectRoutes);
 app.use("/api/v1/repos", repoRoutes);
 app.use("/api/v1/webhooks", webhookRoutes);
+app.use("/api/v1/settings", settingsRoutes);
 
 // Catch-all 404 handler for undefined routes
 app.use(notFoundHandler);

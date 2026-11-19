@@ -41,6 +41,15 @@ export const repoController = {
     }
   },
 
+  async updateRepo(req, res, next) {
+    try {
+      const repo = await repoService.updateRepo(req.userId, req.params.id, req.body);
+      return successResponse(res, repo, 200);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async syncRepo(req, res, next) {
     try {
       const result = await repoService.syncRepo(req.userId, req.params.id, req.body);
